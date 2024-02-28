@@ -15,20 +15,4 @@ ACharacterPrototype::ACharacterPrototype()
 void ACharacterPrototype::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
-
-// Called every frame
-void ACharacterPrototype::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
-void ACharacterPrototype::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
