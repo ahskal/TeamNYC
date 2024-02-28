@@ -1,11 +1,13 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "CharacterPrototype.generated.h"
 
+/********************************************************
+*	모든 캐릭터(Player, Monster, NPC)의 베이스 클래스
+*	공통적인 요소만을 선언
+********************************************************/
 UCLASS()
 class TEAMNYC_API ACharacterPrototype : public ACharacter
 {
@@ -17,11 +19,8 @@ protected:
 	USkeletalMesh* SkeletalMesh{ nullptr };
 
 public:
-	// Sets default values for this character's properties
 	ACharacterPrototype();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
 };
