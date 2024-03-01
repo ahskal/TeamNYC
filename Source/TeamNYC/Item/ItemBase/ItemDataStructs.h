@@ -102,13 +102,13 @@ struct FItemData : public FTableRowBase
 	FName ID;
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	EItemType ItemType;
+	EItemType Type;
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	EItemQuality ItemQuality;
+	EItemQuality Quality;
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemStatistics ItemStatistics;
+	FItemStatistics Statistics;
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
 	FItemTextData TextData;

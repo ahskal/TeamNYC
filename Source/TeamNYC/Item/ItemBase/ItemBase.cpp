@@ -44,3 +44,7 @@ void UItemBase::SetQuantity(const int32 NewQuantity)
 
 	}
 }
+
+void UItemBase::Use(APlayerCharacter* Character)
+{
+}

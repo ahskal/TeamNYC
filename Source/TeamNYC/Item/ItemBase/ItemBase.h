@@ -6,6 +6,8 @@
 #include "Item/ItemBase/ItemDataStructs.h"
 #include "ItemBase.generated.h"
 
+class APlayerCharacter;
+
 UCLASS()
 class TEAMNYC_API UItemBase : public UObject
 {
@@ -33,7 +35,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FName ID;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item", meta = (UIMin = 1, UIMax = 100))
+	UPROPERTY(VisibleAnywhere, Category = "Item")
 	int32 Quantity;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
@@ -79,9 +81,6 @@ public:
 	UFUNCTION(Category = "Item")
 	void SetQuantity(const int32 NewQuantity);
 
-	//UFUNCTION(Category = "Item")
-	//virtual void Use(AinventCharacter* Character);
-
-
-
+	UFUNCTION(Category = "Item")
+	virtual void Use(APlayerCharacter* Character);
 };
