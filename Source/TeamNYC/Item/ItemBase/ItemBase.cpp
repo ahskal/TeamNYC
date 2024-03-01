@@ -2,7 +2,6 @@
 
 
 #include "Item/ItemBase/ItemBase.h"
-#include "Item/ItemBase/ItemDataStructs.h"
 
 UItemBase::UItemBase() :
 	bIsCopy(false), bIsPickup(false)

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
+#include "Item/ItemBase/ItemDataStructs.h"
 #include "ItemBase.generated.h"
 
 UCLASS()
