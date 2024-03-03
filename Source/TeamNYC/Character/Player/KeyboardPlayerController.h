@@ -21,8 +21,11 @@ class TEAMNYC_API AKeyboardPlayerController : public APlayerController
 	
 private:
 	// OwnerPawn
-	UPROPERTY(VisibleAnywhere, Category = "Input")
+	UPROPERTY(VisibleAnywhere, Category = "Owner")
 	APawn* OwnerPawn{ nullptr };
+
+	UPROPERTY(VisibleAnywhere, Category = "Owner")
+	ACharacter* OwnerCharacter{ nullptr };
 
 	// Controller
 	UPROPERTY(VisibleAnywhere, Category = "Input")
@@ -66,6 +69,6 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	//void Look(const FInputActionValue& Value);
-	void StartJump(const FInputActionValue& Value);
-	void StopJump(const FInputActionValue& Value);
+	void StartJump();
+	void StopJump();
 };
