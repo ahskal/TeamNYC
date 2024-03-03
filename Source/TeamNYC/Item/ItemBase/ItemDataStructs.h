@@ -15,7 +15,6 @@ enum class EItemQuality : uint8
 	Grandmaster UMETA(DisplayName = "Grandmaster"),
 };
 
-
 UENUM()
 enum class EItemType : uint8
 {
@@ -28,7 +27,6 @@ enum class EItemType : uint8
 	Quest		UMETA(DisplayName = "Quest"),
 	Mundane		UMETA(DisplayName = "Mundane"),
 };
-
 
 USTRUCT()
 struct FItemStatistics
