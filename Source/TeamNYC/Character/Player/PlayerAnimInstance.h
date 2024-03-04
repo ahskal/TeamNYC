@@ -16,19 +16,19 @@ class TEAMNYC_API UPlayerAnimInstance : public UAnimInstance
 
 private:
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		float MovementSpeed;
-
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		bool bIsInAir;
-
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		class APawn* Pawn;
-
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 		class APlayerCharacter* PlayerCharacter;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 		class APlayerController* PlayerController;
+
+protected:
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+		FVector Velocity;
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+		bool bIsInAir;
+
+
 
 public:
 	virtual void NativeBeginPlay() override;
