@@ -146,7 +146,6 @@ void AKeyboardPlayerController::Move(const FInputActionValue& Value)
 		OwnerPawn->AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
-
 void AKeyboardPlayerController::StartJump()
 {
 	if (OwnerCharacter)

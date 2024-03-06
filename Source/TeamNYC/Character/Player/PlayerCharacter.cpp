@@ -38,6 +38,17 @@ APlayerCharacter::APlayerCharacter()
 	Camera = this->CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
+	// Set AnimClass
+	FString AnimBpPath = TEXT("/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C");
+	ConstructorHelpers::FClassFinder<UAnimInstance> AnimBpClass(*AnimBpPath);
+	if (AnimBpClass.Class)
+	{
+		GetMesh()->SetAnimInstanceClass(AnimBpClass.Class);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get AnimBPClass"));
+	}
 
 	InteractionCheckFrequency = 0.1f; // 지연시간	
 	InteractionCheckDistance = 500.0f; // 탐색거리

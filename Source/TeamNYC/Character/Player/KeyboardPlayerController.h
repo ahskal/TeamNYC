@@ -73,8 +73,8 @@ protected:
 
 	void Move(const FInputActionValue& Value);
 	//void Look(const FInputActionValue& Value);
-	void StartJump(const FInputActionValue& Value);
-	void StopJump(const FInputActionValue& Value);
+	void StartJump();
+	void StopJump();
 
 	void BeginInteraction(const FInputActionValue& Value);
 	void EndInteraction(const FInputActionValue& Value);
