@@ -34,16 +34,16 @@ struct FItemStatistics
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
-	float ArmorRating;
+	float ArmorRating{};
 
 	UPROPERTY(EditAnywhere)
-	float DamageValue;
+	float DamageValue{};
 
 	UPROPERTY(EditAnywhere)
-	float RestorationAmount;
+	float RestorationAmount{};
 
 	UPROPERTY(EditAnywhere)
-	float SellValue;
+	float SellValue{};
 };
 
 USTRUCT()
@@ -52,16 +52,16 @@ struct FItemTextData
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
-	FText Name;
+	FText Name{};
 
 	UPROPERTY(EditAnywhere)
-	FText Description;
+	FText Description{};
 
 	UPROPERTY(EditAnywhere)
-	FText InteractionText;
+	FText InteractionText{};
 
 	UPROPERTY(EditAnywhere)
-	FText UsageText;
+	FText UsageText{};
 };
 
 USTRUCT()
@@ -70,13 +70,13 @@ struct FItemNumericData
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
-	float Weight;
+	float Weight{};
 
 	UPROPERTY(EditAnywhere)
-	int32 MaxStackSize;
+	int32 MaxStackSize{};
 
 	UPROPERTY(EditAnywhere)
-	bool bIsStackable;
+	bool bIsStackable{};
 };
 
 USTRUCT()
@@ -85,10 +85,10 @@ struct FItemAssetData
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
-	UTexture2D* Icon;
+	UTexture2D* Icon{};
 
 	UPROPERTY(EditAnywhere)
-	UStaticMesh* Mesh;
+	UStaticMesh* Mesh{};
 };
 
 USTRUCT()
@@ -97,23 +97,23 @@ struct FItemData : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FName ID;
+	FName ID{};
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	EItemType Type;
+	EItemType Type{};
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	EItemQuality Quality;
+	EItemQuality Quality{};
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemStatistics Statistics;
+	FItemStatistics Statistics{};
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemTextData TextData;
+	FItemTextData TextData{};
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemNumericData NumericData;
+	FItemNumericData NumericData{};
 
 	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemAssetData AssetData;
+	FItemAssetData AssetData{};
 };
