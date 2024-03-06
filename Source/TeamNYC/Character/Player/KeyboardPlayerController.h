@@ -21,8 +21,11 @@ class TEAMNYC_API AKeyboardPlayerController : public APlayerController
 	
 private:
 	// OwnerPawn
-	UPROPERTY(VisibleAnywhere, Category = "Input")
+	UPROPERTY(VisibleAnywhere, Category = "Owner")
 	APawn* OwnerPawn{ nullptr };
+
+	UPROPERTY(VisibleAnywhere, Category = "Owner")
+	ACharacter* OwnerCharacter{ nullptr };
 
 	// Controller
 	UPROPERTY(VisibleAnywhere, Category = "Input")

@@ -58,8 +58,16 @@ void AKeyboardPlayerController::BeginPlay()
 	OwnerPawn = Cast<APawn>(GetPawn());
 	if (OwnerPawn)
 	{
-		UE_LOG(LogTemp, Display, TEXT("OwnerPawn: %s"), *OwnerPawn->GetName());
-
+		//UE_LOG(LogTemp, Display, TEXT("OwnerPawn: %s"), *OwnerPawn->GetName());
+		OwnerCharacter = Cast<ACharacter>(OwnerPawn);
+		if (OwnerCharacter)
+		{
+			//UE_LOG(LogTemp, Display, TEXT("OwnerCharacter: %s"), *OwnerCharacter->GetName());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("OwnerPawn is not a Character"));
+		}
 	}
 	else
 	{
@@ -70,7 +78,7 @@ void AKeyboardPlayerController::BeginPlay()
 	Controller = Cast<APlayerController>(this);
 	if (Controller)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Controller: %s"), *Controller->GetName());
+		//UE_LOG(LogTemp, Display, TEXT("Controller: %s"), *Controller->GetName());
 	}
 	else
 	{
@@ -139,27 +147,19 @@ void AKeyboardPlayerController::Move(const FInputActionValue& Value)
 	}
 }
 
-void AKeyboardPlayerController::StartJump(const FInputActionValue& Value)
+void AKeyboardPlayerController::StartJump()
 {
-	if (OwnerPawn)
+	if (OwnerCharacter)
 	{
-		ACharacter* CharacterTemp = Cast<ACharacter>(OwnerPawn);
-		if (CharacterTemp)
-		{
-			CharacterTemp->Jump();
-		}
+		OwnerCharacter->Jump();
 	}
 }
 
-void AKeyboardPlayerController::StopJump(const FInputActionValue& Value)
+void AKeyboardPlayerController::StopJump()
 {
-	if (OwnerPawn)
+	if (OwnerCharacter)
 	{
-		ACharacter* CharacterTemp = Cast<ACharacter>(OwnerPawn);
-		if (CharacterTemp)
-		{
-			CharacterTemp->StopJumping();
-		}
+		OwnerCharacter->StopJumping();
 	}
 }
 
