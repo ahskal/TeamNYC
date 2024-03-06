@@ -39,6 +39,12 @@ AKeyboardPlayerController::AKeyboardPlayerController()
 	if (IaJump) JumpAction = IaJump;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
 
+	// JumpAction
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Interaction.IA_Interaction'");
+	UInputAction* IaInter = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
+	if (IaInter) InteractionAction = IaInter;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
+
 }
 
 void AKeyboardPlayerController::BeginPlay()
@@ -154,5 +160,29 @@ void AKeyboardPlayerController::StopJump()
 	if (OwnerCharacter)
 	{
 		OwnerCharacter->StopJumping();
+	}
+}
+
+void AKeyboardPlayerController::BeginInteraction(const FInputActionValue& Value)
+{
+	if (OwnerPawn)
+	{
+		APlayerCharacter* CharacterTemp = Cast<APlayerCharacter>(OwnerPawn);
+		if (CharacterTemp)
+		{
+			CharacterTemp->BeginInteract();
+		}
+	}
+}
+
+void AKeyboardPlayerController::EndInteraction(const FInputActionValue& Value)
+{
+	if (OwnerPawn)
+	{
+		APlayerCharacter* CharacterTemp = Cast<APlayerCharacter>(OwnerPawn);
+		if (CharacterTemp)
+		{
+			CharacterTemp->EndInteract();
+		}
 	}
 }

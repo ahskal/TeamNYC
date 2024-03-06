@@ -9,9 +9,25 @@
 class USpringArmComponent;
 class UCameraComponent;
 
-/**
- * 
- */
+class IInteractionInterface;
+
+USTRUCT()
+struct FInteractionData
+{
+	GENERATED_BODY()
+
+	FInteractionData() : CurrentInteractable(nullptr), LastInteractionCheckTime(0.f)
+	{
+
+	};
+
+	UPROPERTY()
+	AActor* CurrentInteractable;
+
+	UPROPERTY()
+	float LastInteractionCheckTime;
+};
+
 UCLASS()
 class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
 {
@@ -27,8 +43,28 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent*		Camera;
 
+	UPROPERTY(VisibleAnywhere, Category = "Character | Interaction")
+	TScriptInterface<IInteractionInterface> TargetInteractable;
+
+	float InteractionCheckFrequency;
+	float InteractionCheckDistance;
+	FTimerHandle TimerHandleInteraction;
+	FInteractionData InteractionData;
+
+	void PerformInteractionCheck();
+	void FoundInteractable(AActor* NewInteractable);
+	void NoInteractableFound();
+	void Interact();
+
+	void ToggleMenu();
+	void UpdateInteractionWidget() const;
 public:
 	APlayerCharacter();
+
+	FORCEINLINE bool bIsInteracting() const { return GetWorldTimerManager().IsTimerActive(TimerHandleInteraction); };
+	
+	void BeginInteract();
+	void EndInteract();
 
 protected:
 	virtual void BeginPlay() override;
