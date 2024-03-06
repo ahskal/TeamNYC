@@ -56,6 +56,10 @@ private:
 	//UPROPERTY(EditAnywhere, Category = "Input")
 	//UInputAction* AttackAction;
 
+	// Look IA
+	UPROPERTY(EditAnywhere, Category = "Input")
+	UInputAction* InteractionAction;
+
 public:
 	AKeyboardPlayerController();
 
@@ -68,4 +72,7 @@ protected:
 	//void Look(const FInputActionValue& Value);
 	void StartJump(const FInputActionValue& Value);
 	void StopJump(const FInputActionValue& Value);
+
+	void BeginInteraction(const FInputActionValue& Value);
+	void EndInteraction(const FInputActionValue& Value);
 };
