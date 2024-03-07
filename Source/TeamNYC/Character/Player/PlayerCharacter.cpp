@@ -1,5 +1,6 @@
 #include "Character/Player/PlayerCharacter.h"
 
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
@@ -23,20 +24,30 @@ APlayerCharacter::APlayerCharacter()
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
 
-	// SpringArm
-	//CppMacro::CreateComponent<USpringArmComponent>(this, SpringArm, TEXT("SpringArm"), GetCapsuleComponent());
-	SpringArm = this->CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	SpringArm->SetupAttachment(GetCapsuleComponent());
+	// Don't rotate character to camera direction
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 
-	SpringArm->TargetArmLength = 400.0f; // The camera follows at this distance behind the character	
-	SpringArm->bUsePawnControlRotation = true; // Rotate the arm based on the controlle
-	//SpringArm->SetRelativeLocation(FVector(0, 50, 50));
-	//SpringArm->SetRelativeRotation(FRotator(-20, 0, 0));
+	// Configure character movement
+	GetCharacterMovement()->bOrientRotationToMovement = true; // Rotate character to moving direction
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 640.f, 0.f);
+	GetCharacterMovement()->bConstrainToPlane = true;
+	GetCharacterMovement()->bSnapToPlaneAtStart = true;
+
+	// SpringArm
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(RootComponent);
+	
+	SpringArm->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
+	SpringArm->TargetArmLength = 800.f;
+	SpringArm->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
+	SpringArm->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
 
 	// Camera
-	//CppMacro::CreateComponent<UCameraComponent>(this, Camera, TEXT("Camera"), SpringArm);
-	Camera = this->CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(SpringArm);
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
+	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+	Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	// Set AnimClass
 	FString AnimBpPath = TEXT("/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C");
@@ -52,6 +63,10 @@ APlayerCharacter::APlayerCharacter()
 
 	InteractionCheckFrequency = 0.1f; // 지연시간	
 	InteractionCheckDistance = 500.0f; // 탐색거리
+
+	// Activate ticking in order to update the cursor every frame.
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
 
 }
 

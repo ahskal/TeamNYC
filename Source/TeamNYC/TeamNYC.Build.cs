@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using UnrealBuildTool.Rules;
 
 public class TeamNYC : ModuleRules
 {
@@ -15,8 +16,10 @@ public class TeamNYC : ModuleRules
             "InputCore",
             "EnhancedInput",
             "AIModule",
-            "GameplayTasks"
-		});
+            "GameplayTasks",
+            "Niagara",
+            "NavigationSystem"
+        });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 
