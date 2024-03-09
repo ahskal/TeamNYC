@@ -21,9 +21,9 @@ AKeyboardPlayerController::AKeyboardPlayerController()
 	bEnableMouseOverEvents = true;	// Enable mouse over events
 
 	// Set DMC
-	FString DmcPath = TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Assets/Input/IMC_Player.IMC_Player'");
+	FString DmcPath = TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Assets/Input/IMC_Keyboard.IMC_Keyboard'");
 	UInputMappingContext* DmcObj = Cast<UInputMappingContext>(StaticLoadObject(UInputMappingContext::StaticClass(), nullptr, *DmcPath));
-	if (DmcObj) InputMappingContext = DmcObj;
+	if (DmcObj) KeyboardInputMappingContext = DmcObj;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load DMC: %s"), *DmcPath);
 
 	// Set IA
@@ -96,7 +96,7 @@ void AKeyboardPlayerController::BeginPlay()
 			if (UEnhancedInputLocalPlayerSubsystem* Subsystem
 				= ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 			{
-				Subsystem->AddMappingContext(InputMappingContext, 0);
+				Subsystem->AddMappingContext(KeyboardInputMappingContext, 0);
 			}
 		}
 	}

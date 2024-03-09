@@ -33,7 +33,7 @@ private:
 
 	// MappingContext
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputMappingContext* InputMappingContext;
+	UInputMappingContext* KeyboardInputMappingContext;
 
 	// Move IA
 	UPROPERTY(EditAnywhere, Category = "Input")
