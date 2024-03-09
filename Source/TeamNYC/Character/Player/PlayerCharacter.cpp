@@ -92,29 +92,8 @@ void APlayerCharacter::PerformInteractionCheck()
 {
 	InteractionData.LastInteractionCheckTime = GetWorld()->GetTimeSeconds();
 
-	//FVector2d ViewportSize;
-	//if (GEngine && GEngine->GameViewport)
-	//{
-	//	GEngine->GameViewport->GetViewportSize(ViewportSize);
-	//}
-
-	//get screen-space location of crosshair
-	//FVector2d CrosshairLocation(ViewportSize.X / 2, ViewportSize.Y / 2);
-	//CrosshairLocation.Y += CrosshairOffset.Y;
-
-	//FVector CrosshairWorldPosition;
-	//FVector CrosshairWorldDirection;
-	//bool bScreenToWorld;
-
-	//bScreenToWorld = GetCrosshairWorldPosition(
-	//	CrosshairLocation,
-	//	CrosshairWorldPosition,
-	//	CrosshairWorldDirection);
-	//
-	//if (!bScreenToWorld) { return; }
-
 	FVector TraceStart{ GetPawnViewLocation() };
-	FVector TraceEnd{ TraceStart + (GetViewRotation().Vector() * InteractionCheckDistance) };
+	FVector TraceEnd{ TraceStart + (GetActorForwardVector() * InteractionCheckDistance) };
 
 	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 0, 2.0f);
 
