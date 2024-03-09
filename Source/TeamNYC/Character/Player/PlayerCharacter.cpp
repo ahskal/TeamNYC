@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 
 #include "Interfaces/InteractionInterface.h"
+#include "UserInterface/PlayerHUD.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -73,6 +74,8 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	HUD = Cast<APlayerHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -164,7 +167,7 @@ void APlayerCharacter::FoundInteractable(AActor* NewInteractable)
 	InteractionData.CurrentInteractable = NewInteractable;
 	TargetInteractable = NewInteractable;
 
-	//HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
+	HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
 
 	TargetInteractable->BeginFocus();
 }
@@ -183,7 +186,7 @@ void APlayerCharacter::NoInteractableFound()
 			TargetInteractable->EndFocus();
 		}
 
-		//HUD->HideInteractionWidget();
+		HUD->HideInteractionWidget();
 
 
 		InteractionData.CurrentInteractable = nullptr;
@@ -239,13 +242,13 @@ void APlayerCharacter::Interact()
 
 void APlayerCharacter::ToggleMenu()
 {
-	//HUD->ToggleMenu();
+	HUD->ToggleMenu();
 }
 
 void APlayerCharacter::UpdateInteractionWidget() const
 {
 	if (IsValid(TargetInteractable.GetObject()))
 	{
-		//HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
+		HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
 	}
 }

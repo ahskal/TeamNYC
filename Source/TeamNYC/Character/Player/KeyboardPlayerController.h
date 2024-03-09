@@ -59,7 +59,7 @@ private:
 	//UPROPERTY(EditAnywhere, Category = "Input")
 	//UInputAction* AttackAction;
 
-	// Look IA
+	// Interaction IA
 	UPROPERTY(EditAnywhere, Category = "Input")
 	UInputAction* InteractionAction;
 
@@ -76,6 +76,6 @@ protected:
 	void StartJump();
 	void StopJump();
 
-	void BeginInteraction(const FInputActionValue& Value);
-	void EndInteraction(const FInputActionValue& Value);
+	void BeginInteract();
+	void EndInteract();
 };

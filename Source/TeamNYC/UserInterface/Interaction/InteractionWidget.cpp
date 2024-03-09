@@ -54,6 +54,6 @@ void UInteractionWidget::UpdateWidget(const FInteractableData* InteractableData)
 	default:
 		break;
 	}
-	//	ActionText->SetText(InteractableData->Action);
+	ActionText->SetText(InteractableData->Action);
 	NameText->SetText(InteractableData->Name);
 }

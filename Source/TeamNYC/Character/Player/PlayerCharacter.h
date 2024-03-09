@@ -10,6 +10,7 @@ class USpringArmComponent;
 class UCameraComponent;
 
 class IInteractionInterface;
+class APlayerHUD;
 
 USTRUCT()
 struct FInteractionData
@@ -58,6 +59,9 @@ private:
 
 	void ToggleMenu();
 	void UpdateInteractionWidget() const;
+
+	APlayerHUD* HUD;
+
 public:
 	APlayerCharacter();
 

@@ -115,6 +115,10 @@ void AKeyboardPlayerController::SetupInputComponent()
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AKeyboardPlayerController::StartJump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AKeyboardPlayerController::StopJump);
+
+		// Interaction
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Started, this, &AKeyboardPlayerController::BeginInteract);
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Completed, this, &AKeyboardPlayerController::EndInteract);
 	}
 }
 
@@ -162,11 +166,11 @@ void AKeyboardPlayerController::StopJump()
 	}
 }
 
-void AKeyboardPlayerController::BeginInteraction(const FInputActionValue& Value)
+void AKeyboardPlayerController::BeginInteract()
 {
-	if (OwnerPawn)
+	if (OwnerCharacter)
 	{
-		APlayerCharacter* CharacterTemp = Cast<APlayerCharacter>(OwnerPawn);
+		APlayerCharacter* CharacterTemp = Cast<APlayerCharacter>(OwnerCharacter);
 		if (CharacterTemp)
 		{
 			CharacterTemp->BeginInteract();
@@ -174,11 +178,11 @@ void AKeyboardPlayerController::BeginInteraction(const FInputActionValue& Value)
 	}
 }
 
-void AKeyboardPlayerController::EndInteraction(const FInputActionValue& Value)
+void AKeyboardPlayerController::EndInteract()
 {
-	if (OwnerPawn)
+	if (OwnerCharacter)
 	{
-		APlayerCharacter* CharacterTemp = Cast<APlayerCharacter>(OwnerPawn);
+		APlayerCharacter* CharacterTemp = Cast<APlayerCharacter>(OwnerCharacter);
 		if (CharacterTemp)
 		{
 			CharacterTemp->EndInteract();

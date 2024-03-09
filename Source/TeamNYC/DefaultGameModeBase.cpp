@@ -2,6 +2,7 @@
 
 
 #include "DefaultGameModeBase.h"
+#include "UserInterface/PlayerHUD.h"
 
 ADefaultGameModeBase::ADefaultGameModeBase()
 {
@@ -31,4 +32,26 @@ ADefaultGameModeBase::ADefaultGameModeBase()
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Class: %s"), *KeyboardControllerPath); UE_LOG(LogTemp, Display, TEXT(""));
 
 
+	// 블루프린트 객체를 불러오는 방법중 하나
+	//FString HUDPath = TEXT("/Script/Engine.Blueprint'/Game/UserInterface/BP_PlayerHUD.BP_PlayerHUD_C'");
+	//FStringClassReference HUDClassRef(HUDPath);
+	//if (UClass* HUDclass = HUDClassRef.TryLoadClass<AHUD>())
+	//{
+	//	this->HUDClass = HUDclass;
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Warning, TEXT("Failed to load HUD class: %s"), *HUDClassRef.GetAssetName());
+	//}
+	
+	// C++로 작성된 객체를 불러올때
+	//HUDClass = APlayerHUD::StaticClass();
+
+	// Set default HUD class
+	// AGameModeBase내부에 HUDClass 멤버에 BP객체 값 할당
+	// Create Pawn 방식과 동일함
+	FString HUDPath = TEXT("/Script/Engine.Blueprint'/Game/UserInterface/BP_PlayerHUD.BP_PlayerHUD_C'");
+	ConstructorHelpers::FClassFinder<AHUD> HUDClassFinder(*HUDPath);
+	if (HUDClassFinder.Succeeded()) HUDClass = HUDClassFinder.Class;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Class: %s"), *HUDPath);
 }
