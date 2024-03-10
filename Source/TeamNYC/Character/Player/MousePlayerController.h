@@ -34,9 +34,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* MouseInputMappingContext;
 
-	/** Jump Input Action */
+	// Click IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ClickAction;
+
+	// Jump IA
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* JumpAction;
+
+private:
+	// OwnerPawn
+	UPROPERTY(VisibleAnywhere, Category = "Owner")
+	APawn* OwnerPawn{ nullptr };
+
+	UPROPERTY(VisibleAnywhere, Category = "Owner")
+	ACharacter* OwnerCharacter{ nullptr };
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -51,6 +63,9 @@ protected:
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
+
+	void StartJump();
+	void StopJump();
 
 private:
 	FVector CachedDestination;

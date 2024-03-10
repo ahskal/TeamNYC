@@ -35,10 +35,17 @@ AMousePlayerController::AMousePlayerController()
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load DMC: %s"), *DmcPath);
 
 	// Set IA
+	// ClickAction
 	FString IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_Click.IA_Mouse_Click'");
 	UInputAction* IaClick = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
 	if (IaClick) ClickAction = IaClick;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Move: %s"), *IaPath);
+
+	// JumpAction
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Jump.IA_Jump'");
+	UInputAction* IaJump = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
+	if (IaJump) JumpAction = IaJump;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
 
 	// Set FxCursor
 	FString FxCursorPath = TEXT("/Script/Niagara.NiagaraSystem'/Game/Assets/Cursor/FX_Cursor.FX_Cursor'");
@@ -58,6 +65,26 @@ void AMousePlayerController::BeginPlay()
 	{
 		Subsystem->AddMappingContext(MouseInputMappingContext, 0);
 	}
+
+	// Get PlayerPawn->GetController()
+	OwnerPawn = Cast<APawn>(GetPawn());
+	if (OwnerPawn)
+	{
+		//UE_LOG(LogTemp, Display, TEXT("OwnerPawn: %s"), *OwnerPawn->GetName());
+		OwnerCharacter = Cast<ACharacter>(OwnerPawn);
+		if (OwnerCharacter)
+		{
+			//UE_LOG(LogTemp, Display, TEXT("OwnerCharacter: %s"), *OwnerCharacter->GetName());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("OwnerPawn is not a Character"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("OwnerPawn is NULL"));
+	}
 }
 
 void AMousePlayerController::SetupInputComponent()
@@ -74,6 +101,9 @@ void AMousePlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(ClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(ClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
+		// Setup jump input events
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMousePlayerController::StartJump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AMousePlayerController::StopJump);
 	}
 	else
 	{
@@ -130,4 +160,20 @@ void AMousePlayerController::OnSetDestinationReleased()
 	}
 
 	FollowTime = 0.f;
+}
+
+void AMousePlayerController::StartJump()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->Jump();
+	}
+}
+
+void AMousePlayerController::StopJump()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->StopJumping();
+	}
 }
