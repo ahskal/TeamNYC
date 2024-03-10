@@ -22,8 +22,11 @@ private:
 		class APlayerController* PlayerController;
 
 protected:
+		//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+		//FVector Velocity;
+
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		FVector Velocity;
+		float GroundSpeed;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 		bool bIsInAir;

@@ -21,7 +21,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Super::NativeUpdateAnimation(DeltaSeconds);
 	if (PlayerCharacter)
 	{
-		Velocity = PlayerCharacter->GetVelocity();
+		GroundSpeed = PlayerCharacter->GetVelocity().Size2D();
 		bIsInAir = PlayerCharacter->GetCharacterMovement()->IsFalling();
 		//bIsCrouching = PlayerCharacter->GetCharacterMovement()->IsCrouching();
 	}
