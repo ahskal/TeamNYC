@@ -47,40 +47,71 @@ void UPlayerInteractionComponent::PerformInteractionCheck()
 {
 	InteractionData.LastInteractionCheckTime = GetWorld()->GetTimeSeconds();
 
-	FVector TraceStart{ GetOwner()->GetActorLocation() };
-	FVector TraceEnd{ TraceStart + (GetOwner()->GetActorForwardVector() * InteractionCheckDistance) };
+	//플레이어의 컨트롤러를 가져옴
+	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
 
-	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 0, 2.0f);
+	// 스크린 센터 기준으로 마우스 좌표, 방향을 구함
+	FVector WorldLocation, WorldDirection;
+	PlayerController->DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
 
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(GetOwner());
+	const float RayLength = 1500.0f;
+	FHitResult HitResult;
+	FVector Start = WorldLocation;
+	FVector End = WorldLocation + (WorldDirection * RayLength);
 
-	FHitResult TraceHit;
+	// 객체과 충돌을 하지 않는 함수 라고함(플레이어 객체)
+	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(GetOwner());
 
-	if (GetWorld()->LineTraceSingleByChannel(TraceHit,
-		TraceStart,
-		TraceEnd,
-		ECC_Visibility,
-		QueryParams))
+	// 디버깅을 위해 레이를 시각화합니다.
+	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 10, 2.0f, 1);
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility, CollisionParams))
 	{
-		if (TraceHit.GetActor()->GetClass()->
-			ImplementsInterface(UInteractionInterface::StaticClass()))
+		// 레이 캐스트가 충돌한 경우
+		if (HitResult.GetActor()->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
 		{
-			const float Distance = (TraceStart - TraceHit.ImpactPoint).Size();
-
-
-			if (TraceHit.GetActor() != InteractionData.CurrentInteractable && Distance <= InteractionCheckDistance)
+			if (HitResult.GetActor() != InteractionData.CurrentInteractable)
 			{
-				FoundInteractable(TraceHit.GetActor());
+				FoundInteractable(HitResult.GetActor());
 				return;
 			}
-
-			if (TraceHit.GetActor() == InteractionData.CurrentInteractable)
+			else
 			{
 				return;
 			}
 		}
 	}
+
+	// 기존에 사용하던 객체 기준에서 레이캐스트로 판별방식
+	//FVector TraceStart{ GetOwner()->GetActorLocation() };
+	//FVector TraceEnd{ TraceStart + (GetOwner()->GetActorForwardVector() * InteractionCheckDistance) };
+	//
+	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 0, 2.0f, 1);
+	//
+	//FCollisionQueryParams QueryParams;
+	//QueryParams.AddIgnoredActor(GetOwner());
+	//
+	//FHitResult TraceHit;
+	//
+	//if (GetWorld()->LineTraceSingleByChannel(TraceHit, TraceStart, TraceEnd, ECC_Visibility, QueryParams))
+	//{
+	//	if (TraceHit.GetActor()->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
+	//	{
+	//		const float Distance = (TraceStart - TraceHit.ImpactPoint).Size();
+	//
+	//		if (TraceHit.GetActor() != InteractionData.CurrentInteractable && Distance <= InteractionCheckDistance)
+	//		{
+	//			FoundInteractable(TraceHit.GetActor());
+	//			return;
+	//		}
+	//
+	//		if (TraceHit.GetActor() == InteractionData.CurrentInteractable)
+	//		{
+	//			return;
+	//		}
+	//	}
+	//}
 	NoInteractableFound();
 }
 
