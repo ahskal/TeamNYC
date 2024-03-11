@@ -8,69 +8,35 @@
 
 class USpringArmComponent;
 class UCameraComponent;
-
-class IInteractionInterface;
-class APlayerHUD;
-
-USTRUCT()
-struct FInteractionData
-{
-	GENERATED_BODY()
-
-	FInteractionData() : CurrentInteractable(nullptr), LastInteractionCheckTime(0.f)
-	{
-
-	};
-
-	UPROPERTY()
-	AActor* CurrentInteractable;
-
-	UPROPERTY()
-	float LastInteractionCheckTime;
-};
+class UPlayerInteractionComponent;
 
 UCLASS()
 class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
 {
 	GENERATED_BODY()
-	
-	
 private:
 	// SpringArm
 	UPROPERTY(EditDefaultsOnly)
-	USpringArmComponent*	SpringArm;
+	USpringArmComponent* SpringArm;
 
 	// Camera
 	UPROPERTY(EditDefaultsOnly)
-	UCameraComponent*		Camera;
+	UCameraComponent* Camera;
 
-	UPROPERTY(VisibleAnywhere, Category = "Character | Interaction")
-	TScriptInterface<IInteractionInterface> TargetInteractable;
-
-	float InteractionCheckFrequency;
-	float InteractionCheckDistance;
-	FTimerHandle TimerHandleInteraction;
-	FInteractionData InteractionData;
-
-	void PerformInteractionCheck();
-	void FoundInteractable(AActor* NewInteractable);
-	void NoInteractableFound();
-	void Interact();
-
-	void ToggleMenu();
-	void UpdateInteractionWidget() const;
-
-	APlayerHUD* HUD;
-
+	UPROPERTY(EditDefaultsOnly)
+	UPlayerInteractionComponent* InteractionComponent;
 public:
 	APlayerCharacter();
 
-	FORCEINLINE bool bIsInteracting() const { return GetWorldTimerManager().IsTimerActive(TimerHandleInteraction); };
-	
-	void BeginInteract();
-	void EndInteract();
+	FORCEINLINE UPlayerInteractionComponent* GetInteractionComponent() const { return InteractionComponent; }
+	FORCEINLINE void SetInteractionComponent(UPlayerInteractionComponent* InInteractionComponent) { InteractionComponent = InInteractionComponent; }
+
+	void BeginInteract() const;
+	void EndInteract() const;
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+
 };

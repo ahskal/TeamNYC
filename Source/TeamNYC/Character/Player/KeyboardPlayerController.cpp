@@ -2,6 +2,7 @@
 
 
 #include "Character/Player/KeyboardPlayerController.h"
+#include "Character/Player/PlayerCharacter.h"
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -11,8 +12,6 @@
 
 #include "GameFramework/Character.h"
 
-
-#include "Character/Player/PlayerCharacter.h"
 
 AKeyboardPlayerController::AKeyboardPlayerController()
 {

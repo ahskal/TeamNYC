@@ -5,8 +5,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
-#include "Interfaces/InteractionInterface.h"
-#include "UserInterface/PlayerHUD.h"
+#include "Character/Player/Component/PlayerInteractionComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -62,172 +61,36 @@ APlayerCharacter::APlayerCharacter()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get AnimBPClass"));
 	}
 
-	InteractionCheckFrequency = 0.1f; // 지연시간	
-	InteractionCheckDistance = 500.0f; // 탐색거리
+	// CreateDefaultSubobject를 통해 컴포넌트를 생성하면, 컴포넌트 내부에는
+	// 부모 클래스인 UActorComponent에서 상속받은 OwnerPrivate라는 멤버 변수가 있습니다.
+	// 이 OwnerPrivate 변수에는 해당 컴포넌트를 소유하는 액터 객체의 포인터가 할당됩니다.
+	// 따라서 컴포넌트는 자동으로 부모 클래스의 주소를 알게 되며, 따로 바인딩을 할 필요가 없습니다.
+	InteractionComponent = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("InteractionComponent"));
+
 
 	// Activate ticking in order to update the cursor every frame.
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+}
 
+void APlayerCharacter::BeginInteract() const
+{
+	InteractionComponent->BeginInteract();
+}
+
+void APlayerCharacter::EndInteract() const
+{
+	InteractionComponent->EndInteract();
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	HUD = Cast<APlayerHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (GetWorld()->TimeSince(InteractionData.LastInteractionCheckTime) > InteractionCheckFrequency)
-	{
-		PerformInteractionCheck();
-	}
+	
 }
 
-void APlayerCharacter::PerformInteractionCheck()
-{
-	InteractionData.LastInteractionCheckTime = GetWorld()->GetTimeSeconds();
-
-	FVector TraceStart{ GetPawnViewLocation() };
-	FVector TraceEnd{ TraceStart + (GetActorForwardVector() * InteractionCheckDistance) };
-
-	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 0, 2.0f);
-
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-
-	FHitResult TraceHit;
-
-	if (GetWorld()->LineTraceSingleByChannel(TraceHit,
-		TraceStart,
-		TraceEnd,
-		ECC_Visibility,
-		QueryParams))
-	{
-		if (TraceHit.GetActor()->GetClass()->
-			ImplementsInterface(UInteractionInterface::StaticClass()))
-		{
-			const float Distance = (TraceStart - TraceHit.ImpactPoint).Size();
-
-
-			if (TraceHit.GetActor() != InteractionData.CurrentInteractable && Distance <= InteractionCheckDistance)
-			{
-				FoundInteractable(TraceHit.GetActor());
-				return;
-			}
-
-			if (TraceHit.GetActor() == InteractionData.CurrentInteractable)
-			{
-				return;
-			}
-		}
-	}
-
-	NoInteractableFound();
-}
-
-void APlayerCharacter::FoundInteractable(AActor* NewInteractable)
-{
-	if (bIsInteracting())
-	{
-		EndInteract();
-	}
-
-	if (InteractionData.CurrentInteractable)
-	{
-		TargetInteractable = InteractionData.CurrentInteractable;
-		TargetInteractable->EndFocus();
-	}
-
-	InteractionData.CurrentInteractable = NewInteractable;
-	TargetInteractable = NewInteractable;
-
-	HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
-
-	TargetInteractable->BeginFocus();
-}
-
-void APlayerCharacter::NoInteractableFound()
-{
-	if (bIsInteracting())
-	{
-		GetWorldTimerManager().ClearTimer(TimerHandleInteraction);
-	}
-
-	if (InteractionData.CurrentInteractable)
-	{
-		if (IsValid(TargetInteractable.GetObject()))
-		{
-			TargetInteractable->EndFocus();
-		}
-
-		HUD->HideInteractionWidget();
-
-
-		InteractionData.CurrentInteractable = nullptr;
-		TargetInteractable = nullptr;
-	}
-}
-
-void APlayerCharacter::BeginInteract()
-{
-	PerformInteractionCheck();
-
-	if (InteractionData.CurrentInteractable)
-	{
-		if (IsValid(TargetInteractable.GetObject()))
-		{
-			TargetInteractable->BeginInteract();
-
-			if (FMath::IsNearlyZero(TargetInteractable->InteractableData.InteractionDuration, 0.7f))
-			{
-				Interact();
-			}
-			else
-			{
-				GetWorldTimerManager().SetTimer(
-					TimerHandleInteraction,
-					this,
-					&APlayerCharacter::Interact,
-					TargetInteractable->InteractableData.InteractionDuration, false);
-			}
-		}
-	}
-}
-
-void APlayerCharacter::EndInteract()
-{
-	GetWorldTimerManager().ClearTimer(TimerHandleInteraction);
-
-	if (IsValid(TargetInteractable.GetObject()))
-	{
-		TargetInteractable->EndInteract();
-	}
-}
-
-void APlayerCharacter::Interact()
-{
-	GetWorldTimerManager().ClearTimer(TimerHandleInteraction);
-
-	if (IsValid(TargetInteractable.GetObject()))
-	{
-		TargetInteractable->Interact(this);
-	}
-}
-
-void APlayerCharacter::ToggleMenu()
-{
-	HUD->ToggleMenu();
-}
-
-void APlayerCharacter::UpdateInteractionWidget() const
-{
-	if (IsValid(TargetInteractable.GetObject()))
-	{
-		HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
-	}
-}
