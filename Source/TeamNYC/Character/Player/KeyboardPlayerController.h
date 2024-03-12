@@ -12,7 +12,7 @@ class UInputAction;
 struct FInputActionValue;
 
 /**********************************************
- * WASD ¿òÁ÷ÀÓÀ» Á¦°øÇÏ´Â ÇÃ·¹ÀÌ¾î ÄÁÆ®·Ñ·¯
+ * WASD ì›€ì§ì„ì„ ì œê³µí•˜ëŠ” í”Œë ˆì´ì–´ ì»¨íŠ¸ë¡¤ëŸ¬
  **********************************************/
 UCLASS()
 class TEAMNYC_API AKeyboardPlayerController : public APlayerController

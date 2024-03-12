@@ -11,6 +11,7 @@
 class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
+class APlayerCharacter;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -42,13 +43,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* JumpAction;
 
+	// Interaction IA
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractionAction;
+
 private:
 	// OwnerPawn
 	UPROPERTY(VisibleAnywhere, Category = "Owner")
-	APawn* OwnerPawn{ nullptr };
+	TObjectPtr<APawn> OwnerPawn;
 
 	UPROPERTY(VisibleAnywhere, Category = "Owner")
-	ACharacter* OwnerCharacter{ nullptr };
+	TObjectPtr<APlayerCharacter> OwnerCharacter;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -66,6 +71,9 @@ protected:
 
 	void StartJump();
 	void StopJump();
+
+	void BeginInteract();
+	void EndInteract();
 
 private:
 	FVector CachedDestination;

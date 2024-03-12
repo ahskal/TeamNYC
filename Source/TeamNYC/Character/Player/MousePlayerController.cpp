@@ -48,6 +48,12 @@ AMousePlayerController::AMousePlayerController()
 	if (IaJump) JumpAction = IaJump;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
 
+	// InteractionAction
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Interaction.IA_Interaction'");
+	UInputAction* IaInter = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
+	if (IaInter) InteractionAction = IaInter;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
+
 	// Set FxCursor
 	FString FxCursorPath = TEXT("/Script/Niagara.NiagaraSystem'/Game/Assets/Cursor/FX_Cursor.FX_Cursor'");
 	UNiagaraSystem* FxCursorObj = Cast<UNiagaraSystem>(StaticLoadObject(UNiagaraSystem::StaticClass(), nullptr, *FxCursorPath));
@@ -72,7 +78,7 @@ void AMousePlayerController::BeginPlay()
 	if (OwnerPawn)
 	{
 		//UE_LOG(LogTemp, Display, TEXT("OwnerPawn: %s"), *OwnerPawn->GetName());
-		OwnerCharacter = Cast<ACharacter>(OwnerPawn);
+		OwnerCharacter = Cast<APlayerCharacter>(OwnerPawn);
 		if (OwnerCharacter)
 		{
 			//UE_LOG(LogTemp, Display, TEXT("OwnerCharacter: %s"), *OwnerCharacter->GetName());
@@ -105,6 +111,10 @@ void AMousePlayerController::SetupInputComponent()
 		// Setup jump input events
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMousePlayerController::StartJump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AMousePlayerController::StopJump);
+
+		// Interaction
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Started, this, &AMousePlayerController::BeginInteract);
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Completed, this, &AMousePlayerController::EndInteract);
 	}
 	else
 	{
@@ -145,11 +155,9 @@ void AMousePlayerController::OnSetDestinationTriggered()
 
 void AMousePlayerController::OnSetDestinationReleased()
 {
-	UE_LOG(LogTemp, Log, TEXT("%g"), FollowTime);
 	// If it was a short press
 	if (FollowTime <= ShortPressThreshold)
 	{
-		UE_LOG(LogTemp, Log, TEXT("f it was a short press"));
 		// We move there and spawn some particles
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FxCursor, CachedDestination, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
@@ -171,5 +179,21 @@ void AMousePlayerController::StopJump()
 	if (OwnerCharacter)
 	{
 		OwnerCharacter->StopJumping();
+	}
+}
+
+void AMousePlayerController::BeginInteract()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->BeginInteract();
+	}
+}
+
+void AMousePlayerController::EndInteract()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->EndInteract();
 	}
 }
