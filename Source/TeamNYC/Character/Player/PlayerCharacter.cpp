@@ -61,10 +61,10 @@ APlayerCharacter::APlayerCharacter()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get AnimBPClass"));
 	}
 
-	// CreateDefaultSubobject¸¦ ÅëÇØ ÄÄÆ÷³ÍÆ®¸¦ »ý¼ºÇÏ¸é, ÄÄÆ÷³ÍÆ® ³»ºÎ¿¡´Â
-	// ºÎ¸ð Å¬·¡½ºÀÎ UActorComponent¿¡¼­ »ó¼Ó¹ÞÀº OwnerPrivate¶ó´Â ¸â¹ö º¯¼ö°¡ ÀÖ½À´Ï´Ù.
-	// ÀÌ OwnerPrivate º¯¼ö¿¡´Â ÇØ´ç ÄÄÆ÷³ÍÆ®¸¦ ¼ÒÀ¯ÇÏ´Â ¾×ÅÍ °´Ã¼ÀÇ Æ÷ÀÎÅÍ°¡ ÇÒ´çµË´Ï´Ù.
-	// µû¶ó¼­ ÄÄÆ÷³ÍÆ®´Â ÀÚµ¿À¸·Î ºÎ¸ð Å¬·¡½ºÀÇ ÁÖ¼Ò¸¦ ¾Ë°Ô µÇ¸ç, µû·Î ¹ÙÀÎµùÀ» ÇÒ ÇÊ¿ä°¡ ¾ø½À´Ï´Ù.
+	// CreateDefaultSubobjectë¥¼ í†µí•´ ì»´í¬ë„ŒíŠ¸ë¥¼ ìƒì„±í•˜ë©´, ì»´í¬ë„ŒíŠ¸ ë‚´ë¶€ì—ëŠ”
+	// ë¶€ëª¨ í´ëž˜ìŠ¤ì¸ UActorComponentì—ì„œ ìƒì†ë°›ì€ OwnerPrivateë¼ëŠ” ë©¤ë²„ ë³€ìˆ˜ê°€ ìžˆìŠµë‹ˆë‹¤.
+	// ì´ OwnerPrivate ë³€ìˆ˜ì—ëŠ” í•´ë‹¹ ì»´í¬ë„ŒíŠ¸ë¥¼ ì†Œìœ í•˜ëŠ” ì•¡í„° ê°ì²´ì˜ í¬ì¸í„°ê°€ í• ë‹¹ë©ë‹ˆë‹¤.
+	// ë”°ë¼ì„œ ì»´í¬ë„ŒíŠ¸ëŠ” ìžë™ìœ¼ë¡œ ë¶€ëª¨ í´ëž˜ìŠ¤ì˜ ì£¼ì†Œë¥¼ ì•Œê²Œ ë˜ë©°, ë”°ë¡œ ë°”ì¸ë”©ì„ í•  í•„ìš”ê°€ ì—†ìŠµë‹ˆë‹¤.
 	InteractionComponent = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("InteractionComponent"));
 
 
