@@ -22,6 +22,7 @@ AMousePlayerController::AMousePlayerController()
 	UE_LOG(LogTemp, Display, TEXT("==================== MousePlayerController ===================="));
 
 	bShowMouseCursor = true;
+	bMoveToMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 	CachedDestination = FVector::ZeroVector;
 	FollowTime = 0.f;
@@ -125,14 +126,7 @@ void AMousePlayerController::OnSetDestinationTriggered()
 	// We look for the location in the world where the player has pressed the input
 	FHitResult Hit;
 	bool bHitSuccessful = false;
-	if (bIsTouch)
-	{
-		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
-	}
-	else
-	{
-		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-	}
+	bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
 
 	// If we hit a surface, cache the location
 	if (bHitSuccessful)
@@ -140,20 +134,22 @@ void AMousePlayerController::OnSetDestinationTriggered()
 		CachedDestination = Hit.Location;
 	}
 
-	// Move towards mouse pointer or touch
-	APawn* ControlledPawn = GetPawn();
-	if (ControlledPawn != nullptr)
+	// Move towards mouse pointer
+	//APawn* ControlledPawn = GetPawn();
+	if (OwnerPawn)
 	{
-		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
+		FVector WorldDirection = (CachedDestination - OwnerPawn->GetActorLocation()).GetSafeNormal();
+		OwnerPawn->AddMovementInput(WorldDirection, 1.0, false);
 	}
 }
 
 void AMousePlayerController::OnSetDestinationReleased()
 {
+	UE_LOG(LogTemp, Log, TEXT("%g"), FollowTime);
 	// If it was a short press
 	if (FollowTime <= ShortPressThreshold)
 	{
+		UE_LOG(LogTemp, Log, TEXT("f it was a short press"));
 		// We move there and spawn some particles
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FxCursor, CachedDestination, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
