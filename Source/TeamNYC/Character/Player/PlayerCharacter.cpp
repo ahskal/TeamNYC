@@ -68,7 +68,7 @@ APlayerCharacter::APlayerCharacter()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get AnimBPClass"));
 	}
 
-
+	// 
 	// CreateDefaultSubobject�� ���� ������Ʈ�� �����ϸ�, ������Ʈ ���ο���
 	// �θ� Ŭ������ UActorComponent���� ��ӹ��� OwnerPrivate��� ��� ������ �ֽ��ϴ�.
 	// �� OwnerPrivate �������� �ش� ������Ʈ�� �����ϴ� ���� ��ü�� �����Ͱ� �Ҵ�˴ϴ�.
