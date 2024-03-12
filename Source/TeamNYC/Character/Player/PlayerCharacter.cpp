@@ -1,10 +1,13 @@
 #include "Character/Player/PlayerCharacter.h"
-
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
-
+#include "Components/DecalComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Materials/Material.h"
+#include "Engine/World.h"
 #include "Character/Player/Component/PlayerInteractionComponent.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -23,6 +26,7 @@ APlayerCharacter::APlayerCharacter()
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;
@@ -38,7 +42,6 @@ APlayerCharacter::APlayerCharacter()
 	// SpringArm
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	
 	SpringArm->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
@@ -48,6 +51,10 @@ APlayerCharacter::APlayerCharacter()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	// Activate ticking in order to update the cursor every frame.
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	// Set AnimClass
 	FString AnimBpPath = TEXT("/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C");
@@ -61,16 +68,12 @@ APlayerCharacter::APlayerCharacter()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get AnimBPClass"));
 	}
 
-	// CreateDefaultSubobject¸¦ ÅëÇØ ÄÄÆ÷³ÍÆ®¸¦ »ý¼ºÇÏ¸é, ÄÄÆ÷³ÍÆ® ³»ºÎ¿¡´Â
-	// ºÎ¸ð Å¬·¡½ºÀÎ UActorComponent¿¡¼­ »ó¼Ó¹ÞÀº OwnerPrivate¶ó´Â ¸â¹ö º¯¼ö°¡ ÀÖ½À´Ï´Ù.
-	// ÀÌ OwnerPrivate º¯¼ö¿¡´Â ÇØ´ç ÄÄÆ÷³ÍÆ®¸¦ ¼ÒÀ¯ÇÏ´Â ¾×ÅÍ °´Ã¼ÀÇ Æ÷ÀÎÅÍ°¡ ÇÒ´çµË´Ï´Ù.
-	// µû¶ó¼­ ÄÄÆ÷³ÍÆ®´Â ÀÚµ¿À¸·Î ºÎ¸ð Å¬·¡½ºÀÇ ÁÖ¼Ò¸¦ ¾Ë°Ô µÇ¸ç, µû·Î ¹ÙÀÎµùÀ» ÇÒ ÇÊ¿ä°¡ ¾ø½À´Ï´Ù.
+
+	// CreateDefaultSubobjectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½Î¿ï¿½ï¿½ï¿½
+	// ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UActorComponentï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ OwnerPrivateï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
+	// ï¿½ï¿½ OwnerPrivate ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Ò´ï¿½Ë´Ï´ï¿½.
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¼Ò¸ï¿½ ï¿½Ë°ï¿½ ï¿½Ç¸ï¿½, ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê¿ä°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.
 	InteractionComponent = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("InteractionComponent"));
-
-
-	// Activate ticking in order to update the cursor every frame.
-	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
 void APlayerCharacter::BeginInteract() const
@@ -88,9 +91,9 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-void APlayerCharacter::Tick(float DeltaTime)
+void APlayerCharacter::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 	
 }
 

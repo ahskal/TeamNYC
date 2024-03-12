@@ -52,7 +52,7 @@ private:
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
+	bool bMoveToMouseCursor;
 
 	virtual void SetupInputComponent() override;
 
@@ -69,8 +69,6 @@ protected:
 
 private:
 	FVector CachedDestination;
-
-	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
 
 };
