@@ -5,8 +5,8 @@
 #include "CharacterPrototype.generated.h"
 
 /********************************************************
-*	¸ğµç Ä³¸¯ÅÍ(Player, Monster, NPC)ÀÇ º£ÀÌ½º Å¬·¡½º
-*	°øÅëÀûÀÎ ¿ä¼Ò¸¸À» ¼±¾ğ
+*	ëª¨ë“  ìºë¦­í„°(Player, Monster, NPC)ì˜ ë² ì´ìŠ¤ í´ë˜ìŠ¤
+*	ê³µí†µì ì¸ ìš”ì†Œë§Œì„ ì„ ì–¸
 ********************************************************/
 UCLASS()
 class TEAMNYC_API ACharacterPrototype : public ACharacter
