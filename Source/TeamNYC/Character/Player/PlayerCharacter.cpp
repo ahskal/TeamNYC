@@ -1,28 +1,57 @@
 #include "Character/Player/PlayerCharacter.h"
-
-#include "GameFramework/CharacterMovementComponent.h"
-#include "Components/CapsuleComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
-
+#include "Components/DecalComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Materials/Material.h"
+#include "Engine/World.h"
 #include "Character/Player/Component/PlayerInteractionComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Skeletal Mesh
-	FString MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/Player/sk_CharM_Base.sk_CharM_Base'");
-	//CppMacro::GetObject<USkeletalMesh>(SkeletalMesh, MeshPath);
+	// Body SkeletalMesh
+	FString MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/MetaHumans/Character/Male/Medium/NormalWeight/Body/m_med_nrw_body.m_med_nrw_body'");
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> ObjectFinder(*MeshPath);
-	if (ObjectFinder.Succeeded()) SkeletalMesh = ObjectFinder.Object;
+	if (ObjectFinder.Succeeded()) BodyMesh = ObjectFinder.Object;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Object: %s"), *MeshPath);
+
+	// Face SkeletalMesh
+	MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/MetaHumans/Character/Face/FaceMesh.FaceMesh'");
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> FaceObjectFinder(*MeshPath);
+	if (FaceObjectFinder.Succeeded()) Face = FaceObjectFinder.Object;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Object: %s"), *MeshPath);
 
 	// Mesh Setup
-	GetMesh()->SetSkeletalMesh(SkeletalMesh);
+	GetMesh()->SetSkeletalMesh(BodyMesh);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
+	// Face Mesh Setup
+	FaceMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Face"));
+	FaceMesh->SetupAttachment(GetMesh());
+	FaceMesh->SetSkeletalMesh(Face);
+
+	// Torso SkeletalMesh
+	TorsoMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Torso"));
+	TorsoMesh->SetupAttachment(GetMesh());
+	TorsoMesh->SetSkeletalMesh(Torso);
+
+	// Legs SkeletalMesh
+	LegsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Legs"));
+	LegsMesh->SetupAttachment(GetMesh());
+	LegsMesh->SetSkeletalMesh(Legs);
+
+	// Feet SkeletalMesh
+	FeetMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Feet"));
+	FeetMesh->SetupAttachment(GetMesh());
+	FeetMesh->SetSkeletalMesh(Feet);
 
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;
@@ -38,7 +67,6 @@ APlayerCharacter::APlayerCharacter()
 	// SpringArm
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
-	
 	SpringArm->SetUsingAbsoluteRotation(true); // Don't want arm to rotate when character does
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
@@ -49,8 +77,12 @@ APlayerCharacter::APlayerCharacter()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Set AnimClass
-	FString AnimBpPath = TEXT("/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C");
+	// Activate ticking in order to update the cursor every frame.
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	// Set Body AnimClass
+	FString AnimBpPath = TEXT("/Script/Engine.AnimBlueprint'/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C'");
 	ConstructorHelpers::FClassFinder<UAnimInstance> AnimBpClass(*AnimBpPath);
 	if (AnimBpClass.Class)
 	{
@@ -58,19 +90,26 @@ APlayerCharacter::APlayerCharacter()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to Get AnimBPClass"));
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Body AnimBPClass"));
 	}
 
-	// CreateDefaultSubobject¸¦ ÅëÇØ ÄÄÆ÷³ÍÆ®¸¦ »ı¼ºÇÏ¸é, ÄÄÆ÷³ÍÆ® ³»ºÎ¿¡´Â
-	// ºÎ¸ğ Å¬·¡½ºÀÎ UActorComponent¿¡¼­ »ó¼Ó¹ŞÀº OwnerPrivate¶ó´Â ¸â¹ö º¯¼ö°¡ ÀÖ½À´Ï´Ù.
-	// ÀÌ OwnerPrivate º¯¼ö¿¡´Â ÇØ´ç ÄÄÆ÷³ÍÆ®¸¦ ¼ÒÀ¯ÇÏ´Â ¾×ÅÍ °´Ã¼ÀÇ Æ÷ÀÎÅÍ°¡ ÇÒ´çµË´Ï´Ù.
-	// µû¶ó¼­ ÄÄÆ÷³ÍÆ®´Â ÀÚµ¿À¸·Î ºÎ¸ğ Å¬·¡½ºÀÇ ÁÖ¼Ò¸¦ ¾Ë°Ô µÇ¸ç, µû·Î ¹ÙÀÎµùÀ» ÇÒ ÇÊ¿ä°¡ ¾ø½À´Ï´Ù.
+	// Set Face AnimClass
+	FString FaceAnimBpPath = TEXT("/Script/Engine.AnimBlueprint'/Game/Assets/Character/MetaHumans/Common/Face/Face_AnimBP.Face_AnimBP_C'");
+	ConstructorHelpers::FClassFinder<UAnimInstance> FaceAnimBpClass(*FaceAnimBpPath);
+	if (FaceAnimBpClass.Class)
+	{
+		FaceMesh->SetAnimInstanceClass(FaceAnimBpClass.Class);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Face AnimBPClass"));
+	}
+
+	// CreateDefaultSubobjectë¥¼ í†µí•´ ì»´í¬ë„ŒíŠ¸ë¥¼ ìƒì„±í•˜ë©´, ì»´í¬ë„ŒíŠ¸ ë‚´ë¶€ì—ëŠ”
+	// ë¶€ëª¨ í´ë˜ìŠ¤ì¸ UActorComponentì—ì„œ ìƒì†ë°›ì€ OwnerPrivateë¼ëŠ” ë©¤ë²„ ë³€ìˆ˜ê°€ ìˆìŠµë‹ˆë‹¤.
+	// ì´ OwnerPrivate ë³€ìˆ˜ì—ëŠ” í•´ë‹¹ ì»´í¬ë„ŒíŠ¸ë¥¼ ì†Œìœ í•˜ëŠ” ì•¡í„° ê°ì²´ì˜ í¬ì¸í„°ê°€ í• ë‹¹ë©ë‹ˆë‹¤.
+	// ë”°ë¼ì„œ ì»´í¬ë„ŒíŠ¸ëŠ” ìë™ìœ¼ë¡œ ë¶€ëª¨ í´ë˜ìŠ¤ì˜ ì£¼ì†Œë¥¼ ì•Œê²Œ ë˜ë©°, ë”°ë¡œ ë°”ì¸ë”©ì„ í•  í•„ìš”ê°€ ì—†ìŠµë‹ˆë‹¤.
 	InteractionComponent = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("InteractionComponent"));
-
-
-	// Activate ticking in order to update the cursor every frame.
-	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = true;
 }
 
 void APlayerCharacter::BeginInteract() const
@@ -88,9 +127,9 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-void APlayerCharacter::Tick(float DeltaTime)
+void APlayerCharacter::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaTime);
+	Super::Tick(DeltaSeconds);
 	
 }
 

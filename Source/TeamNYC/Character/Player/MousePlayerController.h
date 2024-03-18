@@ -11,6 +11,7 @@
 class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
+class APlayerCharacter;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -36,23 +37,31 @@ public:
 
 	// Click IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ClickAction;
+	UInputAction* LeftClickAction;
+
+	// Click IA
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* RightClickAction;
 
 	// Jump IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* JumpAction;
 
+	// Interaction IA
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractionAction;
+
 private:
 	// OwnerPawn
 	UPROPERTY(VisibleAnywhere, Category = "Owner")
-	APawn* OwnerPawn{ nullptr };
+	TObjectPtr<APawn> OwnerPawn;
 
 	UPROPERTY(VisibleAnywhere, Category = "Owner")
-	ACharacter* OwnerCharacter{ nullptr };
+	TObjectPtr<APlayerCharacter> OwnerCharacter;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
+	bool bMoveToMouseCursor;
 
 	virtual void SetupInputComponent() override;
 
@@ -67,10 +76,11 @@ protected:
 	void StartJump();
 	void StopJump();
 
+	void BeginInteract();
+	void EndInteract();
+
 private:
 	FVector CachedDestination;
-
-	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
 
 };

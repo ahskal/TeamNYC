@@ -38,7 +38,7 @@ AKeyboardPlayerController::AKeyboardPlayerController()
 	if (IaJump) JumpAction = IaJump;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
 
-	// JumpAction
+	// InteractionAction
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Interaction.IA_Interaction'");
 	UInputAction* IaInter = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
 	if (IaInter) InteractionAction = IaInter;

@@ -22,6 +22,7 @@ AMousePlayerController::AMousePlayerController()
 	UE_LOG(LogTemp, Display, TEXT("==================== MousePlayerController ===================="));
 
 	bShowMouseCursor = true;
+	bMoveToMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
 	CachedDestination = FVector::ZeroVector;
 	FollowTime = 0.f;
@@ -35,16 +36,28 @@ AMousePlayerController::AMousePlayerController()
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load DMC: %s"), *DmcPath);
 
 	// Set IA
-	// ClickAction
-	FString IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_Click.IA_Mouse_Click'");
-	UInputAction* IaClick = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
-	if (IaClick) ClickAction = IaClick;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Move: %s"), *IaPath);
+	// LeftClickAction
+	FString IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_LClick.IA_Mouse_LClick'");
+	UInputAction* IaLClick = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
+	if (IaLClick) LeftClickAction = IaLClick;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_LClick: %s"), *IaPath);
+
+	// RightClickAction
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_RClick.IA_Mouse_RClick'");
+	UInputAction* IaRClick = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
+	if (IaRClick) RightClickAction = IaRClick;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_RClick: %s"), *IaPath);
 
 	// JumpAction
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Jump.IA_Jump'");
 	UInputAction* IaJump = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
 	if (IaJump) JumpAction = IaJump;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
+
+	// InteractionAction
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Interaction.IA_Interaction'");
+	UInputAction* IaInter = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
+	if (IaInter) InteractionAction = IaInter;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
 
 	// Set FxCursor
@@ -71,7 +84,7 @@ void AMousePlayerController::BeginPlay()
 	if (OwnerPawn)
 	{
 		//UE_LOG(LogTemp, Display, TEXT("OwnerPawn: %s"), *OwnerPawn->GetName());
-		OwnerCharacter = Cast<ACharacter>(OwnerPawn);
+		OwnerCharacter = Cast<APlayerCharacter>(OwnerPawn);
 		if (OwnerCharacter)
 		{
 			//UE_LOG(LogTemp, Display, TEXT("OwnerCharacter: %s"), *OwnerCharacter->GetName());
@@ -95,15 +108,25 @@ void AMousePlayerController::SetupInputComponent()
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
-		// Setup mouse input events
-		EnhancedInputComponent->BindAction(ClickAction, ETriggerEvent::Started, this, &AMousePlayerController::OnInputStarted);
-		EnhancedInputComponent->BindAction(ClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnSetDestinationTriggered);
-		EnhancedInputComponent->BindAction(ClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
-		EnhancedInputComponent->BindAction(ClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
+		// Setup left click input events
+		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &AMousePlayerController::OnInputStarted);
+		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnSetDestinationTriggered);
+		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
+		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
+
+		// Setup right click input events
+		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &AMousePlayerController::OnInputStarted);
+		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnSetDestinationTriggered);
+		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
+		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
 		// Setup jump input events
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMousePlayerController::StartJump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &AMousePlayerController::StopJump);
+
+		// Interaction
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Started, this, &AMousePlayerController::BeginInteract);
+		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Completed, this, &AMousePlayerController::EndInteract);
 	}
 	else
 	{
@@ -125,14 +148,7 @@ void AMousePlayerController::OnSetDestinationTriggered()
 	// We look for the location in the world where the player has pressed the input
 	FHitResult Hit;
 	bool bHitSuccessful = false;
-	if (bIsTouch)
-	{
-		bHitSuccessful = GetHitResultUnderFinger(ETouchIndex::Touch1, ECollisionChannel::ECC_Visibility, true, Hit);
-	}
-	else
-	{
-		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-	}
+	bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
 
 	// If we hit a surface, cache the location
 	if (bHitSuccessful)
@@ -140,12 +156,12 @@ void AMousePlayerController::OnSetDestinationTriggered()
 		CachedDestination = Hit.Location;
 	}
 
-	// Move towards mouse pointer or touch
-	APawn* ControlledPawn = GetPawn();
-	if (ControlledPawn != nullptr)
+	// Move towards mouse pointer
+	//APawn* ControlledPawn = GetPawn();
+	if (OwnerPawn)
 	{
-		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-		ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
+		FVector WorldDirection = (CachedDestination - OwnerPawn->GetActorLocation()).GetSafeNormal();
+		OwnerPawn->AddMovementInput(WorldDirection, 1.0, false);
 	}
 }
 
@@ -175,5 +191,21 @@ void AMousePlayerController::StopJump()
 	if (OwnerCharacter)
 	{
 		OwnerCharacter->StopJumping();
+	}
+}
+
+void AMousePlayerController::BeginInteract()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->BeginInteract();
+	}
+}
+
+void AMousePlayerController::EndInteract()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->EndInteract();
 	}
 }
