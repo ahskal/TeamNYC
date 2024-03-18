@@ -18,23 +18,22 @@ UItemBase* UItemBase::CreateItemCopy() const
 {
 	UItemBase* ItemCopy = NewObject<UItemBase>(StaticClass());
 
-	ItemCopy->ID = this->ID;
-	ItemCopy->SetQuantity(this->Quantity);
-	ItemCopy->ItemQuality = this->ItemQuality;
-	ItemCopy->ItemType = this->ItemType;
-	ItemCopy->TextData = this->TextData;
-	ItemCopy->NumericData = this->NumericData;
-	ItemCopy->ItemStatistics = this->ItemStatistics;
-	ItemCopy->AssetData = this->AssetData;
-	ItemCopy->bIsCopy = true;
+	ItemCopy->ItemID =			this->ItemID;
+	ItemCopy->ItemQuality =		this->ItemQuality;
+	ItemCopy->ItemType =		this->ItemType;
+	ItemCopy->ItemTextData =	this->ItemTextData;
+	ItemCopy->ItemNumericData =	this->ItemNumericData;
+	ItemCopy->ItemStatistics =	this->ItemStatistics;
+	ItemCopy->ItemAssetData =	this->ItemAssetData;
+	ItemCopy->bIsCopy =			true;
 
 	return ItemCopy;
 }
 
 void UItemBase::SetQuantity(const int32 NewQuantity)
 {
-	if (NewQuantity != Quantity) {
-		this->Quantity = FMath::Clamp(NewQuantity, 0, NumericData.bIsStackable ? NumericData.MaxStackSize : 1);
+	if (NewQuantity != ItemQuantity) {
+		this->ItemQuantity = FMath::Clamp(NewQuantity, 0, ItemNumericData.bIsStackable ? ItemNumericData.MaxStackSize : 1);
 
 		//if (OwningInventory) {
 		//	if (Quantity <= 0) {

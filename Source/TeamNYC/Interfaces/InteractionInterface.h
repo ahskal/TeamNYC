@@ -44,7 +44,7 @@ struct FInteractableData
 
 	// used only for pickup
 	UPROPERTY(EditInstanceOnly)
-	int8 Quantity;
+	int32 Quantity;
 
 
 	// used for things like valves, doors, etc. that require an interaction timer
@@ -58,14 +58,9 @@ class UInteractionInterface : public UInterface
 	GENERATED_BODY()
 };
 
-/**
- * 
- */
 class TEAMNYC_API IInteractionInterface
 {
 	GENERATED_BODY()
-
-	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual void BeginFocus();
 	virtual void EndFocus();

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Item/ItemBase/ItemDataStructs.h"
 #include "ItemBase.generated.h"
 
@@ -18,7 +19,7 @@ protected:
 	//====================================================================================
 	bool operator ==(const FName& OtherID) const
 	{
-		return this->ID == OtherID;
+		return this->ItemID == OtherID;
 	}
 protected:
 	//====================================================================================
@@ -33,10 +34,10 @@ public:
 	//UInventoryComponent* OwningInventory;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FName ID;
+	FName ItemID;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	int32 Quantity;
+	int32 ItemQuantity;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	EItemType ItemType;
@@ -48,13 +49,13 @@ public:
 	FItemStatistics ItemStatistics;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemTextData TextData;
+	FItemTextData ItemTextData;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemNumericData NumericData;
+	FItemNumericData ItemNumericData;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemAssetData AssetData;
+	FItemAssetData ItemAssetData;
 
 	bool bIsPickup;
 	bool bIsCopy;
@@ -70,13 +71,13 @@ public:
 	UItemBase* CreateItemCopy() const;
 
 	UFUNCTION(Category = "Item")
-	FORCEINLINE float GetItemStackWeight() const { return Quantity * NumericData.Weight; };
+	FORCEINLINE float GetItemStackWeight() const { return ItemQuantity * ItemNumericData.Weight; };
 
 	UFUNCTION(Category = "Item")
-	FORCEINLINE float GetItemSingleWeight() const { return NumericData.Weight; };
+	FORCEINLINE float GetItemSingleWeight() const { return ItemNumericData.Weight; };
 
 	UFUNCTION(Category = "Item")
-	FORCEINLINE bool IsFullItemStack() const { return Quantity == NumericData.MaxStackSize; };
+	FORCEINLINE bool IsFullItemStack() const { return ItemQuantity == ItemNumericData.MaxStackSize; };
 
 	UFUNCTION(Category = "Item")
 	void SetQuantity(const int32 NewQuantity);
