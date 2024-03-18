@@ -25,6 +25,40 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	UPlayerInteractionComponent* InteractionComponent;
+
+protected:
+	// Face SkeletalMesh
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMesh> Face;
+
+	// Torso SkeletalMesh
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMesh> Torso;
+
+	// Legs SkeletalMesh
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMesh> Legs;
+
+	// Feet SkeletalMesh
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMesh> Feet;
+
+	// Face SkeletalMeshComponent
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMeshComponent> FaceMesh;
+
+	// Torso SkeletalMeshComponent
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMeshComponent> TorsoMesh;
+
+	// Legs SkeletalMeshComponent
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMeshComponent> LegsMesh;
+
+	// Feet SkeletalMeshComponent
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USkeletalMeshComponent> FeetMesh;
+
 public:
 	APlayerCharacter();
 
