@@ -14,19 +14,46 @@ APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Skeletal Mesh
-	FString MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/Player/sk_CharM_Base.sk_CharM_Base'");
-	//CppMacro::GetObject<USkeletalMesh>(SkeletalMesh, MeshPath);
+	// Body SkeletalMesh
+	FString MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/MetaHumans/Character/Male/Medium/NormalWeight/Body/m_med_nrw_body.m_med_nrw_body'");
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> ObjectFinder(*MeshPath);
-	if (ObjectFinder.Succeeded()) SkeletalMesh = ObjectFinder.Object;
+	if (ObjectFinder.Succeeded()) BodyMesh = ObjectFinder.Object;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Object: %s"), *MeshPath);
 
+	// Face SkeletalMesh
+	MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/MetaHumans/Character/Face/FaceMesh.FaceMesh'");
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> FaceObjectFinder(*MeshPath);
+	if (FaceObjectFinder.Succeeded()) Face = FaceObjectFinder.Object;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Object: %s"), *MeshPath);
+
+
+
 	// Mesh Setup
-	GetMesh()->SetSkeletalMesh(SkeletalMesh);
+	GetMesh()->SetSkeletalMesh(BodyMesh);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
+	// Face Mesh Setup
+	FaceMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Face"));
+	FaceMesh->SetupAttachment(GetMesh());
+	FaceMesh->SetSkeletalMesh(Face);
+
+	// Torso SkeletalMesh
+	TorsoMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Torso"));
+	TorsoMesh->SetupAttachment(GetMesh());
+	TorsoMesh->SetSkeletalMesh(Torso);
+
+	// Legs SkeletalMesh
+	LegsMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Legs"));
+	LegsMesh->SetupAttachment(GetMesh());
+	LegsMesh->SetSkeletalMesh(Legs);
+
+	// Feet SkeletalMesh
+	FeetMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Feet"));
+	FeetMesh->SetupAttachment(GetMesh());
+	FeetMesh->SetSkeletalMesh(Feet);
 
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;

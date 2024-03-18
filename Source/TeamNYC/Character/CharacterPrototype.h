@@ -14,9 +14,9 @@ class TEAMNYC_API ACharacterPrototype : public ACharacter
 	GENERATED_BODY()
 
 protected:
-	// SkeletalMesh
+	// Body SkeletalMesh
 	UPROPERTY(EditDefaultsOnly)
-	USkeletalMesh* SkeletalMesh{ nullptr };
+	TObjectPtr<USkeletalMesh> BodyMesh;
 
 public:
 	ACharacterPrototype();
