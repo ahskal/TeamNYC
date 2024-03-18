@@ -26,8 +26,6 @@ APlayerCharacter::APlayerCharacter()
 	if (FaceObjectFinder.Succeeded()) Face = FaceObjectFinder.Object;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Object: %s"), *MeshPath);
 
-
-
 	// Mesh Setup
 	GetMesh()->SetSkeletalMesh(BodyMesh);
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
@@ -83,8 +81,8 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 
-	// Set AnimClass
-	FString AnimBpPath = TEXT("/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C");
+	// Set Body AnimClass
+	FString AnimBpPath = TEXT("/Script/Engine.AnimBlueprint'/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C'");
 	ConstructorHelpers::FClassFinder<UAnimInstance> AnimBpClass(*AnimBpPath);
 	if (AnimBpClass.Class)
 	{
@@ -92,7 +90,19 @@ APlayerCharacter::APlayerCharacter()
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to Get AnimBPClass"));
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Body AnimBPClass"));
+	}
+
+	// Set Face AnimClass
+	FString FaceAnimBpPath = TEXT("/Script/Engine.AnimBlueprint'/Game/Assets/Character/MetaHumans/Common/Face/Face_AnimBP.Face_AnimBP_C'");
+	ConstructorHelpers::FClassFinder<UAnimInstance> FaceAnimBpClass(*FaceAnimBpPath);
+	if (FaceAnimBpClass.Class)
+	{
+		FaceMesh->SetAnimInstanceClass(FaceAnimBpClass.Class);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Face AnimBPClass"));
 	}
 
 	// CreateDefaultSubobject를 통해 컴포넌트를 생성하면, 컴포넌트 내부에는
