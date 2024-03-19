@@ -14,6 +14,9 @@ UCLASS()
 class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
 {
 	GENERATED_BODY()
+	
+friend class AMousePlayerController;
+	
 private:
 	// SpringArm
 	UPROPERTY(EditDefaultsOnly)
@@ -59,6 +62,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> FeetMesh;
 
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAnimMontage> UnarmedAttackMontage;
+
+
+private:
+	UFUNCTION(BlueprintCallable)
+	void UnarmedAttack() const;
+
+protected:
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
+
 public:
 	APlayerCharacter();
 
@@ -68,9 +83,7 @@ public:
 	void BeginInteract() const;
 	void EndInteract() const;
 
-protected:
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
+
 
 
 };

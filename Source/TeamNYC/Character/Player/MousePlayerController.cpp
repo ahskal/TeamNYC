@@ -115,8 +115,8 @@ void AMousePlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
 		// Setup right click input events
-		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &AMousePlayerController::OnInputStarted);
-		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnSetDestinationTriggered);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &AMousePlayerController::Attack);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
@@ -207,5 +207,13 @@ void AMousePlayerController::EndInteract()
 	if (OwnerCharacter)
 	{
 		OwnerCharacter->EndInteract();
+	}
+}
+
+void AMousePlayerController::Attack()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->UnarmedAttack();
 	}
 }

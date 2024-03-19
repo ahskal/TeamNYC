@@ -3,6 +3,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/DecalComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -110,6 +111,20 @@ APlayerCharacter::APlayerCharacter()
 	// 이 OwnerPrivate 변수에는 해당 컴포넌트를 소유하는 액터 객체의 포인터가 할당됩니다.
 	// 따라서 컴포넌트는 자동으로 부모 클래스의 주소를 알게 되며, 따로 바인딩을 할 필요가 없습니다.
 	InteractionComponent = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("InteractionComponent"));
+
+
+	// Set MontagePath
+	FString MontagePath = TEXT("/Script/Engine.AnimMontage'/Game/Assets/Character/Player/Animations/AM_Player_Jab.AM_Player_Jab'");
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> UnarmedAttack(*MontagePath);
+	if (UnarmedAttack.Succeeded())
+	{
+		UnarmedAttackMontage = UnarmedAttack.Object;
+		UE_LOG(LogTemp, Warning, TEXT("Succeeded to Get Montage: %s"), *MontagePath);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Montage: %s"), *MontagePath);
+	}
 }
 
 void APlayerCharacter::BeginInteract() const
@@ -120,6 +135,18 @@ void APlayerCharacter::BeginInteract() const
 void APlayerCharacter::EndInteract() const
 {
 	InteractionComponent->EndInteract();
+}
+
+void APlayerCharacter::UnarmedAttack() const
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && UnarmedAttackMontage)
+	{
+		if (!AnimInstance->Montage_IsPlaying(UnarmedAttackMontage))
+		{
+			AnimInstance->Montage_Play(UnarmedAttackMontage, 1.f, EMontagePlayReturnType::MontageLength, 0.f, true);
+		}
+	}
 }
 
 void APlayerCharacter::BeginPlay()

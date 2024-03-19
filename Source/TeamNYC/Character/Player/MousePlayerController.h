@@ -51,12 +51,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractionAction;
 
-private:
 	// OwnerPawn
-	UPROPERTY(VisibleAnywhere, Category = "Owner")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner")
 	TObjectPtr<APawn> OwnerPawn;
 
-	UPROPERTY(VisibleAnywhere, Category = "Owner")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner")
 	TObjectPtr<APlayerCharacter> OwnerCharacter;
 
 protected:
@@ -75,6 +74,8 @@ protected:
 
 	void StartJump();
 	void StopJump();
+
+	void Attack();
 
 	void BeginInteract();
 	void EndInteract();
