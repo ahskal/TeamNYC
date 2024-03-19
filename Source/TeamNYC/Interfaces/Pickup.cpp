@@ -60,16 +60,24 @@ void APickup::InitializeDrop(UItemBase* ItemToDrop, const int32 InQuantity)
 void APickup::BeginFocus()
 {
 	IInteractionInterface::BeginFocus();
+	if (PickupMesh)
+	{
+		PickupMesh->SetRenderCustomDepth(true);
+	}
 }
 
 void APickup::EndFocus()
 {
 	IInteractionInterface::EndFocus();
+	if (PickupMesh)
+	{
+		PickupMesh->SetRenderCustomDepth(false);
+	}
 }
 
 void APickup::Interact(APlayerCharacter* PlayerCharacter)
 {
-	IInteractionInterface::Interact(PlayerCharacter);
+	//IInteractionInterface::Interact(PlayerCharacter);
 
 	if (PlayerCharacter)
 	{

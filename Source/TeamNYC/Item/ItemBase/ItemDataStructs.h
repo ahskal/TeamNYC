@@ -102,24 +102,24 @@ struct FItemData : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FName ItemID{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	EItemType ItemType{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	EItemQuality ItemQuality{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemStatistics ItemStatistics{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemTextData ItemTextData{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemNumericData ItemNumericData{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
+	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemAssetData ItemAssetData{};
 };
