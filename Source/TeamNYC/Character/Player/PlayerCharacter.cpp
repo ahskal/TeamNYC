@@ -114,6 +114,7 @@ APlayerCharacter::APlayerCharacter()
 	if (UnarmedAttack.Succeeded())
 	{
 		UnarmedAttackMontage = UnarmedAttack.Object;
+		UnarmedAttackMontage->RateScale = 1.5f;
 		UE_LOG(LogTemp, Warning, TEXT("Succeeded to Get Montage: %s"), *MontagePath);
 	}
 	else
@@ -129,6 +130,14 @@ APlayerCharacter::APlayerCharacter()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 	InventoryComponent->SetSlotsCapacity(20);
 	InventoryComponent->SetWeightCapacity(50.f);
+
+
+	PlayerState = EPlayerState::NORMAL;
+}
+
+void APlayerCharacter::SetMaxWalkSpeed(float InMaxWalkSpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = InMaxWalkSpeed;
 }
 
 void APlayerCharacter::UpdateInteractionWidget() const
@@ -146,14 +155,19 @@ void APlayerCharacter::EndInteract() const
 	InteractionComponent->EndInteract();
 }
 
-void APlayerCharacter::UnarmedAttack() const
+void APlayerCharacter::UnarmedAttack()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && UnarmedAttackMontage)
 	{
 		if (!AnimInstance->Montage_IsPlaying(UnarmedAttackMontage))
 		{
-			AnimInstance->Montage_Play(UnarmedAttackMontage, 1.f, EMontagePlayReturnType::MontageLength, 0.f, true);
+			FName SectionName{ (ComboCount % 2) ? TEXT("LeftJab") : TEXT("RightJab") };
+
+			AnimInstance->Montage_Play(UnarmedAttackMontage);
+			AnimInstance->Montage_JumpToSection(SectionName, UnarmedAttackMontage);
+
+			ComboCount++;
 		}
 	}
 }
@@ -166,6 +180,5 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
 }
 

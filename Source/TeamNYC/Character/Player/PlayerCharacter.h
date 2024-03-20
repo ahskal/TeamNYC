@@ -11,13 +11,24 @@ class UCameraComponent;
 class UPlayerInteractionComponent;
 class UInventoryComponent;
 
+UENUM(BlueprintType)
+enum class EPlayerState : uint8
+{
+	NORMAL,
+	ATTACKING
+};
+
+
 UCLASS()
 class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
 {
 	GENERATED_BODY()
 	
 friend class AMousePlayerController;
+friend class UPlayerAnimInstance;
 	
+
+
 private:
 	// SpringArm
 	UPROPERTY(EditDefaultsOnly)
@@ -32,6 +43,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	UInventoryComponent* InventoryComponent;
+
+	EPlayerState	PlayerState;
+
 
 protected:
 	// Face SkeletalMesh
@@ -69,10 +83,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAnimMontage> UnarmedAttackMontage;
 
+public:
+	int32			ComboCount;
 
 private:
 	UFUNCTION(BlueprintCallable)
-	void UnarmedAttack() const;
+	void UnarmedAttack();
 
 protected:
 	virtual void BeginPlay() override;
@@ -80,6 +96,10 @@ protected:
 
 public:
 	APlayerCharacter();
+
+	FORCEINLINE void SetPlayerState(EPlayerState InPlayerState) { PlayerState = InPlayerState; }
+	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerState; }
+	void SetMaxWalkSpeed(float InMaxWalkSpeed);
 
 	FORCEINLINE UPlayerInteractionComponent* GetInteractionComponent() const { return InteractionComponent; }
 	FORCEINLINE void SetInteractionComponent(UPlayerInteractionComponent* InInteractionComponent) { InteractionComponent = InInteractionComponent; }
@@ -90,6 +110,4 @@ public:
 
 	void BeginInteract() const;
 	void EndInteract() const;
-
-
 };

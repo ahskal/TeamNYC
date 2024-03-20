@@ -12,6 +12,9 @@
 #include "InputActionValue.h"
 #include "InputAction.h"
 #include "InputMappingContext.h"
+#include "EnhancedPlayerInput.h"
+
+#include <Kismet/KismetMathLibrary.h>
 
 #include "Engine/LocalPlayer.h"
 
@@ -214,6 +217,21 @@ void AMousePlayerController::Attack()
 {
 	if (OwnerCharacter)
 	{
+		// stop movement
+		StopMovement();
+
+		// Look in the direction you clicked
+		// Smooth directional rotation
+		FHitResult Hit;
+		bool bHitSuccessful = false;
+		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
+		if (bHitSuccessful)
+		{
+			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), Hit.Location);
+			float RotationSpeed = 12.f;
+			OwnerCharacter->SetActorRotation(FMath::RInterpTo(OwnerCharacter->GetActorRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotationSpeed));
+		}
+
 		OwnerCharacter->UnarmedAttack();
 	}
 }
