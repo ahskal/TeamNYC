@@ -108,6 +108,19 @@ APlayerCharacter::APlayerCharacter()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Face AnimBPClass"));
 	}
 
+	// Set MontagePath
+	FString MontagePath = TEXT("/Script/Engine.AnimMontage'/Game/Assets/Character/Player/Animations/AM_Player_Jab.AM_Player_Jab'");
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> UnarmedAttack(*MontagePath);
+	if (UnarmedAttack.Succeeded())
+	{
+		UnarmedAttackMontage = UnarmedAttack.Object;
+		UE_LOG(LogTemp, Warning, TEXT("Succeeded to Get Montage: %s"), *MontagePath);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Montage: %s"), *MontagePath);
+	}
+
 	// CreateDefaultSubobject를 통해 컴포넌트를 생성하면, 컴포넌트 내부에는
 	// 부모 클래스인 UActorComponent에서 상속받은 OwnerPrivate라는 멤버 변수가 있습니다.
 	// 이 OwnerPrivate 변수에는 해당 컴포넌트를 소유하는 액터 객체의 포인터가 할당됩니다.
@@ -121,21 +134,6 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::UpdateInteractionWidget() const
 {
 	InteractionComponent->UpdateInteractionWidget();
-}
-
-
-	// Set MontagePath
-	FString MontagePath = TEXT("/Script/Engine.AnimMontage'/Game/Assets/Character/Player/Animations/AM_Player_Jab.AM_Player_Jab'");
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> UnarmedAttack(*MontagePath);
-	if (UnarmedAttack.Succeeded())
-	{
-		UnarmedAttackMontage = UnarmedAttack.Object;
-		UE_LOG(LogTemp, Warning, TEXT("Succeeded to Get Montage: %s"), *MontagePath);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Montage: %s"), *MontagePath);
-	}
 }
 
 void APlayerCharacter::BeginInteract() const

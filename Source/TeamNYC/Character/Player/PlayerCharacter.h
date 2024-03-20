@@ -92,10 +92,4 @@ public:
 	void EndInteract() const;
 
 
-protected:
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-
-
-
 };
