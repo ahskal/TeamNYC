@@ -2,6 +2,7 @@
 
 
 #include "Item/ItemBase/ItemBase.h"
+#include "Components/InventoryComponent.h"
 
 UItemBase::UItemBase() :
 	bIsCopy(false), bIsPickup(false)
@@ -35,12 +36,11 @@ void UItemBase::SetQuantity(const int32 NewQuantity)
 	if (NewQuantity != ItemQuantity) {
 		this->ItemQuantity = FMath::Clamp(NewQuantity, 0, ItemNumericData.bIsStackable ? ItemNumericData.MaxStackSize : 1);
 
-		//if (OwningInventory) {
-		//	if (Quantity <= 0) {
-		//		OwningInventory->RemoveSingleInstanceOfItem(this);
-		//	}
-		//}
-
+		if (OwningInventory) {
+			if (ItemQuantity <= 0) {
+				OwningInventory->RemoveSingleInstanceOfItem(this);
+			}
+		}
 	}
 }
 

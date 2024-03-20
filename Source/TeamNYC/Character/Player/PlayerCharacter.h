@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UPlayerInteractionComponent;
+class UInventoryComponent;
 
 UCLASS()
 class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
@@ -25,6 +26,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	UPlayerInteractionComponent* InteractionComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	UInventoryComponent* InventoryComponent;
 
 protected:
 	// Face SkeletalMesh
@@ -65,8 +69,13 @@ public:
 	FORCEINLINE UPlayerInteractionComponent* GetInteractionComponent() const { return InteractionComponent; }
 	FORCEINLINE void SetInteractionComponent(UPlayerInteractionComponent* InInteractionComponent) { InteractionComponent = InInteractionComponent; }
 
+	FORCEINLINE UInventoryComponent* GetInventory() const { return InventoryComponent; }
+
+	void UpdateInteractionWidget() const;
+
 	void BeginInteract() const;
 	void EndInteract() const;
+
 
 protected:
 	virtual void BeginPlay() override;

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
+#include "Components/InventoryComponent.h"
 #include "Item/ItemBase/ItemDataStructs.h"
 #include "ItemBase.generated.h"
 
@@ -30,8 +30,8 @@ public:
 	//====================================================================================
 	// PROPERTIES & VARIABLES
 	//====================================================================================
-	//UPROPERTY();
-	//UInventoryComponent* OwningInventory;
+	UPROPERTY();
+	UInventoryComponent* OwningInventory;
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FName ItemID;

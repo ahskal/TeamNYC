@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Interfaces/Pickup.h"
+#include "Item/Pickup.h"
 
 #include "Item/ItemBase/ItemBase.h"
 #include "Character/Player/PlayerCharacter.h"
@@ -101,27 +101,26 @@ void APickup::TakePickup(const APlayerCharacter* Taker)
 	{
 		if (ItemReference)
 		{
-			//if (UInventoryComponent* PlayerInventory = Taker->GetInventory())
-			//{
-			//	const FItemAddResult AddResult = PlayerInventory->HandleAddItem(ItemReference);
-			//
-			//	switch (AddResult.OperationResult)
-			//	{
-			//	case EItemAddResult::IAR_NoItemAdded:
-			//		break;
-			//	case EItemAddResult::IAR_PartialAmountItemAdded:
-			//		UpdateInteractableData();
-			//		Taker->UpdateInteractionWidget();
-			//
-			//		break;
-			//	case EItemAddResult::IAR_AllItemsAdded:
-			//		Destroy();
-			//		break;
-			//	default:;
-			//	}
-			//	UE_LOG(LogTemp, Warning, TEXT("%s"), *AddResult.ResultMessage.ToString());
-			//}
-			//else
+			if (UInventoryComponent* PlayerInventory = Taker->GetInventory())
+			{
+				const FItemAddResult AddResult = PlayerInventory->HandleAddItem(ItemReference);
+			
+				switch (AddResult.OperationResult)
+				{
+				case EItemAddResult::IAR_NoItemAdded:
+					break;
+				case EItemAddResult::IAR_PartialAmountItemAdded:
+					UpdateInteractableData();
+					Taker->UpdateInteractionWidget();			
+					break;
+				case EItemAddResult::IAR_AllItemsAdded:
+					Destroy();
+					break;
+				default:;
+				}
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *AddResult.ResultMessage.ToString());
+			}
+			else
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Player Inventory Component is null!"));
 			}

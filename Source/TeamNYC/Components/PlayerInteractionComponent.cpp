@@ -1,29 +1,21 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "Character/Player/Component/PlayerInteractionComponent.h"
+#include "Components/PlayerInteractionComponent.h"
+#include "Components/InventoryComponent.h"
+#include "Character/Player/PlayerCharacter.h"
+#include "Interfaces/InteractionInterface.h"
+#include "UserInterface/PlayerHUD.h"
+#include "Item/Pickup.h"
 
 #include "GameFramework/Character.h"
 
-#include "Interfaces/InteractionInterface.h"
-#include "Character/Player/PlayerCharacter.h"
-#include "UserInterface/PlayerHUD.h"
-
-// Sets default values for this component's properties
 UPlayerInteractionComponent::UPlayerInteractionComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
+	PrimaryComponentTick.bCanEverTick = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
 	InteractionCheckFrequency = 0.1f; // 지연시간	
 	InteractionCheckDistance = 500.0f; // 탐색거리
-
-	// ...
 }
 
-
-// Called when the game starts
 void UPlayerInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -31,8 +23,6 @@ void UPlayerInteractionComponent::BeginPlay()
 	HUD = Cast<APlayerHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 }
 
-
-// Called every frame
 void UPlayerInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -82,36 +72,6 @@ void UPlayerInteractionComponent::PerformInteractionCheck()
 			}
 		}
 	}
-
-	// 기존에 사용하던 객체 기준에서 레이캐스트로 판별방식
-	//FVector TraceStart{ GetOwner()->GetActorLocation() };
-	//FVector TraceEnd{ TraceStart + (GetOwner()->GetActorForwardVector() * InteractionCheckDistance) };
-	//
-	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 0, 2.0f, 1);
-	//
-	//FCollisionQueryParams QueryParams;
-	//QueryParams.AddIgnoredActor(GetOwner());
-	//
-	//FHitResult TraceHit;
-	//
-	//if (GetWorld()->LineTraceSingleByChannel(TraceHit, TraceStart, TraceEnd, ECC_Visibility, QueryParams))
-	//{
-	//	if (TraceHit.GetActor()->GetClass()->ImplementsInterface(UInteractionInterface::StaticClass()))
-	//	{
-	//		const float Distance = (TraceStart - TraceHit.ImpactPoint).Size();
-	//
-	//		if (TraceHit.GetActor() != InteractionData.CurrentInteractable && Distance <= InteractionCheckDistance)
-	//		{
-	//			FoundInteractable(TraceHit.GetActor());
-	//			return;
-	//		}
-	//
-	//		if (TraceHit.GetActor() == InteractionData.CurrentInteractable)
-	//		{
-	//			return;
-	//		}
-	//	}
-	//}
 	NoInteractableFound();
 }
 
@@ -215,5 +175,31 @@ void UPlayerInteractionComponent::UpdateInteractionWidget() const
 	if (IsValid(TargetInteractable.GetObject()))
 	{
 		HUD->UpdateInteractionWidget(&TargetInteractable->InteractableData);
+	}
+}
+
+void UPlayerInteractionComponent::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
+{
+	if (PlayerInventory->FindMatchingItem(ItemToDrop))
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = GetOwner();
+		SpawnParams.bNoFail = true;
+		SpawnParams.SpawnCollisionHandlingOverride =
+			ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
+		const FVector SpawnLocation{ GetOwner()->GetActorLocation() + FVector(0.f,45.f,0.f) + (GetOwner()->GetActorForwardVector() * 235.f) };
+		const FTransform SpawnTransform(GetOwner()->GetActorRotation(), SpawnLocation);
+
+		const int32 RemovedQuantity = PlayerInventory->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
+
+		APickup* Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), SpawnTransform, SpawnParams);
+
+		Pickup->InitializeDrop(ItemToDrop, RemovedQuantity);
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Item to drop is null!"));
 	}
 }

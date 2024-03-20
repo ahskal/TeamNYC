@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InterfaceTestActor.h"
+#include "Item/InterfaceTestActor.h"
 
 // Sets default values
 AInterfaceTestActor::AInterfaceTestActor()
