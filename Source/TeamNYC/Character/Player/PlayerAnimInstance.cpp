@@ -24,6 +24,7 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		GroundSpeed = PlayerCharacter->GetVelocity().Size2D();
 		bIsInAir = PlayerCharacter->GetCharacterMovement()->IsFalling();
 		//bIsCrouching = PlayerCharacter->GetCharacterMovement()->IsCrouching();
+		bIsMoving = GroundSpeed > 0.0f;
 		PlayerState = static_cast<int32>(PlayerCharacter->PlayerState);
 	}
 }
