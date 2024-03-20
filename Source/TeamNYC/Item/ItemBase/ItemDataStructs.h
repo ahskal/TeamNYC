@@ -62,6 +62,9 @@ struct FItemTextData
 
 	UPROPERTY(EditAnywhere)
 	FText UsageText{};
+
+	UPROPERTY(EditAnywhere)
+	FText WhenUsedText;
 };
 
 USTRUCT()
@@ -77,6 +80,9 @@ struct FItemNumericData
 
 	UPROPERTY(EditAnywhere)
 	bool bIsStackable{};
+
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	bool bIsQuestItem;
 };
 
 USTRUCT()
@@ -96,24 +102,24 @@ struct FItemData : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FName ID{};
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	FName ItemID{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
-	EItemType Type{};
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	EItemType ItemType{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
-	EItemQuality Quality{};
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	EItemQuality ItemQuality{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemStatistics Statistics{};
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	FItemStatistics ItemStatistics{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemTextData TextData{};
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	FItemTextData ItemTextData{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemNumericData NumericData{};
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	FItemNumericData ItemNumericData{};
 
-	UPROPERTY(EditAnywhere, Category = "ItemData")
-	FItemAssetData AssetData{};
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	FItemAssetData ItemAssetData{};
 };

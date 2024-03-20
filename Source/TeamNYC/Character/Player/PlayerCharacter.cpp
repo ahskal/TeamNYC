@@ -9,7 +9,9 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Materials/Material.h"
 #include "Engine/World.h"
-#include "Character/Player/Component/PlayerInteractionComponent.h"
+
+#include "Components/PlayerInteractionComponent.h"
+#include "Components/InventoryComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -111,6 +113,15 @@ APlayerCharacter::APlayerCharacter()
 	// 이 OwnerPrivate 변수에는 해당 컴포넌트를 소유하는 액터 객체의 포인터가 할당됩니다.
 	// 따라서 컴포넌트는 자동으로 부모 클래스의 주소를 알게 되며, 따로 바인딩을 할 필요가 없습니다.
 	InteractionComponent = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("InteractionComponent"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+	InventoryComponent->SetSlotsCapacity(20);
+	InventoryComponent->SetWeightCapacity(50.f);
+}
+
+void APlayerCharacter::UpdateInteractionWidget() const
+{
+	InteractionComponent->UpdateInteractionWidget();
+}
 
 
 	// Set MontagePath
@@ -157,6 +168,6 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	
+
 }
 
