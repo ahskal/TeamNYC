@@ -10,6 +10,7 @@
 #include "Materials/Material.h"
 #include "Engine/World.h"
 
+// Component
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 
@@ -155,7 +156,11 @@ void APlayerCharacter::EndInteract() const
 	InteractionComponent->EndInteract();
 }
 
-void APlayerCharacter::UnarmedAttack()
+void APlayerCharacter::ToggleMenu() const
+{ 
+}
+
+void APlayerCharacter::UnarmedAttack() const
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && UnarmedAttackMontage)

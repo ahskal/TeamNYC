@@ -38,9 +38,11 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent* Camera;
 
+	// InteractionComponent;
 	UPROPERTY(EditDefaultsOnly)
 	UPlayerInteractionComponent* InteractionComponent;
 
+	// InventoryComponent;
 	UPROPERTY(EditDefaultsOnly)
 	UInventoryComponent* InventoryComponent;
 
@@ -101,13 +103,17 @@ public:
 	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerState; }
 	void SetMaxWalkSpeed(float InMaxWalkSpeed);
 
+	// Get InteractionComponent
 	FORCEINLINE UPlayerInteractionComponent* GetInteractionComponent() const { return InteractionComponent; }
 	FORCEINLINE void SetInteractionComponent(UPlayerInteractionComponent* InInteractionComponent) { InteractionComponent = InInteractionComponent; }
 
+	// Get InventoryComponent
 	FORCEINLINE UInventoryComponent* GetInventory() const { return InventoryComponent; }
 
+	// Interaction function
 	void UpdateInteractionWidget() const;
-
 	void BeginInteract() const;
 	void EndInteract() const;
+
+	void ToggleMenu() const;
 };

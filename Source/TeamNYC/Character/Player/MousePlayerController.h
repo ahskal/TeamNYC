@@ -51,6 +51,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractionAction;
 
+	// Inventory IA
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InventoryAction;
+
 	// OwnerPawn
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner")
 	TObjectPtr<APawn> OwnerPawn;
@@ -77,8 +81,12 @@ protected:
 
 	void Attack();
 
+	// Interaction IA
 	void BeginInteract();
 	void EndInteract();
+
+	// Inventory IA
+	void ToggleMenu();
 
 private:
 	FVector CachedDestination;

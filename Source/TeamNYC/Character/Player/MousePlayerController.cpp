@@ -130,6 +130,9 @@ void AMousePlayerController::SetupInputComponent()
 		// Interaction
 		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Started, this, &AMousePlayerController::BeginInteract);
 		EnhancedInputComponent->BindAction(InteractionAction, ETriggerEvent::Completed, this, &AMousePlayerController::EndInteract);
+
+		// Interaction
+		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AMousePlayerController::ToggleMenu);
 	}
 	else
 	{
@@ -210,6 +213,13 @@ void AMousePlayerController::EndInteract()
 	if (OwnerCharacter)
 	{
 		OwnerCharacter->EndInteract();
+	}
+}
+void AMousePlayerController::ToggleMenu()
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->ToggleMenu();
 	}
 }
 

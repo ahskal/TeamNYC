@@ -55,19 +55,19 @@ void APlayerHUD::ToggleMenu()
 {
 	if (bIsMenuVisible)
 	{
+		HideMenu();
+
 		const FInputModeGameOnly InputMode;
 		GetOwningPlayerController()->SetInputMode(InputMode);
 		GetOwningPlayerController()->SetShowMouseCursor(false);
-
-		HideMenu();
 	}
 	else
 	{
+		DisplayMenu();
+
 		const FInputModeGameAndUI InputMode;
 		GetOwningPlayerController()->SetInputMode(InputMode);
 		GetOwningPlayerController()->SetShowMouseCursor(true);
-
-		DisplayMenu();
 	}
 }
 
