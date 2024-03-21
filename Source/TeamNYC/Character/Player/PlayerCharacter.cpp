@@ -180,5 +180,7 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	UE_LOG(LogTemp, Log, TEXT("UE5.4 TEST"));
 }
 
