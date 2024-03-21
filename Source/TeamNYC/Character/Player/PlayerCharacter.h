@@ -27,9 +27,11 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	UCameraComponent* Camera;
 
+	// InteractionComponent;
 	UPROPERTY(EditDefaultsOnly)
 	UPlayerInteractionComponent* InteractionComponent;
 
+	// InventoryComponent;
 	UPROPERTY(EditDefaultsOnly)
 	UInventoryComponent* InventoryComponent;
 
@@ -81,15 +83,13 @@ protected:
 public:
 	APlayerCharacter();
 
-	FORCEINLINE UPlayerInteractionComponent* GetInteractionComponent() const { return InteractionComponent; }
-	FORCEINLINE void SetInteractionComponent(UPlayerInteractionComponent* InInteractionComponent) { InteractionComponent = InInteractionComponent; }
-
+	// Get InventoryComponent
 	FORCEINLINE UInventoryComponent* GetInventory() const { return InventoryComponent; }
 
+	// Interaction function
 	void UpdateInteractionWidget() const;
-
 	void BeginInteract() const;
 	void EndInteract() const;
 
-
+	void ToggleMenu() const;
 };

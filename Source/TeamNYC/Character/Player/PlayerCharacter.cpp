@@ -10,6 +10,7 @@
 #include "Materials/Material.h"
 #include "Engine/World.h"
 
+// Component
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 
@@ -144,6 +145,10 @@ void APlayerCharacter::BeginInteract() const
 void APlayerCharacter::EndInteract() const
 {
 	InteractionComponent->EndInteract();
+}
+
+void APlayerCharacter::ToggleMenu() const
+{ 
 }
 
 void APlayerCharacter::UnarmedAttack() const

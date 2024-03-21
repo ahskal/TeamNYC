@@ -75,6 +75,7 @@ public:
 	FOnInventoryUpdated OnInventoryUpdated;
 
 	UInventoryComponent();
+
 	UFUNCTION(Category = "Inventory")
 	FItemAddResult HandleAddItem(UItemBase* InputItem);
 
@@ -115,19 +116,21 @@ public:
 	FORCEINLINE void SetWeightCapacity(const float NewWeightCapacity) { InventoryWeightCapacity = NewWeightCapacity; };
 
 protected:
-
+	// 인벤토리 전체 크기
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	float InventoryTotalWeight;
 
-	UPROPERTY(EditInstanceOnly, Category = "Inventory")
+	// 인벤토리 슬롯 용량
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	int32 InventorySlotsCapacity;
 
-	UPROPERTY(EditInstanceOnly, Category = "Inventory")
+	// 인벤토리 중량 용량
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	float InventoryWeightCapacity;
 
+	// 아이템 주소의 배열
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	TArray<TObjectPtr<UItemBase>> InventoryContents;
-
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
