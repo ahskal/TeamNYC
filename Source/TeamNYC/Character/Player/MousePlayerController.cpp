@@ -63,6 +63,12 @@ AMousePlayerController::AMousePlayerController()
 	if (IaInter) InteractionAction = IaInter;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
 
+	// InteractionAction
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Inventory.IA_Inventory'");
+	UInputAction* IaInven = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
+	if (IaInter) InventoryAction = IaInven;
+	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
+
 	// Set FxCursor
 	FString FxCursorPath = TEXT("/Script/Niagara.NiagaraSystem'/Game/Assets/Cursor/FX_Cursor.FX_Cursor'");
 	UNiagaraSystem* FxCursorObj = Cast<UNiagaraSystem>(StaticLoadObject(UNiagaraSystem::StaticClass(), nullptr, *FxCursorPath));
@@ -217,6 +223,7 @@ void AMousePlayerController::EndInteract()
 }
 void AMousePlayerController::ToggleMenu()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ToggleMenu Key binding"));
 	if (OwnerCharacter)
 	{
 		OwnerCharacter->ToggleMenu();

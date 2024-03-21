@@ -158,9 +158,10 @@ void APlayerCharacter::EndInteract() const
 
 void APlayerCharacter::ToggleMenu() const
 { 
+	InteractionComponent->ToggleMenu();
 }
 
-void APlayerCharacter::UnarmedAttack() const
+void APlayerCharacter::UnarmedAttack()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && UnarmedAttackMontage)

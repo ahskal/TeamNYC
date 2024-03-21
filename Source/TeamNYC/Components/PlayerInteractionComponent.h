@@ -41,6 +41,7 @@ public:
 
 	void BeginInteract();
 	void EndInteract();
+	void ToggleMenu();
 
 protected:
 	APlayerHUD* HUD;
@@ -62,7 +63,6 @@ protected:
 	void NoInteractableFound();
 	
 	void Interact();
-	void ToggleMenu();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void BeginPlay() override;
