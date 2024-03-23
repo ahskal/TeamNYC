@@ -31,49 +31,60 @@ AMousePlayerController::AMousePlayerController()
 	FollowTime = 0.f;
 	ShortPressThreshold = 0.3f;
 
+	/*
+		객체 로드 방식 변경 (나중에 삭제할 주석)
+		기존: UInputMappingContext* DmcObj = Cast<UInputMappingContext>(StaticLoadObject(UInputMappingContext::StaticClass(), nullptr, *ImcPath));
+		변경: ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(*ImcPath);
 
+					ConstructorHelpers::FObjectFinder				StaticLoadObject
+		설명			생성자에서 객체를 로드하는 방식					게임 실행 중에 동적으로 객체를 로드하는 방식
+		장점			간단하고 안전함(생성자에서 한 번에 처리 가능)		실행 중에 동적으로 객체 로드 가능(유연성이 높음)
+		단점			실행 중에 동적으로 객체를 로드할 수 없음			코드가 약간 복잡함, 메모리 관리 필요
+		사용시기		게임 시작 시 필요한 객체를 로드할 때				게임 실행 중에 동적으로 객체가 필요할 때
+		예시			플레이어 입력 매핑 컨텍스트 설정					실행 중에 다른 입력 매핑 컨텍스트 로드
+	*/
 	// Set DMC
-	FString DmcPath = TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Assets/Input/IMC_Mouse.IMC_Mouse'");
-	UInputMappingContext* DmcObj = Cast<UInputMappingContext>(StaticLoadObject(UInputMappingContext::StaticClass(), nullptr, *DmcPath));
-	if (DmcObj) MouseInputMappingContext = DmcObj;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load DMC: %s"), *DmcPath);
+	FString ImcPath = TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Assets/Input/IMC_Mouse.IMC_Mouse'");
+	ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(*ImcPath);
+	if (InputMappingContextRef.Succeeded()) MouseInputMappingContext = InputMappingContextRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load DMC: %s"), *ImcPath);
 
 	// Set IA
-	// LeftClickAction
+	// LeftClick Action
 	FString IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_LClick.IA_Mouse_LClick'");
-	UInputAction* IaLClick = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
-	if (IaLClick) LeftClickAction = IaLClick;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_LClick: %s"), *IaPath);
+	ConstructorHelpers::FObjectFinder<UInputAction> IaLeftRef(*IaPath);
+	if (IaLeftRef.Succeeded()) LeftClickAction = IaLeftRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_LClick: %s"), *IaPath);
 
-	// RightClickAction
+	// RightClick Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_RClick.IA_Mouse_RClick'");
-	UInputAction* IaRClick = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
-	if (IaRClick) RightClickAction = IaRClick;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_RClick: %s"), *IaPath);
+	ConstructorHelpers::FObjectFinder<UInputAction> IaRightRef(*IaPath);
+	if (IaRightRef.Succeeded()) RightClickAction = IaRightRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_RClick: %s"), *IaPath);
 
-	// JumpAction
+	// Jump Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Jump.IA_Jump'");
-	UInputAction* IaJump = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
-	if (IaJump) JumpAction = IaJump;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
+	ConstructorHelpers::FObjectFinder<UInputAction> IaJumpRef(*IaPath);
+	if (IaJumpRef.Succeeded()) JumpAction = IaJumpRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Jump: %s"), *IaPath);
 
-	// InteractionAction
+	// Interaction Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Interaction.IA_Interaction'");
-	UInputAction* IaInter = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
-	if (IaInter) InteractionAction = IaInter;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
+	ConstructorHelpers::FObjectFinder<UInputAction> IaInterRef(*IaPath);
+	if (IaInterRef.Succeeded()) InteractionAction = IaInterRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Inter: %s"), *IaPath);
 
-	// InteractionAction
+	// Inventory Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Inventory.IA_Inventory'");
-	UInputAction* IaInven = Cast<UInputAction>(StaticLoadObject(UInputAction::StaticClass(), nullptr, *IaPath));
-	if (IaInter) InventoryAction = IaInven;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load IA_Jump: %s"), *IaPath);
+	ConstructorHelpers::FObjectFinder<UInputAction> IaInventoryRef(*IaPath);
+	if (IaInventoryRef.Succeeded()) InventoryAction = IaInventoryRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Inventory: %s"), *IaPath);
 
 	// Set FxCursor
 	FString FxCursorPath = TEXT("/Script/Niagara.NiagaraSystem'/Game/Assets/Cursor/FX_Cursor.FX_Cursor'");
-	UNiagaraSystem* FxCursorObj = Cast<UNiagaraSystem>(StaticLoadObject(UNiagaraSystem::StaticClass(), nullptr, *FxCursorPath));
-	if (FxCursorObj) FxCursor = FxCursorObj;
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to load FxCursor: %s"), *FxCursorPath);
+	ConstructorHelpers::FObjectFinder<UNiagaraSystem> FxCursorRef(*FxCursorPath);
+	if (FxCursorRef.Succeeded()) FxCursor = FxCursorRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load FxCursor: %s"), *FxCursorPath);
 
 }
 
