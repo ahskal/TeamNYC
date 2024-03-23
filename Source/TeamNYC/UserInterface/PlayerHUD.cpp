@@ -59,7 +59,7 @@ void APlayerHUD::ToggleMenu()
 
 		const FInputModeGameOnly InputMode;
 		GetOwningPlayerController()->SetInputMode(InputMode);
-		GetOwningPlayerController()->SetShowMouseCursor(false);
+		//GetOwningPlayerController()->SetShowMouseCursor(false);
 	}
 	else
 	{
@@ -67,7 +67,7 @@ void APlayerHUD::ToggleMenu()
 
 		const FInputModeGameAndUI InputMode;
 		GetOwningPlayerController()->SetInputMode(InputMode);
-		GetOwningPlayerController()->SetShowMouseCursor(true);
+		//GetOwningPlayerController()->SetShowMouseCursor(true);
 	}
 }
 
