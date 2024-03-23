@@ -83,9 +83,9 @@ void AMousePlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	// Set Input Mode
-	FInputModeGameAndUI InputMode;
-	SetInputMode(InputMode);
-	bShowMouseCursor = true;
+	//FInputModeGameAndUI InputMode;
+	//SetInputMode(InputMode);
+	//bShowMouseCursor = true;
 
 	//Add Input Mapping Context
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
