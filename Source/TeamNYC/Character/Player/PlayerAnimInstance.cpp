@@ -8,23 +8,31 @@
 void UPlayerAnimInstance::NativeBeginPlay()
 {
 	Super::NativeBeginPlay();
+
+	MovingThreshould = 3.0f;
+	JumpingThreshould = 100.0f;
+
 	APawn* Pawn = TryGetPawnOwner();
 	if (Pawn)
 	{
 		PlayerCharacter = Cast<APlayerCharacter>(Pawn);
 		PlayerController = Cast<APlayerController>(PlayerCharacter->GetController());
+		Movement = PlayerCharacter->GetCharacterMovement();
 	}
 }
 
 void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+
 	if (PlayerCharacter)
 	{
-		GroundSpeed = PlayerCharacter->GetVelocity().Size2D();
-		bIsInAir = PlayerCharacter->GetCharacterMovement()->IsFalling();
+		Velocity = PlayerCharacter->GetVelocity();
+		GroundSpeed = Velocity.Size2D();
+		bIsMoving = GroundSpeed > MovingThreshould;
+		bIsFalling = Movement->IsFalling();
+		bIsJumping = bIsFalling && (Velocity.Z > JumpingThreshould);
 		//bIsCrouching = PlayerCharacter->GetCharacterMovement()->IsCrouching();
-		bIsMoving = GroundSpeed > 0.0f;
 		PlayerState = static_cast<int32>(PlayerCharacter->PlayerState);
 	}
 }
