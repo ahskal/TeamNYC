@@ -8,22 +8,29 @@ UENUM()
 enum class EItemQuality : uint8
 {
 	// Item Quality
+	Useless		UMETA(DisplayName = "Useless"),
 	Shoddy		UMETA(DisplayName = "Shoddy"),
 	Common		UMETA(DisplayName = "Common"),
-	Quality		UMETA(DisplayName = "Quality"),
-	Masterwork	UMETA(DisplayName = "Masterwork"),
-	Grandmaster UMETA(DisplayName = "Grandmaster"),
+	Rare		UMETA(DisplayName = "Rare"),
+	Epic		UMETA(DisplayName = "Epic"),
+	Unique		UMETA(DisplayName = "Unique"),
+	Masterpiece	UMETA(DisplayName = "Masterpiece"),
+	Mythic		UMETA(DisplayName = "Mythic"),
+	Legendary	UMETA(DisplayName = "Legendary"),
 };
 
 UENUM()
 enum class EItemType : uint8
 {
 	//Item Slot Type
+	Junk		UMETA(DisplayName = "Junk"),
+	Tool		UMETA(DisplayName = "Tool"),
 	Armor		UMETA(DisplayName = "Armor"),
 	Weapon		UMETA(DisplayName = "Weapon"),
 	Shield		UMETA(DisplayName = "Shield"),
 	Spell		UMETA(DisplayName = "Spell"),
-	Consumalbe	UMETA(DisplayName = "Consumalbe"),
+	Ammo		UMETA(DisplayName = "Ammo"),
+	Consumable	UMETA(DisplayName = "Consumable"),
 	Quest		UMETA(DisplayName = "Quest"),
 	Mundane		UMETA(DisplayName = "Mundane"),
 };
