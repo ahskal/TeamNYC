@@ -48,6 +48,10 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAnimMontage> UnarmedAttackMontage;
 
+	// Unarmed Jab DataAsset
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UPlayerJabDataAsset> UnarmedJabDataAsset;
+
 	EPlayerState	PlayerState;
 
 protected:
@@ -84,11 +88,22 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> FeetMesh;
 	
 public:
-	int32			ComboCount;
+	// Combo Section
+	int32			CurrentCombo{ 0 };
+	FTimerHandle    ComboTimerHandle;
+	bool			bHasNextComboCommand{ false };
 
 private:
-	UFUNCTION(BlueprintCallable)
-	void UnarmedAttack();
+	void ProcessUnarmedAttack();
+	// UnarmedAttackMontage가 시작될 때 호출되는 함수
+	void UnarmedAttackBegin();
+	// UnarmedAttackMontage가 완전히 끝났을 때 호출되는 함수
+	void UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded);
+
+	// 타이머 발동 함수
+	void SetComoboCheckTimer();
+	// 타이머 발동 시 입력이 들어왔는지 확인하는 함수
+	void CheckComboInput();
 
 protected:
 	virtual void BeginPlay() override;

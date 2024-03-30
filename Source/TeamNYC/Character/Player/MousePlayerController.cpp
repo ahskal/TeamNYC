@@ -141,7 +141,7 @@ void AMousePlayerController::SetupInputComponent()
 
 		// Right Click
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &AMousePlayerController::Attack);
-		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
+		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
@@ -265,6 +265,7 @@ void AMousePlayerController::Attack()
 			OwnerCharacter->SetActorRotation(FMath::RInterpTo(OwnerCharacter->GetActorRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotationSpeed));
 		}
 
-		OwnerCharacter->UnarmedAttack();
+		// 나중에 이부분은 맵핑된 함수를 호출하게 수정할 예정
+		OwnerCharacter->ProcessUnarmedAttack();
 	}
 }

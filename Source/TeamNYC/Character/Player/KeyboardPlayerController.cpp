@@ -15,6 +15,7 @@
 
 AKeyboardPlayerController::AKeyboardPlayerController()
 {
+
 	bShowMouseCursor = true;		// Show the mouse cursor
 	bEnableClickEvents = true;		// Enable mouse click events
 	bEnableMouseOverEvents = true;	// Enable mouse over events
