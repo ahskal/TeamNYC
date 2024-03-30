@@ -3,6 +3,7 @@
 
 #include "Character/Player/UnarmedJabAnimNotifyState.h"
 #include "Character/Player/PlayerCharacter.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 FString UUnarmedJabAnimNotifyState::GetNotifyName_Implementation() const
 {
@@ -15,7 +16,8 @@ void UUnarmedJabAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, U
 	if (OwnerPlayerCharacter)
 	{
 		OwnerPlayerCharacter->SetPlayerState(EPlayerState::ATTACKING);
-		OwnerPlayerCharacter->SetMaxWalkSpeed(0);
+		//OwnerPlayerCharacter->SetMaxWalkSpeed(0);
+		OwnerPlayerCharacter->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 		OwnerPlayerCharacter->ComboCount %= 2;
 
 
@@ -28,7 +30,8 @@ void UUnarmedJabAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, UAn
 	if (OwnerPlayerCharacter)
 	{
 		OwnerPlayerCharacter->SetPlayerState(EPlayerState::NORMAL);
-		OwnerPlayerCharacter->SetMaxWalkSpeed(600);
+		//OwnerPlayerCharacter->SetMaxWalkSpeed(600);
+		OwnerPlayerCharacter->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		OwnerPlayerCharacter->ComboCount %= 2;
 	}
 }
