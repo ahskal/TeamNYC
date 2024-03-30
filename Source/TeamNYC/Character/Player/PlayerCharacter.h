@@ -26,28 +26,29 @@ class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
 	
 friend class AMousePlayerController;
 friend class UPlayerAnimInstance;
-	
-
 
 private:
 	// SpringArm
 	UPROPERTY(EditDefaultsOnly)
-	USpringArmComponent* SpringArm;
+	TObjectPtr<USpringArmComponent> SpringArm;
 
 	// Camera
 	UPROPERTY(EditDefaultsOnly)
-	UCameraComponent* Camera;
+	TObjectPtr<UCameraComponent> Camera;
 
-	// InteractionComponent;
+	// Interaction Component;
 	UPROPERTY(EditDefaultsOnly)
-	UPlayerInteractionComponent* InteractionComponent;
+	TObjectPtr<UPlayerInteractionComponent> InteractionComponent;
 
-	// InventoryComponent;
+	// Inventory Component;
 	UPROPERTY(EditDefaultsOnly)
-	UInventoryComponent* InventoryComponent;
+	TObjectPtr<UInventoryComponent> InventoryComponent;
+
+	// UnarmedAttackMontage
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAnimMontage> UnarmedAttackMontage;
 
 	EPlayerState	PlayerState;
-
 
 protected:
 	// Face SkeletalMesh
@@ -81,10 +82,7 @@ protected:
 	// Feet SkeletalMeshComponent
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> FeetMesh;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UAnimMontage> UnarmedAttackMontage;
-
+	
 public:
 	int32			ComboCount;
 
