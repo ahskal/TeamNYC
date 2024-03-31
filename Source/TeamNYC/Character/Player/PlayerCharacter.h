@@ -52,7 +52,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UPlayerJabDataAsset> UnarmedJabDataAsset;
 
-	EPlayerState	PlayerState;
+	EPlayerState	PlayerCurrentState;
 
 protected:
 	// Face SkeletalMesh
@@ -112,8 +112,8 @@ protected:
 public:
 	APlayerCharacter();
 
-	FORCEINLINE void SetPlayerState(EPlayerState InPlayerState) { PlayerState = InPlayerState; }
-	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerState; }
+	FORCEINLINE void SetPlayerState(EPlayerState InPlayerState) { PlayerCurrentState = InPlayerState; }
+	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerCurrentState; }
 	void SetMaxWalkSpeed(float InMaxWalkSpeed);
 
 	// Get InteractionComponent

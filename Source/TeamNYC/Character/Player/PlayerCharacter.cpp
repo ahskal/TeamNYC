@@ -122,7 +122,7 @@ APlayerCharacter::APlayerCharacter()
 	if (UnarmedAttack.Succeeded())
 	{
 		UnarmedAttackMontage = UnarmedAttack.Object;
-		UnarmedAttackMontage->RateScale = 1.5f;
+		UnarmedAttackMontage->RateScale = 1.0f;
 	}
 	else
 	{
@@ -150,7 +150,7 @@ APlayerCharacter::APlayerCharacter()
 	InventoryComponent->SetWeightCapacity(50.f);
 
 
-	PlayerState = EPlayerState::NORMAL;
+	PlayerCurrentState = EPlayerState::NORMAL;
 }
 
 void APlayerCharacter::SetMaxWalkSpeed(float InMaxWalkSpeed)
@@ -199,6 +199,7 @@ void APlayerCharacter::ToggleMenu() const
 
 void APlayerCharacter::ProcessUnarmedAttack()
 {
+	UE_LOG(LogTemp, Warning, TEXT("ProcessUnarmedAttack"));
 	UE_LOG(LogTemp, Log, TEXT("CurrentCombo: %d"), CurrentCombo);
 
 	// 콤보가 0인 경우
@@ -206,6 +207,7 @@ void APlayerCharacter::ProcessUnarmedAttack()
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("1"));
 		UnarmedAttackBegin();
+		return;
 	}
 	// 콤보가 1 이상인 경우
 	else
@@ -222,7 +224,6 @@ void APlayerCharacter::ProcessUnarmedAttack()
 			//UE_LOG(LogTemp, Warning, TEXT("3"));
 			bHasNextComboCommand = false;
 		}
-
 	}
 }
 
@@ -260,7 +261,6 @@ void APlayerCharacter::UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsPro
 	CurrentCombo = 0;
 	SetPlayerState(EPlayerState::NORMAL);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-
 }
 
 void APlayerCharacter::SetComoboCheckTimer()
@@ -309,7 +309,6 @@ void APlayerCharacter::CheckComboInput()
 
 		// 다음 콤보 애니메이션 실행
 		const float AttackSpeed = 1.0f;
-		AnimInstance->Montage_Play(UnarmedAttackMontage, AttackSpeed);
 		AnimInstance->Montage_JumpToSection(NextComboSectionName, UnarmedAttackMontage);
 
 		// 콤보 타이머 재설정
@@ -317,6 +316,8 @@ void APlayerCharacter::CheckComboInput()
 		// 입력값 초기화
 		bHasNextComboCommand = false;
 	}
+	//else UnarmedAttackEnd(nullptr, true);
+
 }
 
 void APlayerCharacter::BeginPlay()

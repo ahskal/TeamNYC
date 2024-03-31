@@ -33,6 +33,6 @@ void UPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		bIsFalling = Movement->IsFalling();
 		bIsJumping = bIsFalling && (Velocity.Z > JumpingThreshould);
 		//bIsCrouching = PlayerCharacter->GetCharacterMovement()->IsCrouching();
-		PlayerState = static_cast<int32>(PlayerCharacter->PlayerState);
+		PlayerState = static_cast<int32>(PlayerCharacter->PlayerCurrentState);
 	}
 }
