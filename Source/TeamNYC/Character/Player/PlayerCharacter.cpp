@@ -23,8 +23,6 @@ APlayerCharacter::APlayerCharacter()
 {
 	UE_LOG(LogTemp, Display, TEXT("==================== PlayerCharacter ===================="));
 
-	PrimaryActorTick.bCanEverTick = true;
-
 	// Body SkeletalMesh
 	FString MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/MetaHumans/Character/Male/Medium/NormalWeight/Body/m_med_nrw_body.m_med_nrw_body'");
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> ObjectFinder(*MeshPath);
@@ -140,6 +138,7 @@ APlayerCharacter::APlayerCharacter()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Player_Jab DataAsset: %s"), *DataAssetPath);
 	}
+	
 	// CreateDefaultSubobject를 통해 컴포넌트를 생성하면, 컴포넌트 내부에는
 	// 부모 클래스인 UActorComponent에서 상속받은 OwnerPrivate라는 멤버 변수가 있습니다.
 	// 이 OwnerPrivate 변수에는 해당 컴포넌트를 소유하는 액터 객체의 포인터가 할당됩니다.
@@ -199,8 +198,8 @@ void APlayerCharacter::ToggleMenu() const
 
 void APlayerCharacter::ProcessUnarmedAttack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ProcessUnarmedAttack"));
-	UE_LOG(LogTemp, Log, TEXT("CurrentCombo: %d"), CurrentCombo);
+	//UE_LOG(LogTemp, Warning, TEXT("ProcessUnarmedAttack"));
+	//UE_LOG(LogTemp, Log, TEXT("CurrentCombo: %d"), CurrentCombo);
 
 	// 콤보가 0인 경우
 	if (CurrentCombo == 0)
@@ -229,7 +228,7 @@ void APlayerCharacter::ProcessUnarmedAttack()
 
 void APlayerCharacter::UnarmedAttackBegin()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackBegin"));
+	//UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackBegin"));
 	// 시작 콤보 스테이지 설정
 	CurrentCombo = 1;
 	
@@ -255,7 +254,7 @@ void APlayerCharacter::UnarmedAttackBegin()
 
 void APlayerCharacter::UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackEnd"));
+	//UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackEnd"));
 	ensure(CurrentCombo != 0);
 
 	CurrentCombo = 0;
@@ -265,7 +264,7 @@ void APlayerCharacter::UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsPro
 
 void APlayerCharacter::SetComoboCheckTimer()
 {
-	UE_LOG(LogTemp, Warning, TEXT("SetComoboCheckTimer"));
+	//UE_LOG(LogTemp, Warning, TEXT("SetComoboCheckTimer"));
 
 	// 배열의 인덱스 체크
 	int32 ComboIndex = CurrentCombo - 1;
@@ -274,7 +273,7 @@ void APlayerCharacter::SetComoboCheckTimer()
 	// 콤보 타이머 설정
 	const float AttackSpeedRate = 1.0f;
 	const float ComboEffectiveTime = (UnarmedJabDataAsset->EffectiveFrameCount[ComboIndex] / UnarmedJabDataAsset->FramePerSceond) / AttackSpeedRate;
-	UE_LOG(LogTemp, Log, TEXT("ComboEffectiveTime: %f"), ComboEffectiveTime);
+	//UE_LOG(LogTemp, Log, TEXT("ComboEffectiveTime: %f"), ComboEffectiveTime);
 	if (ComboEffectiveTime > 0.0f)
 	{
 		GetWorld()->GetTimerManager().SetTimer(ComboTimerHandle, this, &APlayerCharacter::CheckComboInput, ComboEffectiveTime, false);
@@ -283,12 +282,12 @@ void APlayerCharacter::SetComoboCheckTimer()
 
 void APlayerCharacter::CheckComboInput()
 {
-	UE_LOG(LogTemp, Warning, TEXT("CheckComboInput"));
+	//UE_LOG(LogTemp, Warning, TEXT("CheckComboInput"));
 
 	// 콤보 타이머 핸들 무효화 (추가 발동하지 않도록)
 	ComboTimerHandle.Invalidate();
 
-	UE_LOG(LogTemp, Log, TEXT("bHasNextComboCommand: %d"), bHasNextComboCommand);
+	//UE_LOG(LogTemp, Log, TEXT("bHasNextComboCommand: %d"), bHasNextComboCommand);
 	// 다음 콤보가 있는지 체크
 	if (bHasNextComboCommand)
 	{

@@ -16,10 +16,10 @@ class TEAMNYC_API UPlayerAnimInstance : public UAnimInstance
 
 private:
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
-		TObjectPtr<class APlayerCharacter> PlayerCharacter;
+		TObjectPtr<class ACharacterPrototype> OwnerCharacter;
 
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
-		TObjectPtr<class APlayerController> PlayerController;
+		//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
+		//TObjectPtr<class APlayerController> PlayerController;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 		TObjectPtr<class UCharacterMovementComponent> Movement;

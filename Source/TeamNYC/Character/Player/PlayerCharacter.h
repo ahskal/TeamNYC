@@ -94,16 +94,15 @@ public:
 	bool			bHasNextComboCommand{ false };
 
 private:
-	void ProcessUnarmedAttack();
-	// UnarmedAttackMontage가 시작될 때 호출되는 함수
-	void UnarmedAttackBegin();
-	// UnarmedAttackMontage가 완전히 끝났을 때 호출되는 함수
-	void UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded);
+	// Timer Section
+	void SetComoboCheckTimer();		// 타이머 발동 함수
+	void CheckComboInput();			// 타이머 발동시 콤보 입력 체크 함수
 
-	// 타이머 발동 함수
-	void SetComoboCheckTimer();
-	// 타이머 발동 시 입력이 들어왔는지 확인하는 함수
-	void CheckComboInput();
+	// Unarmed Attack Section
+	void ProcessUnarmedAttack();	
+	void UnarmedAttackBegin();		// UnarmedAttackMontage가 시작될 때 호출되는 함수
+	void UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded);	// UnarmedAttackMontage가 완전히 끝났을 때 호출되는 함수
+
 
 protected:
 	virtual void BeginPlay() override;
