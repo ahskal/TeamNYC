@@ -87,6 +87,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> FeetMesh;
 	
+// UI Widget Section
+protected:
+	virtual void SetupCharacterWidget(class UExtendedUserWidget* InUserWidget) override;
+
 public:
 	// Combo Section
 	int32			CurrentCombo{ 0 };

@@ -19,6 +19,9 @@
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 
+// HpBar Widget
+#include "Character/UI/HpBarUserWidget.h"
+
 APlayerCharacter::APlayerCharacter()
 {
 	UE_LOG(LogTemp, Display, TEXT("==================== PlayerCharacter ===================="));
@@ -262,6 +265,17 @@ void APlayerCharacter::UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsPro
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
+void APlayerCharacter::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
+{
+	Super::SetupCharacterWidget(InUserWidget);
+
+	UHpBarUserWidget* HpBarWidget = Cast<UHpBarUserWidget>(InUserWidget);
+	if (HpBarWidget)
+	{
+		HpBarWidget->SetHpBarColor(FLinearColor::Green);
+	}
+}
+
 void APlayerCharacter::SetComoboCheckTimer()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("SetComoboCheckTimer"));
@@ -304,7 +318,7 @@ void APlayerCharacter::CheckComboInput()
 			*UnarmedJabDataAsset->MontageSectionNamePrefix,
 			*UnarmedJabDataAsset->MontageSectionNameSuffix[ComboIndex]);
 
-		UE_LOG(LogTemp, Log, TEXT("NextComboSectionName: %s"), *NextComboSectionName.ToString());
+		//UE_LOG(LogTemp, Log, TEXT("NextComboSectionName: %s"), *NextComboSectionName.ToString());
 
 		// 다음 콤보 애니메이션 실행
 		const float AttackSpeed = 1.0f;

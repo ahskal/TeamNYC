@@ -2,9 +2,13 @@
 
 
 #include "Character/CharacterPrototype.h"
-#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Character/UI/ExtendedWidgetComponent.h"
+#include "Character/UI/HpBarUserWidget.h"
+#include "Component/CharacterStatComponent.h"
 #include "Engine/DamageEvents.h"
+#include <Components/ProgressBar.h>
 
 // Sets default values
 ACharacterPrototype::ACharacterPrototype()
@@ -13,6 +17,30 @@ ACharacterPrototype::ACharacterPrototype()
 
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("CharacterCapsule"));
+
+	// Stat Component
+	CharacterStatComp = CreateDefaultSubobject<UCharacterStatComponent>(TEXT("Stat"));
+
+	// Widget Component
+	HpBarWidgetComp = CreateDefaultSubobject<UExtendedWidgetComponent>(TEXT("Widget"));
+	HpBarWidgetComp->SetupAttachment(GetMesh());
+	HpBarWidgetComp->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+
+	FString HpbarWidgetBlueBlueprintPath= TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Characters/UI/WBP_HpBar.WBP_HpBar_C'");
+	static ConstructorHelpers::FClassFinder<UUserWidget> HpBarWidgetCompWidgetClass(*HpbarWidgetBlueBlueprintPath);
+	if (HpBarWidgetCompWidgetClass.Succeeded())
+	{
+
+		HpBarWidgetComp->SetWidgetClass(HpBarWidgetCompWidgetClass.Class);
+		HpBarWidgetComp->SetWidgetSpace(EWidgetSpace::Screen);
+		HpBarWidgetComp->SetDrawSize(FVector2D(150.0f, 15.0f));
+		HpBarWidgetComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Failed to load HP bar widget class."));
+	}
+
 
 	// 피격 판정 후 Dead montage 테스트용으로 차후 삭제 예정
 	// Dead Montage
@@ -32,6 +60,9 @@ ACharacterPrototype::ACharacterPrototype()
 void ACharacterPrototype::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Delegate Bindings for Death Event
+	CharacterStatComp->OnHpIsZero.AddUObject(this, &ACharacterPrototype::SetDead);
 }
 
 void ACharacterPrototype::AttackHitCheck()
@@ -82,9 +113,22 @@ float ACharacterPrototype::TakeDamage(float DamageAmount, FDamageEvent const& Da
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	SetDead();
+	CharacterStatComp->ApplyDamage(DamageAmount);
 
 	return DamageAmount;
+}
+
+void ACharacterPrototype::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
+{
+	UHpBarUserWidget* HpBarWidget = Cast<UHpBarUserWidget>(InUserWidget);
+	if (HpBarWidget)
+	{
+		HpBarWidget->SetMaxHp(CharacterStatComp->GetMaxHp());
+		HpBarWidget->UpdateHpBar(CharacterStatComp->GetCurrentHp());
+		HpBarWidget->SetHpBarColor(FLinearColor::Red);
+
+		CharacterStatComp->OnHpChanged.AddUObject(HpBarWidget, &UHpBarUserWidget::UpdateHpBar);
+	}
 }
 
 void ACharacterPrototype::SetDead()
@@ -92,6 +136,7 @@ void ACharacterPrototype::SetDead()
 	GetCharacterMovement()->DisableMovement();
 	PlayDeadAnimation();
 	SetActorEnableCollision(false);
+	HpBarWidgetComp->SetHiddenInGame(true);
 }
 
 void ACharacterPrototype::PlayDeadAnimation()
