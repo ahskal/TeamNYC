@@ -88,3 +88,15 @@ void ATestMonster::SetDead()
 		),
 		DeadEventDelayTime, false);
 }
+
+void ATestMonster::BeginFocus()
+{
+	GetMesh()->SetRenderCustomDepth(true);
+	FaceMesh->SetRenderCustomDepth(true);
+}
+
+void ATestMonster::EndFocus()
+{
+	GetMesh()->SetRenderCustomDepth(false);
+	FaceMesh->SetRenderCustomDepth(false);
+}

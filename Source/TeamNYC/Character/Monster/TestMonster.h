@@ -52,4 +52,7 @@ protected:
 
 protected:
 	void SetDead() override;
+
+	virtual void BeginFocus() override;
+	virtual void EndFocus() override;
 };

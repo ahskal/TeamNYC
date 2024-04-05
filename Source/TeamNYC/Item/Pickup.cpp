@@ -12,6 +12,7 @@ APickup::APickup()
 
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>("PickupMesh");
 	PickupMesh->SetSimulatePhysics(true);
+	PickupMesh->SetCanEverAffectNavigation(false);
 	SetRootComponent(PickupMesh);
 }
 
@@ -111,6 +112,7 @@ void APickup::TakePickup(const APlayerCharacter* Taker)
 					break;
 				case EItemAddResult::IAR_PartialAmountItemAdded:
 					UpdateInteractableData();
+					//SetActorEnableCollision(false);
 					Taker->UpdateInteractionWidget();			
 					break;
 				case EItemAddResult::IAR_AllItemsAdded:

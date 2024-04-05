@@ -5,6 +5,8 @@
 #include "Character/Interfaces/AnimationAttackInterfece.h"
 #include "Character/Interfaces/CharacterWidgetInterface.h"
 
+#include "Interfaces/InteractionInterface.h"
+
 #include "CharacterPrototype.generated.h"
 
 /********************************************************
@@ -12,7 +14,7 @@
 *	공통적인 요소만을 선언
 ********************************************************/
 UCLASS()
-class TEAMNYC_API ACharacterPrototype : public ACharacter, public IAnimationAttackInterfece, public ICharacterWidgetInterface
+class TEAMNYC_API ACharacterPrototype : public ACharacter, public IAnimationAttackInterfece, public ICharacterWidgetInterface, public IInteractionInterface
 {
 	GENERATED_BODY()
 
