@@ -15,24 +15,38 @@ class TEAMNYC_API UPlayerAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 private:
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		class APlayerCharacter* PlayerCharacter;
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
+		TObjectPtr<class ACharacterPrototype> OwnerCharacter;
+
+		//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
+		//TObjectPtr<class APlayerController> PlayerController;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		class APlayerController* PlayerController;
+		TObjectPtr<class UCharacterMovementComponent> Movement;
+
 
 protected:
-		//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		//FVector Velocity;
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+		float JumpingThreshould;
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
+		float MovingThreshould;
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+		FVector Velocity;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 		float GroundSpeed;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		bool bIsInAir;
+		bool bIsMoving;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
-		bool bIsMoving;
+		bool bIsFalling;
+
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+		bool bIsJumping;
 
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerState", meta = (AllowPrivateAccess = "true"))
 		int32 PlayerState;

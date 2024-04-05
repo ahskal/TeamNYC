@@ -18,7 +18,8 @@ public class TeamNYC : ModuleRules
             "AIModule",
             "GameplayTasks",
             "Niagara",
-            "NavigationSystem"
+            "NavigationSystem",
+            "UMG",
         });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });

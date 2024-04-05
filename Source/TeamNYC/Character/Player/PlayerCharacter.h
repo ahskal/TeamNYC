@@ -26,28 +26,33 @@ class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
 	
 friend class AMousePlayerController;
 friend class UPlayerAnimInstance;
-	
-
 
 private:
 	// SpringArm
 	UPROPERTY(EditDefaultsOnly)
-	USpringArmComponent* SpringArm;
+	TObjectPtr<USpringArmComponent> SpringArm;
 
 	// Camera
 	UPROPERTY(EditDefaultsOnly)
-	UCameraComponent* Camera;
+	TObjectPtr<UCameraComponent> Camera;
 
-	// InteractionComponent;
+	// Interaction Component;
 	UPROPERTY(EditDefaultsOnly)
-	UPlayerInteractionComponent* InteractionComponent;
+	TObjectPtr<UPlayerInteractionComponent> InteractionComponent;
 
-	// InventoryComponent;
+	// Inventory Component;
 	UPROPERTY(EditDefaultsOnly)
-	UInventoryComponent* InventoryComponent;
+	TObjectPtr<UInventoryComponent> InventoryComponent;
 
-	EPlayerState	PlayerState;
+	// UnarmedAttackMontage
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAnimMontage> UnarmedAttackMontage;
 
+	// Unarmed Jab DataAsset
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<class UPlayerJabDataAsset> UnarmedJabDataAsset;
+
+	EPlayerState	PlayerCurrentState;
 
 protected:
 	// Face SkeletalMesh
@@ -81,16 +86,27 @@ protected:
 	// Feet SkeletalMeshComponent
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USkeletalMeshComponent> FeetMesh;
-
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UAnimMontage> UnarmedAttackMontage;
+	
+// UI Widget Section
+protected:
+	virtual void SetupCharacterWidget(class UExtendedUserWidget* InUserWidget) override;
 
 public:
-	int32			ComboCount;
+	// Combo Section
+	int32			CurrentCombo{ 0 };
+	FTimerHandle    ComboTimerHandle;
+	bool			bHasNextComboCommand{ false };
 
 private:
-	UFUNCTION(BlueprintCallable)
-	void UnarmedAttack();
+	// Timer Section
+	void SetComoboCheckTimer();		// 타이머 발동 함수
+	void CheckComboInput();			// 타이머 발동시 콤보 입력 체크 함수
+
+	// Unarmed Attack Section
+	void ProcessUnarmedAttack();	
+	void UnarmedAttackBegin();		// UnarmedAttackMontage가 시작될 때 호출되는 함수
+	void UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded);	// UnarmedAttackMontage가 완전히 끝났을 때 호출되는 함수
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -99,8 +115,8 @@ protected:
 public:
 	APlayerCharacter();
 
-	FORCEINLINE void SetPlayerState(EPlayerState InPlayerState) { PlayerState = InPlayerState; }
-	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerState; }
+	FORCEINLINE void SetPlayerState(EPlayerState InPlayerState) { PlayerCurrentState = InPlayerState; }
+	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerCurrentState; }
 	void SetMaxWalkSpeed(float InMaxWalkSpeed);
 
 	// Get InteractionComponent
