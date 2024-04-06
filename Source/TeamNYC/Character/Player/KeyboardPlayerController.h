@@ -11,9 +11,9 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
-/**********************************************
- * WASD 움직임을 제공하는 플레이어 컨트롤러
- **********************************************/
+//====================================================================================
+//  WASD 움직임을 제공하는 플레이어 컨트롤러
+//====================================================================================
 UCLASS()
 class TEAMNYC_API AKeyboardPlayerController : public APlayerController
 {
@@ -22,46 +22,46 @@ class TEAMNYC_API AKeyboardPlayerController : public APlayerController
 private:
 	// OwnerPawn
 	UPROPERTY(VisibleAnywhere, Category = "Owner")
-	APawn* OwnerPawn{ nullptr };
+	TObjectPtr<APawn> OwnerPawn;
 
 	UPROPERTY(VisibleAnywhere, Category = "Owner")
-	ACharacter* OwnerCharacter{ nullptr };
+	TObjectPtr<ACharacter> OwnerCharacter;
 
 	// Controller
 	UPROPERTY(VisibleAnywhere, Category = "Input")
-	AController* Controller{ nullptr };
+	TObjectPtr<AController> Controller;
 
 	// MappingContext
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputMappingContext* KeyboardInputMappingContext;
+	TObjectPtr<UInputMappingContext> KeyboardInputMappingContext;
 
 	// Move IA
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* MoveAction;
+	TObjectPtr<UInputAction> MoveAction;
 
 	// Jump IA
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* JumpAction;
+	TObjectPtr<UInputAction> JumpAction;
 
 	// Look IA
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* LookAction;
+	TObjectPtr<UInputAction> LookAction;
 
 	// WalkSlow IA
 	//UPROPERTY(EditAnywhere, Category = "Input")
-	//UInputAction* WalkSlowAction;
+	//TObjectPtr<UInputAction> WalkSlowAction;
 
 	// WalkFast IA
 	//UPROPERTY(EditAnywhere, Category = "Input")
-	//UInputAction* WalkFastAction;
+	//TObjectPtr<UInputAction> WalkFastAction;
 
 	// Attack IA
 	//UPROPERTY(EditAnywhere, Category = "Input")
-	//UInputAction* AttackAction;
+	//TObjectPtr<UInputAction> AttackAction;
 
 	// Interaction IA
 	UPROPERTY(EditAnywhere, Category = "Input")
-	UInputAction* InteractionAction;
+	TObjectPtr<UInputAction> InteractionAction;
 
 public:
 	AKeyboardPlayerController();

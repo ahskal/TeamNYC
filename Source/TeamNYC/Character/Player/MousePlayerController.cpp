@@ -62,6 +62,12 @@ AMousePlayerController::AMousePlayerController()
 	if (IaRightRef.Succeeded()) RightClickAction = IaRightRef.Object;
 	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_RClick: %s"), *IaPath);
 
+	// Wheel Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_Wheel_UpDown.IA_Mouse_Wheel_UpDown'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaWheelRef(*IaPath);
+	if (IaWheelRef.Succeeded()) WheelAction = IaWheelRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Wheel: %s"), *IaPath);
+
 	// Jump Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Jump.IA_Jump'");
 	ConstructorHelpers::FObjectFinder<UInputAction> IaJumpRef(*IaPath);
@@ -144,6 +150,9 @@ void AMousePlayerController::SetupInputComponent()
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
+
+		// Wheel
+		EnhancedInputComponent->BindAction(WheelAction, ETriggerEvent::Started, this, &AMousePlayerController::OnWheelAction);
 
 		// Jump
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMousePlayerController::StartJump);
@@ -267,5 +276,22 @@ void AMousePlayerController::Attack()
 
 		// 나중에 이부분은 맵핑된 함수를 호출하게 수정할 예정
 		OwnerCharacter->ProcessUnarmedAttack();
+	}
+}
+
+void AMousePlayerController::OnWheelAction(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Log, TEXT("OnWheelActions"));
+
+	if (OwnerCharacter)
+	{
+		//float WheelValue = 0.f;
+		// Get the value of the wheel action
+		float WheelValue = Value.Get<float>();
+
+		UE_LOG(LogTemp, Log, TEXT("WheelValue: %f"), WheelValue);
+
+		// Zoom in/out
+		OwnerCharacter->SetCameraZoom(WheelValue);
 	}
 }

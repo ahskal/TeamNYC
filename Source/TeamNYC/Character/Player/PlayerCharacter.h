@@ -118,6 +118,7 @@ public:
 	FORCEINLINE void SetPlayerState(EPlayerState InPlayerState) { PlayerCurrentState = InPlayerState; }
 	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerCurrentState; }
 	void SetMaxWalkSpeed(float InMaxWalkSpeed);
+	void SetCameraZoom(float InZoomValue);
 
 	// Get InteractionComponent
 	FORCEINLINE UPlayerInteractionComponent* GetInteractionComponent() const { return InteractionComponent; }

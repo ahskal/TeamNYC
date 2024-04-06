@@ -12,9 +12,13 @@ class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
 class APlayerCharacter;
+struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+//====================================================================================
+//  마우스 커서 이동을 제공하는 플레이어 컨트롤러
+//====================================================================================
 UCLASS()
 class TEAMNYC_API AMousePlayerController : public APlayerController
 {
@@ -29,33 +33,35 @@ public:
 
 	/** FX Class that we will spawn when clicking */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UNiagaraSystem* FxCursor;
+	TObjectPtr<UNiagaraSystem> FxCursor;
 
-	/** MappingContext */
+	//====================================================================================
+	//  IMC, IA Section
+	//====================================================================================
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* MouseInputMappingContext;
+	TObjectPtr<UInputMappingContext> MouseInputMappingContext;
 
-	// Click IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LeftClickAction;
+	TObjectPtr<UInputAction> LeftClickAction;
 
-	// Click IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* RightClickAction;
+	TObjectPtr<UInputAction> RightClickAction;
 
-	// Jump IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
+	TObjectPtr<UInputAction> WheelAction;
 
-	// Interaction IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* InteractionAction;
+	TObjectPtr<UInputAction> JumpAction;
 
-	// Inventory IA
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* InventoryAction;
+	TObjectPtr<UInputAction> InteractionAction;
 
-	// OwnerPawn
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> InventoryAction;
+
+	//====================================================================================
+	//  Owner Section
+	//====================================================================================
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner")
 	TObjectPtr<APawn> OwnerPawn;
 
@@ -70,6 +76,9 @@ protected:
 
 	// To add mapping context
 	virtual void BeginPlay();
+
+	// Camera Zoom Up/Down
+	void OnWheelAction(const FInputActionValue& Value);
 
 	/** Input handlers for SetDestination action. */
 	void OnInputStarted();

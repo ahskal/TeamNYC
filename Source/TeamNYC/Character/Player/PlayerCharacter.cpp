@@ -83,6 +83,10 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
 	SpringArm->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
+	if (SpringArm)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SpringArm is NOT NULL"));
+	}
 
 	// Camera
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
@@ -158,6 +162,18 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::SetMaxWalkSpeed(float InMaxWalkSpeed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = InMaxWalkSpeed;
+}
+
+void APlayerCharacter::SetCameraZoom(float InZoomValue)
+{
+	float ZoomScale = 50.f;
+	InZoomValue *= ZoomScale;
+
+	float MinZoomValue = 200.f;	
+	float MaxZoomValue = 800.f;
+	float CurrentZoomValue = SpringArm->TargetArmLength;
+
+	SpringArm->TargetArmLength = FMath::Clamp(CurrentZoomValue + InZoomValue, MinZoomValue, MaxZoomValue);
 }
 
 void APlayerCharacter::UpdateInteractionWidget() const
