@@ -83,10 +83,6 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
 	SpringArm->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
-	if (SpringArm)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SpringArm is NOT NULL"));
-	}
 
 	// Camera
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
@@ -174,6 +170,18 @@ void APlayerCharacter::SetCameraZoom(float InZoomValue)
 	float CurrentZoomValue = SpringArm->TargetArmLength;
 
 	SpringArm->TargetArmLength = FMath::Clamp(CurrentZoomValue + InZoomValue, MinZoomValue, MaxZoomValue);
+}
+
+void APlayerCharacter::SetCameraPitch(float InPitchValue)
+{
+	float PitchScale = 5.f;
+	InPitchValue *= PitchScale;
+
+	float MinPitchValue = -80.f;
+	float MaxPitchValue = 0.f;
+	float CurrentPitchValue = SpringArm->GetRelativeRotation().Pitch;
+
+	SpringArm->SetRelativeRotation(FRotator(FMath::Clamp(CurrentPitchValue + InPitchValue, MinPitchValue, MaxPitchValue), 0.f, 0.f));
 }
 
 void APlayerCharacter::UpdateInteractionWidget() const

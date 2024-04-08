@@ -62,6 +62,12 @@ AMousePlayerController::AMousePlayerController()
 	if (IaRightRef.Succeeded()) RightClickAction = IaRightRef.Object;
 	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_RClick: %s"), *IaPath);
 
+	// MiddleClick Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_MClick.IA_Mouse_MClick'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaMiddleRef(*IaPath);
+	if (IaMiddleRef.Succeeded()) MiddleClickAction = IaMiddleRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_MClick: %s"), *IaPath);
+
 	// Wheel Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_Wheel_UpDown.IA_Mouse_Wheel_UpDown'");
 	ConstructorHelpers::FObjectFinder<UInputAction> IaWheelRef(*IaPath);
@@ -139,19 +145,22 @@ void AMousePlayerController::SetupInputComponent()
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
-		// Left Click
+		// Left Mouse Btn Click
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &AMousePlayerController::OnInputStarted);
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
-		// Right Click
+		// Right Mouse Btn Click
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &AMousePlayerController::Attack);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
-		// Wheel
+		// Middle Mouse Btn Click
+		EnhancedInputComponent->BindAction(MiddleClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnInputStarted);
+
+		// Wheel Up/Down
 		EnhancedInputComponent->BindAction(WheelAction, ETriggerEvent::Started, this, &AMousePlayerController::OnWheelAction);
 
 		// Jump
@@ -215,6 +224,21 @@ void AMousePlayerController::OnSetDestinationReleased()
 	FollowTime = 0.f;
 }
 
+void AMousePlayerController::Look(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Log, TEXT("Look"));
+	// input is a Vector2D
+	FVector2D LookAxisVector = Value.Get<FVector2D>();
+
+	// get owner AController
+	if (OwnerPawn)
+	{
+		UE_LOG(LogTemp, Log, TEXT("X:%f, Y:%f"));
+		OwnerPawn->AddControllerYawInput(LookAxisVector.X);
+		OwnerPawn->AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
 void AMousePlayerController::StartJump()
 {
 	if (OwnerCharacter)
@@ -255,6 +279,7 @@ void AMousePlayerController::ToggleMenu()
 	}
 }
 
+
 void AMousePlayerController::Attack()
 {
 	if (OwnerCharacter)
@@ -281,15 +306,10 @@ void AMousePlayerController::Attack()
 
 void AMousePlayerController::OnWheelAction(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Log, TEXT("OnWheelActions"));
-
 	if (OwnerCharacter)
 	{
-		//float WheelValue = 0.f;
 		// Get the value of the wheel action
 		float WheelValue = Value.Get<float>();
-
-		UE_LOG(LogTemp, Log, TEXT("WheelValue: %f"), WheelValue);
 
 		// Zoom in/out
 		OwnerCharacter->SetCameraZoom(WheelValue);
