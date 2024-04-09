@@ -72,6 +72,8 @@ ATestMonster::ATestMonster()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Face AnimBPClass"));
 	}
+
+	InteractableData.InteractableType = EInteractableType::Monster;
 }
 
 void ATestMonster::SetDead()

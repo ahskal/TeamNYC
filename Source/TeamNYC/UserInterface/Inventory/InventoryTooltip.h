@@ -22,37 +22,42 @@ public:
 	UTextBlock* ItemType;
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* QuestText;
-
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* QualityText;
-
-	UPROPERTY()
-	UTextBlock* DamageLabel;
-
-	UPROPERTY(meta = (BindWidget))
 	UTextBlock* DamageValue;
-
-	UPROPERTY()
-	UTextBlock* ArmorLabel;
 
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ArmorRating;
 
 	UPROPERTY(meta = (BindWidget))
+	UTextBlock* UsageText;
+
+	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemDescription;
 
-	UPROPERTY()
-	UTextBlock* StackSizeLabel;
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MaxStackSize;
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* StackSizeText;
+	UTextBlock* MaxStackSizeText;
 
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* SellValue;
+	UTextBlock* StackWeight;
 
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* StackWeightValue;
+	//UPROPERTY(meta = (BindWidget))
+	//UTextBlock* QuestText;
+	//UPROPERTY(meta = (BindWidget))
+	//UTextBlock* QualityText;
+	//UPROPERTY()
+	//UTextBlock* DamageLabel;
+	//UPROPERTY()
+	//UTextBlock* ArmorLabel;
+	//UPROPERTY()
+	//UTextBlock* StackSizeLabel;
+	//UPROPERTY(meta = (BindWidget))
+	//UTextBlock* StackSizeText;
+	//UPROPERTY(meta = (BindWidget))
+	//UTextBlock* SellValue;
+	//UPROPERTY(meta = (BindWidget))
+	//UTextBlock* StackWeightValue;
 protected:
 	virtual void NativeConstruct() override;
 };

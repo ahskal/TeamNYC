@@ -13,6 +13,7 @@ enum class EInteractableType : uint8
 {
 	// Linetrace Collision TargetType
 	Pickup				UMETA(DisplayName = "Pickup"),
+	Monster				UMETA(DisplayName = "Monster"),
 	NonPlayerCharacter	UMETA(DisplayName = "NonPlayerCharacter"),
 	Device				UMETA(DisplayName = "Device"),
 	Toggle				UMETA(DisplayName = "Toggle"),
