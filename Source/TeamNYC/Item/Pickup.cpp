@@ -112,8 +112,7 @@ void APickup::TakePickup(const APlayerCharacter* Taker)
 					break;
 				case EItemAddResult::IAR_PartialAmountItemAdded:
 					UpdateInteractableData();
-					//SetActorEnableCollision(false);
-					Taker->UpdateInteractionWidget();			
+					//Taker->UpdateInteractionWidget();			
 					break;
 				case EItemAddResult::IAR_AllItemsAdded:
 					Destroy();

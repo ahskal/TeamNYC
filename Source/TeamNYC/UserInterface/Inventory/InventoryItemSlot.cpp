@@ -112,20 +112,20 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 		const TObjectPtr<UDragItemVisual> DragVisual = CreateWidget<UDragItemVisual>(this, DragItemVisualClass);
 		DragVisual->ItemIcon->SetBrushFromTexture(ItemReference->ItemAssetData.Icon);
 		DragVisual->ItemBorder->SetBrushColor(ItemBorder->GetBrushColor());
-		DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->Quantity));
+		DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->ItemQuantity));
 	
 		ItemReference->ItemNumericData.bIsStackable ?
-			DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->Quantity))
+			DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->ItemQuantity))
 			: DragVisual->ItemQuantity->SetVisibility(ESlateVisibility::Collapsed);
 	
-		UItemDragDropOperation* DragItemOperation = NewObject<UItemDragDropOperation>();
-		DragItemOperation->SourceItem = ItemReference;
-		DragItemOperation->SourceInventory = ItemReference->OwningInventory;
-	
-		DragItemOperation->DefaultDragVisual = DragVisual;
-		DragItemOperation->Pivot = EDragPivot::TopLeft;
-	
-		OutOperation = DragItemOperation;
+		//UItemDragDropOperation* DragItemOperation = NewObject<UItemDragDropOperation>();
+		//DragItemOperation->SourceItem = ItemReference;
+		//DragItemOperation->SourceInventory = ItemReference->OwningInventory;
+		//
+		//DragItemOperation->DefaultDragVisual = DragVisual;
+		//DragItemOperation->Pivot = EDragPivot::TopLeft;
+		//
+		//OutOperation = DragItemOperation;
 	
 	}
 }
