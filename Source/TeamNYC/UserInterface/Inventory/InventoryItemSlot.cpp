@@ -11,10 +11,13 @@
 #include "Util/ColorConstants.h"
 
 
-#define BLUE FLinearColor(0.0f, 0.2f, 1.0f)
-#define ORANGE FLinearColor(1.0f, 0.15f, 0.0f)
-#define GOLD FLinearColor(0.97f, 0.8f, 0.0f)
-#define CYAN FLinearColor(0, 1.f, 1.f)
+#define BLUE FLinearColor(0.f, 0.2f, 1.f)
+#define ORANGE FLinearColor(1.f, 0.15f, 0.f)
+#define GOLD FLinearColor(0.97f, 0.8f, 0.f)
+#define CYAN FLinearColor(0.f, 1.f, 1.f)
+
+//#define PURPLE FLinearColor(169.f/255, 7.f/255, 228.f/255)
+#define PURPLE FLinearColor(0.3f, 0.f, 1.f)
 
 class UItemBase;
 
@@ -39,36 +42,38 @@ void UInventoryItemSlot::NativeConstruct()
 	{
 		switch (ItemReference->ItemQuality)
 		{
+		case EItemQuality::Useless:
+			ItemBorder->SetBrushColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.f));
+			break;
 		case EItemQuality::Shoddy:
-			//ItemBorder->SetBrushColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.f));
 			ItemBorder->SetBrushColor(FLinearColor::Gray);
+			//ItemBorder->SetBrushColor(FLinearColor::White);
 			break;
 		case EItemQuality::Common:
-			ItemBorder->SetBrushColor(FLinearColor::White);
+			ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkCyan3b());
+			//ItemBorder->SetBrushColor(FLinearColor::Green);
 			break;
 		case EItemQuality::Rare:
-			ItemBorder->SetBrushColor(FLinearColor::Green);
+			ItemBorder->SetBrushColor(FLinearColor(0.0f, 0.1f, 1.0f));
 			break;
 		case EItemQuality::Epic:
-			//ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkCyan3b());
-			//ItemBorder->SetBrushColor(FLinearColor(0.0f, 0.1f, 1.0f));
-			//ItemBorder->SetBrushColor(BLUE);
-			ItemBorder->SetBrushColor(BLUE);
+			ItemBorder->SetBrushColor(PURPLE);
 			break;
 		case EItemQuality::Unique:
-			//ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkOrange3b());
 			ItemBorder->SetBrushColor(CYAN);
 			break;
+		case EItemQuality::Masterpiece:
+			ItemBorder->SetBrushColor(UE::Geometry::LinearColors::Red3b());
+			break;
 		case EItemQuality::Mythic:
-			//ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkOrange3b());
 			ItemBorder->SetBrushColor(GOLD);
 			break;
 		case EItemQuality::Legendary:
-			//ItemBorder->SetBrushColor(UE::Geometry::LinearColors::Purple3f());
+			//ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkOrange3b());
 			ItemBorder->SetBrushColor(ORANGE);
 			break;
 		default:
-			ItemBorder->SetBrushColor(FLinearColor::White);
+			ItemBorder->SetBrushColor(FLinearColor::Black);
 		}
 
 		ItemIcon->SetBrushFromTexture(ItemReference->ItemAssetData.Icon);
@@ -113,11 +118,11 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 		DragVisual->ItemIcon->SetBrushFromTexture(ItemReference->ItemAssetData.Icon);
 		DragVisual->ItemBorder->SetBrushColor(ItemBorder->GetBrushColor());
 		DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->ItemQuantity));
-	
+
 		ItemReference->ItemNumericData.bIsStackable ?
 			DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->ItemQuantity))
 			: DragVisual->ItemQuantity->SetVisibility(ESlateVisibility::Collapsed);
-	
+
 		//UItemDragDropOperation* DragItemOperation = NewObject<UItemDragDropOperation>();
 		//DragItemOperation->SourceItem = ItemReference;
 		//DragItemOperation->SourceInventory = ItemReference->OwningInventory;
@@ -126,7 +131,7 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 		//DragItemOperation->Pivot = EDragPivot::TopLeft;
 		//
 		//OutOperation = DragItemOperation;
-	
+
 	}
 }
 
