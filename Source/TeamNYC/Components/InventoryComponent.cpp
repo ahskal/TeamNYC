@@ -136,7 +136,6 @@ FItemAddResult UInventoryComponent::HandleNonStackableItems(UItemBase* ItemIn)
 		//return added none
 		return FItemAddResult::AddedNone(FText::Format(
 			FText::FromString("Could not add {0} to inventory. Item has invalid weight."), ItemIn->ItemTextData.Name));
-
 	}
 
 	if (InventoryTotalWeight + ItemIn->GetItemSingleWeight() > GetWeightCapacity())

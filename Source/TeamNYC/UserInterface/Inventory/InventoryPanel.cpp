@@ -48,7 +48,7 @@ void UInventoryPanel::RefreshInventory()
 		{
 			UInventoryItemSlot* ItemSlot = CreateWidget<UInventoryItemSlot>(this, InventorySlotClass);
 
-			//ItemSlot->SetItemReference(InventoryItem);
+			ItemSlot->SetItemReference(InventoryItem);
 			InventoryUWrapBox->AddChildToWrapBox(ItemSlot);
 		}
 		SetInfoText();
