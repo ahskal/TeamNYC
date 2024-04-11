@@ -8,15 +8,15 @@ UENUM()
 enum class EItemQuality : uint8
 {
 	// Item Quality
-	Useless		UMETA(DisplayName = "Useless"),
-	Shoddy		UMETA(DisplayName = "Shoddy"),
-	Common		UMETA(DisplayName = "Common"),
-	Rare		UMETA(DisplayName = "Rare"),
-	Epic		UMETA(DisplayName = "Epic"),
-	Unique		UMETA(DisplayName = "Unique"),
-	Masterpiece	UMETA(DisplayName = "Masterpiece"),
-	Mythic		UMETA(DisplayName = "Mythic"),
-	Legendary	UMETA(DisplayName = "Legendary"),
+	Useless		UMETA(DisplayName = "Useless"),		// 회색
+	Shoddy		UMETA(DisplayName = "Shoddy"),		// 흰색
+	Common		UMETA(DisplayName = "Common"),		// 초록
+	Rare		UMETA(DisplayName = "Rare"),		// 파랑
+	Epic		UMETA(DisplayName = "Epic"),		// 보라
+	Unique		UMETA(DisplayName = "Unique"),		// 청록
+	Masterpiece	UMETA(DisplayName = "Masterpiece"),	// 레드
+	Mythic		UMETA(DisplayName = "Mythic"),		// 노랑
+	Legendary	UMETA(DisplayName = "Legendary"),	// 주황
 };
 
 UENUM()

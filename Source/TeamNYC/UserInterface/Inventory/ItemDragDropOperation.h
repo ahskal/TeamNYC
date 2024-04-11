@@ -14,4 +14,5 @@ class TEAMNYC_API UItemDragDropOperation : public UDragDropOperation
 {
 	GENERATED_BODY()
 	
+
 };

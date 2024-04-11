@@ -105,16 +105,18 @@ void APickup::TakePickup(const APlayerCharacter* Taker)
 			if (UInventoryComponent* PlayerInventory = Taker->GetInventory())
 			{
 				const FItemAddResult AddResult = PlayerInventory->HandleAddItem(ItemReference);
-			
+
 				switch (AddResult.OperationResult)
 				{
+					// 객체 아무것도 아닐때
 				case EItemAddResult::IAR_NoItemAdded:
 					break;
+					// 객체 업데이트용(상호작용)
 				case EItemAddResult::IAR_PartialAmountItemAdded:
 					UpdateInteractableData();
-					//SetActorEnableCollision(false);
 					Taker->UpdateInteractionWidget();			
 					break;
+					// 객체 삭제용(아이템)
 				case EItemAddResult::IAR_AllItemsAdded:
 					Destroy();
 					break;
@@ -126,7 +128,6 @@ void APickup::TakePickup(const APlayerCharacter* Taker)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Player Inventory Component is null!"));
 			}
-
 		}
 		else
 		{

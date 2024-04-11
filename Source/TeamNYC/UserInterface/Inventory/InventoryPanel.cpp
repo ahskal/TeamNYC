@@ -48,7 +48,9 @@ void UInventoryPanel::RefreshInventory()
 		{
 			UInventoryItemSlot* ItemSlot = CreateWidget<UInventoryItemSlot>(this, InventorySlotClass);
 
-			//ItemSlot->SetItemReference(InventoryItem);
+			// 아이템의 복사본을 가져오는 부분
+			ItemSlot->SetItemReference(InventoryItem);
+			// 복제한 아이템을 인벤토리의 자식으로 넣는 부분
 			InventoryUWrapBox->AddChildToWrapBox(ItemSlot);
 		}
 		SetInfoText();
