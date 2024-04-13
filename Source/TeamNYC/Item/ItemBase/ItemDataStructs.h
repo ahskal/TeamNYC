@@ -41,7 +41,7 @@ struct FItemStatistics
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere)
-	float ArmorRating{};
+	float ArmorValue{};
 
 	UPROPERTY(EditAnywhere)
 	float DamageValue{};
