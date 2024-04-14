@@ -40,7 +40,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Mesh Setup
 	GetMesh()->SetSkeletalMesh(BodyMesh);
-	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -98));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);

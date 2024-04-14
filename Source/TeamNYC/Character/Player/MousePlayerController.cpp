@@ -153,7 +153,7 @@ void AMousePlayerController::SetupInputComponent()
 
 		// Right Mouse Btn Click
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &AMousePlayerController::Attack);
-		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
@@ -296,18 +296,24 @@ void AMousePlayerController::Attack()
 {
 	if (OwnerCharacter)
 	{
-		// stop movement
+		// 캐릭터 움직임 정지
 		StopMovement();
 
-		// Look in the direction you clicked
-		// Smooth directional rotation
+		// 충돌 정보를 저장할 변수
 		FHitResult Hit;
 		bool bHitSuccessful = false;
+
+		// 마우스 커서에서 lay를 쏘아 충돌 확인
 		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-		if (bHitSuccessful)
+		if (bHitSuccessful)	// 충돌이 발생했을 경우
 		{
+			// 바라보는 방향의 계산, yaw만 구함. pitch/roll은 유지.
 			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), Hit.Location);
+			LookAtRotation.Pitch = OwnerCharacter->GetActorRotation().Pitch;
+			LookAtRotation.Roll = OwnerCharacter->GetActorRotation().Roll;
 			float RotationSpeed = 12.f;
+
+			// 캐릭터 회전을 부드럽게 보간하여 처리
 			OwnerCharacter->SetActorRotation(FMath::RInterpTo(OwnerCharacter->GetActorRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotationSpeed));
 		}
 
