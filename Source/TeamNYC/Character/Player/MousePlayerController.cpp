@@ -228,25 +228,18 @@ void AMousePlayerController::OnSetDestinationReleased()
 
 void AMousePlayerController::CameraZoom(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Log, TEXT("CameraZoom"));
-
 	// get owner AController
 	if (OwnerCharacter)
 	{
-		UE_LOG(LogTemp, Log, TEXT("CameraZoom value: %f"), Value.Get<float>());
 		OwnerCharacter->SetCameraZoom(Value.Get<float>());
 	}
 }
 
 void AMousePlayerController::CameraRotate(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Log, TEXT("CameraRotate"));
-
 	// get owner AController
 	if (OwnerCharacter)
 	{
-		UE_LOG(LogTemp, Log, TEXT("CameraRotate vlaue :%f"), Value.Get<float>());
-
 		OwnerCharacter->SetCameraYaw(Value.Get<float>());
 	}
 }
@@ -311,6 +304,8 @@ void AMousePlayerController::Attack()
 			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), Hit.Location);
 			LookAtRotation.Pitch = OwnerCharacter->GetActorRotation().Pitch;
 			LookAtRotation.Roll = OwnerCharacter->GetActorRotation().Roll;
+
+			// 회전 속도
 			float RotationSpeed = 12.f;
 
 			// 캐릭터 회전을 부드럽게 보간하여 처리
