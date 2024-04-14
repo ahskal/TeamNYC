@@ -122,6 +122,7 @@ public:
 	// Camera Section
 	void SetCameraZoom(float InZoomValue);
 	void SetCameraPitch(float InPitchValue);
+	void SetCameraYaw(float InYawValue);
 
 	// Get InteractionComponent
 	FORCEINLINE UPlayerInteractionComponent* GetInteractionComponent() const { return InteractionComponent; }

@@ -48,10 +48,10 @@ public:
 	TObjectPtr<UInputAction> RightClickAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> MiddleClickAction;
+	TObjectPtr<UInputAction> CameraZoomAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> WheelAction;
+	TObjectPtr<UInputAction> CameraRotationAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> JumpAction;
@@ -88,7 +88,8 @@ protected:
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 
-	void Look(const FInputActionValue& Value);
+	void CameraZoom(const FInputActionValue& Value);
+	void CameraRotate(const FInputActionValue& Value);
 
 	void StartJump();
 	void StopJump();

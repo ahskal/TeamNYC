@@ -162,7 +162,7 @@ void APlayerCharacter::SetMaxWalkSpeed(float InMaxWalkSpeed)
 
 void APlayerCharacter::SetCameraZoom(float InZoomValue)
 {
-	float ZoomScale = 50.f;
+	float ZoomScale = 10.f;
 	InZoomValue *= ZoomScale;
 
 	float MinZoomValue = 200.f;	
@@ -182,6 +182,14 @@ void APlayerCharacter::SetCameraPitch(float InPitchValue)
 	float CurrentPitchValue = SpringArm->GetRelativeRotation().Pitch;
 
 	SpringArm->SetRelativeRotation(FRotator(FMath::Clamp(CurrentPitchValue + InPitchValue, MinPitchValue, MaxPitchValue), 0.f, 0.f));
+}
+
+void APlayerCharacter::SetCameraYaw(float InYawValue)
+{
+	float YawScale = 1.f;
+	InYawValue *= YawScale;
+
+	SpringArm->AddRelativeRotation(FRotator(0.0f, InYawValue, 0.0f));
 }
 
 void APlayerCharacter::UpdateInteractionWidget() const

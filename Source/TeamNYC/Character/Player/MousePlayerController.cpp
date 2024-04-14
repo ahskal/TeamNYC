@@ -62,17 +62,17 @@ AMousePlayerController::AMousePlayerController()
 	if (IaRightRef.Succeeded()) RightClickAction = IaRightRef.Object;
 	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_RClick: %s"), *IaPath);
 
-	// MiddleClick Action
-	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_MClick.IA_Mouse_MClick'");
-	ConstructorHelpers::FObjectFinder<UInputAction> IaMiddleRef(*IaPath);
-	if (IaMiddleRef.Succeeded()) MiddleClickAction = IaMiddleRef.Object;
-	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_MClick: %s"), *IaPath);
+	// Camera Zoom Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_CameraZoom.IA_CameraZoom'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaCameraZoomActionRef(*IaPath);
+	if (IaCameraZoomActionRef.Succeeded()) CameraZoomAction = IaCameraZoomActionRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Look: %s"), *IaPath);
 
-	// Wheel Action
-	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_Wheel_UpDown.IA_Mouse_Wheel_UpDown'");
-	ConstructorHelpers::FObjectFinder<UInputAction> IaWheelRef(*IaPath);
-	if (IaWheelRef.Succeeded()) WheelAction = IaWheelRef.Object;
-	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Wheel: %s"), *IaPath);
+	// Camera Rotation Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_CameraRotation.IA_CameraRotation'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaCameraRotationRef(*IaPath);
+	if (IaCameraRotationRef.Succeeded()) CameraRotationAction = IaCameraRotationRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_CameraRotation: %s"), *IaPath);
 
 	// Jump Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Jump.IA_Jump'");
@@ -157,11 +157,13 @@ void AMousePlayerController::SetupInputComponent()
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
-		// Middle Mouse Btn Click
-		EnhancedInputComponent->BindAction(MiddleClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnInputStarted);
+		// Camera Zoom
+		EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Started, this, &AMousePlayerController::CameraZoom);
+		EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AMousePlayerController::CameraZoom);
 
-		// Wheel Up/Down
-		EnhancedInputComponent->BindAction(WheelAction, ETriggerEvent::Started, this, &AMousePlayerController::OnWheelAction);
+		// Camera Rotation
+		EnhancedInputComponent->BindAction(CameraRotationAction, ETriggerEvent::Started, this, &AMousePlayerController::CameraRotate);
+		EnhancedInputComponent->BindAction(CameraRotationAction, ETriggerEvent::Triggered, this, &AMousePlayerController::CameraRotate);
 
 		// Jump
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMousePlayerController::StartJump);
@@ -224,18 +226,28 @@ void AMousePlayerController::OnSetDestinationReleased()
 	FollowTime = 0.f;
 }
 
-void AMousePlayerController::Look(const FInputActionValue& Value)
+void AMousePlayerController::CameraZoom(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Log, TEXT("Look"));
-	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	UE_LOG(LogTemp, Log, TEXT("CameraZoom"));
 
 	// get owner AController
-	if (OwnerPawn)
+	if (OwnerCharacter)
 	{
-		UE_LOG(LogTemp, Log, TEXT("X:%f, Y:%f"));
-		OwnerPawn->AddControllerYawInput(LookAxisVector.X);
-		OwnerPawn->AddControllerPitchInput(LookAxisVector.Y);
+		UE_LOG(LogTemp, Log, TEXT("CameraZoom value: %f"), Value.Get<float>());
+		OwnerCharacter->SetCameraZoom(Value.Get<float>());
+	}
+}
+
+void AMousePlayerController::CameraRotate(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Log, TEXT("CameraRotate"));
+
+	// get owner AController
+	if (OwnerCharacter)
+	{
+		UE_LOG(LogTemp, Log, TEXT("CameraRotate vlaue :%f"), Value.Get<float>());
+
+		OwnerCharacter->SetCameraYaw(Value.Get<float>());
 	}
 }
 
