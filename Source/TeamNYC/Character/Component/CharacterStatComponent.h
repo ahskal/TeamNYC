@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Data/CharacterStat.h"
 #include "CharacterStatComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
@@ -20,23 +21,39 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-// HP Section
+	//====================================================================================
+	//  HP Section
+	//====================================================================================
+protected:
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
+	float CurrentHp;
+
 public:
 	FOnHPIsZeroDelegate OnHpIsZero;
 	FOnHPChangedDelegate OnHpChanged;
 
-	FORCEINLINE float GetMaxHp() const { return MaxHp; }
+	FORCEINLINE float GetMaxHp() const { return TotalStat.MaxHp; }
 	FORCEINLINE float GetCurrentHp() const { return CurrentHp; }
-	FORCEINLINE float GetHpRatio() const { return CurrentHp / MaxHp; }
+	FORCEINLINE float GetHpRatio() const { return CurrentHp / GetMaxHp(); }
+	void SetHp(float NewHp);
 	
 	float ApplyDamage(float InDamage);
 
+	//====================================================================================
+	//  Stat Section
+	//====================================================================================
 protected:
-	UPROPERTY(VisibleInstanceOnly, Category = "Stat")
-	float MaxHp;
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
+	FCharacterStat BaseStat;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
-	float CurrentHp;
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
+	FCharacterStat ModifierStat;
 
-	void SetHp(float NewHp);
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat", meta = (AllowPrivateAccess = "true"))
+	FCharacterStat TotalStat;
+
+public:
+	FORCEINLINE FCharacterStat& GetTotalStat() { return TotalStat; }
+	FORCEINLINE void SetTotalStat() { TotalStat = BaseStat + ModifierStat; }
+	FORCEINLINE void AddModifierStat(const FCharacterStat& InModifierStat) { ModifierStat += InModifierStat; }
 };

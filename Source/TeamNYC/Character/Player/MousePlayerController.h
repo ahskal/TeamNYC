@@ -48,7 +48,10 @@ public:
 	TObjectPtr<UInputAction> RightClickAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UInputAction> WheelAction;
+	TObjectPtr<UInputAction> CameraZoomAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> CameraRotationAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> JumpAction;
@@ -85,6 +88,9 @@ protected:
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 
+	void CameraZoom(const FInputActionValue& Value);
+	void CameraRotate(const FInputActionValue& Value);
+
 	void StartJump();
 	void StopJump();
 
@@ -100,5 +106,4 @@ protected:
 private:
 	FVector CachedDestination;
 	float FollowTime; // For how long it has been pressed
-
 };

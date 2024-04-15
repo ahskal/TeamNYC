@@ -62,11 +62,17 @@ AMousePlayerController::AMousePlayerController()
 	if (IaRightRef.Succeeded()) RightClickAction = IaRightRef.Object;
 	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_RClick: %s"), *IaPath);
 
-	// Wheel Action
-	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Mouse_Wheel_UpDown.IA_Mouse_Wheel_UpDown'");
-	ConstructorHelpers::FObjectFinder<UInputAction> IaWheelRef(*IaPath);
-	if (IaWheelRef.Succeeded()) WheelAction = IaWheelRef.Object;
-	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Wheel: %s"), *IaPath);
+	// Camera Zoom Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_CameraZoom.IA_CameraZoom'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaCameraZoomActionRef(*IaPath);
+	if (IaCameraZoomActionRef.Succeeded()) CameraZoomAction = IaCameraZoomActionRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Look: %s"), *IaPath);
+
+	// Camera Rotation Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_CameraRotation.IA_CameraRotation'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaCameraRotationRef(*IaPath);
+	if (IaCameraRotationRef.Succeeded()) CameraRotationAction = IaCameraRotationRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_CameraRotation: %s"), *IaPath);
 
 	// Jump Action
 	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_Jump.IA_Jump'");
@@ -139,20 +145,25 @@ void AMousePlayerController::SetupInputComponent()
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
-		// Left Click
+		// Left Mouse Btn Click
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &AMousePlayerController::OnInputStarted);
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
-		// Right Click
+		// Right Mouse Btn Click
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &AMousePlayerController::Attack);
-		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Triggered, this, &AMousePlayerController::Attack);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &AMousePlayerController::OnSetDestinationReleased);
 		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Canceled, this, &AMousePlayerController::OnSetDestinationReleased);
 
-		// Wheel
-		EnhancedInputComponent->BindAction(WheelAction, ETriggerEvent::Started, this, &AMousePlayerController::OnWheelAction);
+		// Camera Zoom
+		EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Started, this, &AMousePlayerController::CameraZoom);
+		EnhancedInputComponent->BindAction(CameraZoomAction, ETriggerEvent::Triggered, this, &AMousePlayerController::CameraZoom);
+
+		// Camera Rotation
+		EnhancedInputComponent->BindAction(CameraRotationAction, ETriggerEvent::Started, this, &AMousePlayerController::CameraRotate);
+		EnhancedInputComponent->BindAction(CameraRotationAction, ETriggerEvent::Triggered, this, &AMousePlayerController::CameraRotate);
 
 		// Jump
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &AMousePlayerController::StartJump);
@@ -215,6 +226,24 @@ void AMousePlayerController::OnSetDestinationReleased()
 	FollowTime = 0.f;
 }
 
+void AMousePlayerController::CameraZoom(const FInputActionValue& Value)
+{
+	// get owner AController
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->SetCameraZoom(Value.Get<float>());
+	}
+}
+
+void AMousePlayerController::CameraRotate(const FInputActionValue& Value)
+{
+	// get owner AController
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->SetCameraYaw(Value.Get<float>());
+	}
+}
+
 void AMousePlayerController::StartJump()
 {
 	if (OwnerCharacter)
@@ -255,22 +284,31 @@ void AMousePlayerController::ToggleMenu()
 	}
 }
 
+
 void AMousePlayerController::Attack()
 {
 	if (OwnerCharacter)
 	{
-		// stop movement
+		// 캐릭터 움직임 정지
 		StopMovement();
 
-		// Look in the direction you clicked
-		// Smooth directional rotation
+		// 충돌 정보를 저장할 변수
 		FHitResult Hit;
 		bool bHitSuccessful = false;
+
+		// 마우스 커서에서 lay를 쏘아 충돌 확인
 		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-		if (bHitSuccessful)
+		if (bHitSuccessful)	// 충돌이 발생했을 경우
 		{
+			// 바라보는 방향의 계산, yaw만 구함. pitch/roll은 유지.
 			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), Hit.Location);
+			LookAtRotation.Pitch = OwnerCharacter->GetActorRotation().Pitch;
+			LookAtRotation.Roll = OwnerCharacter->GetActorRotation().Roll;
+
+			// 회전 속도
 			float RotationSpeed = 12.f;
+
+			// 캐릭터 회전을 부드럽게 보간하여 처리
 			OwnerCharacter->SetActorRotation(FMath::RInterpTo(OwnerCharacter->GetActorRotation(), LookAtRotation, GetWorld()->GetDeltaSeconds(), RotationSpeed));
 		}
 
@@ -281,15 +319,10 @@ void AMousePlayerController::Attack()
 
 void AMousePlayerController::OnWheelAction(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Log, TEXT("OnWheelActions"));
-
 	if (OwnerCharacter)
 	{
-		//float WheelValue = 0.f;
 		// Get the value of the wheel action
 		float WheelValue = Value.Get<float>();
-
-		UE_LOG(LogTemp, Log, TEXT("WheelValue: %f"), WheelValue);
 
 		// Zoom in/out
 		OwnerCharacter->SetCameraZoom(WheelValue);

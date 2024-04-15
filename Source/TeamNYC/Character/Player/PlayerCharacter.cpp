@@ -16,6 +16,7 @@
 #include "Character/Player/PlayerJabDataAsset.h"
 
 // Component
+#include "Character/Component/CharacterStatComponent.h"
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 
@@ -40,7 +41,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Mesh Setup
 	GetMesh()->SetSkeletalMesh(BodyMesh);
-	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -98));
 	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
 	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -83,10 +84,6 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
 	SpringArm->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
-	if (SpringArm)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SpringArm is NOT NULL"));
-	}
 
 	// Camera
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("TopDownCamera"));
@@ -166,7 +163,7 @@ void APlayerCharacter::SetMaxWalkSpeed(float InMaxWalkSpeed)
 
 void APlayerCharacter::SetCameraZoom(float InZoomValue)
 {
-	float ZoomScale = 50.f;
+	float ZoomScale = 10.f;
 	InZoomValue *= ZoomScale;
 
 	float MinZoomValue = 200.f;	
@@ -174,6 +171,26 @@ void APlayerCharacter::SetCameraZoom(float InZoomValue)
 	float CurrentZoomValue = SpringArm->TargetArmLength;
 
 	SpringArm->TargetArmLength = FMath::Clamp(CurrentZoomValue + InZoomValue, MinZoomValue, MaxZoomValue);
+}
+
+void APlayerCharacter::SetCameraPitch(float InPitchValue)
+{
+	float PitchScale = 5.f;
+	InPitchValue *= PitchScale;
+
+	float MinPitchValue = -80.f;
+	float MaxPitchValue = 0.f;
+	float CurrentPitchValue = SpringArm->GetRelativeRotation().Pitch;
+
+	SpringArm->SetRelativeRotation(FRotator(FMath::Clamp(CurrentPitchValue + InPitchValue, MinPitchValue, MaxPitchValue), 0.f, 0.f));
+}
+
+void APlayerCharacter::SetCameraYaw(float InYawValue)
+{
+	//float YawScale = 1.f;
+	//InYawValue *= YawScale;
+
+	SpringArm->AddRelativeRotation(FRotator(0.0f, InYawValue, 0.0f));
 }
 
 void APlayerCharacter::UpdateInteractionWidget() const
@@ -212,8 +229,6 @@ void APlayerCharacter::ToggleMenu() const
 //		}
 //	}
 //}
-
-
 
 void APlayerCharacter::ProcessUnarmedAttack()
 {
@@ -257,7 +272,8 @@ void APlayerCharacter::UnarmedAttackBegin()
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
 	// 애니메이션 실행
-	const float AttackSpeed = 1.0f;
+	const float AttackSpeed = CharacterStatComp->GetTotalStat().AttackSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("AttackSpeed: %f"), AttackSpeed);
 	AnimInstance->Montage_Play(UnarmedAttackMontage, AttackSpeed);
 
 	// 애니메이션 종료 델리게이트 설정
@@ -301,7 +317,7 @@ void APlayerCharacter::SetComoboCheckTimer()
 	ensure(UnarmedJabDataAsset->EffectiveFrameCount.IsValidIndex(ComboIndex));
 
 	// 콤보 타이머 설정
-	const float AttackSpeedRate = 1.0f;
+	const float AttackSpeedRate = CharacterStatComp->GetTotalStat().AttackSpeed;
 	const float ComboEffectiveTime = (UnarmedJabDataAsset->EffectiveFrameCount[ComboIndex] / UnarmedJabDataAsset->FramePerSceond) / AttackSpeedRate;
 	//UE_LOG(LogTemp, Log, TEXT("ComboEffectiveTime: %f"), ComboEffectiveTime);
 	if (ComboEffectiveTime > 0.0f)
@@ -337,7 +353,7 @@ void APlayerCharacter::CheckComboInput()
 		//UE_LOG(LogTemp, Log, TEXT("NextComboSectionName: %s"), *NextComboSectionName.ToString());
 
 		// 다음 콤보 애니메이션 실행
-		const float AttackSpeed = 1.0f;
+		const float AttackSpeed = CharacterStatComp->GetTotalStat().AttackSpeed;
 		AnimInstance->Montage_JumpToSection(NextComboSectionName, UnarmedAttackMontage);
 
 		// 콤보 타이머 재설정
