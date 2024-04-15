@@ -16,6 +16,7 @@
 #include "Character/Player/PlayerJabDataAsset.h"
 
 // Component
+#include "Character/Component/CharacterStatComponent.h"
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 
@@ -186,8 +187,8 @@ void APlayerCharacter::SetCameraPitch(float InPitchValue)
 
 void APlayerCharacter::SetCameraYaw(float InYawValue)
 {
-	float YawScale = 1.f;
-	InYawValue *= YawScale;
+	//float YawScale = 1.f;
+	//InYawValue *= YawScale;
 
 	SpringArm->AddRelativeRotation(FRotator(0.0f, InYawValue, 0.0f));
 }
@@ -228,8 +229,6 @@ void APlayerCharacter::ToggleMenu() const
 //		}
 //	}
 //}
-
-
 
 void APlayerCharacter::ProcessUnarmedAttack()
 {
@@ -273,7 +272,8 @@ void APlayerCharacter::UnarmedAttackBegin()
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
 	// 애니메이션 실행
-	const float AttackSpeed = 1.0f;
+	const float AttackSpeed = CharacterStatComp->GetTotalStat().AttackSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("AttackSpeed: %f"), AttackSpeed);
 	AnimInstance->Montage_Play(UnarmedAttackMontage, AttackSpeed);
 
 	// 애니메이션 종료 델리게이트 설정
@@ -317,7 +317,7 @@ void APlayerCharacter::SetComoboCheckTimer()
 	ensure(UnarmedJabDataAsset->EffectiveFrameCount.IsValidIndex(ComboIndex));
 
 	// 콤보 타이머 설정
-	const float AttackSpeedRate = 1.0f;
+	const float AttackSpeedRate = CharacterStatComp->GetTotalStat().AttackSpeed;
 	const float ComboEffectiveTime = (UnarmedJabDataAsset->EffectiveFrameCount[ComboIndex] / UnarmedJabDataAsset->FramePerSceond) / AttackSpeedRate;
 	//UE_LOG(LogTemp, Log, TEXT("ComboEffectiveTime: %f"), ComboEffectiveTime);
 	if (ComboEffectiveTime > 0.0f)
@@ -353,7 +353,7 @@ void APlayerCharacter::CheckComboInput()
 		//UE_LOG(LogTemp, Log, TEXT("NextComboSectionName: %s"), *NextComboSectionName.ToString());
 
 		// 다음 콤보 애니메이션 실행
-		const float AttackSpeed = 1.0f;
+		const float AttackSpeed = CharacterStatComp->GetTotalStat().AttackSpeed;
 		AnimInstance->Montage_JumpToSection(NextComboSectionName, UnarmedAttackMontage);
 
 		// 콤보 타이머 재설정

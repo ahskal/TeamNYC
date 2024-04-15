@@ -67,9 +67,9 @@ void ACharacterPrototype::BeginPlay()
 
 void ACharacterPrototype::AttackHitCheck()
 {
-	const float AttackRange = 50.0f;
-	const float AttackRadius = 50.0f;
-	const float AttackDamage = 10.0f;
+	const float AttackRange = CharacterStatComp->GetTotalStat().AttackRange;
+	const float AttackRadius = 50.0f; // 임시값, 스탯에 공격범위 추가시 변경할 예정
+	const float AttackDamage = CharacterStatComp->GetTotalStat().Damage;
 
 	const FVector TraceStart = GetActorLocation() + GetActorForwardVector() * GetCapsuleComponent()->GetScaledCapsuleRadius();
 	const FVector TraceEnd = TraceStart + GetActorForwardVector() * AttackRange;
