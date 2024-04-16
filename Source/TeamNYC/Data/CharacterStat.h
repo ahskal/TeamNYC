@@ -5,7 +5,7 @@
 #include "Engine/DataTable.h"
 #include "CharacterStat.generated.h"
 
-USTRUCT(BlueprintType)
+USTRUCT()
 struct FCharacterStat : public FTableRowBase
 {
 	GENERATED_BODY()

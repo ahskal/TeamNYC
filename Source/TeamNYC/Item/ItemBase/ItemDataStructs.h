@@ -40,15 +40,35 @@ struct FItemStatistics
 {
 	GENERATED_USTRUCT_BODY()
 
+	// 최대 체력
 	UPROPERTY(EditAnywhere)
-	float ArmorValue{};
+	float AdditionalHp{};
 
+	// 공격력
 	UPROPERTY(EditAnywhere)
-	float DamageValue{};
+	float Damage{};
 
+	// 방어력
+	UPROPERTY(EditAnywhere)
+	float Armor{};
+
+	// 공격사거리
+	UPROPERTY(EditAnywhere)
+	float AttackRange{};
+
+	// 공격속도
+	UPROPERTY(EditAnywhere)
+	float AttackSpeed{};
+
+	// 이동속도
+	UPROPERTY(EditAnywhere)
+	float MovementSpeed{};
+
+	// 복구금액 -> 다시사기
 	UPROPERTY(EditAnywhere)
 	float RestorationAmount{};
 
+	// 팔기금액
 	UPROPERTY(EditAnywhere)
 	float SellValue{};
 };
@@ -86,7 +106,7 @@ struct FItemNumericData
 	int32 MaxStackSize{};
 
 	UPROPERTY(EditAnywhere)
-	bool bIsStackable{};
+	bool bIsStackable = true;
 
 	UPROPERTY(EditAnywhere, Category = "Item Data")
 	bool bIsQuestItem;

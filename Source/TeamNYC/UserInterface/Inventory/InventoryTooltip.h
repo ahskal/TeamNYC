@@ -23,13 +23,29 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemType;
 
+	// 추가 체력
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* AdditionalHp;
+
 	// 공격력
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* DamageValue;
+	UTextBlock* Damage;
 
 	// 방어력
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* ArmorValue;
+	UTextBlock* Armor;
+
+	// 공격 사거리
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* AttackRange;
+
+	// 공격 사거리
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* AttackSpeed;
+	
+	// 이동속도
+	UPROPERTY(meta = (BindWidget))
+	UTextBlock* MovementSpeed;
 
 	// 사용법 설명 텍스트
 	UPROPERTY(meta = (BindWidget))
@@ -71,4 +87,7 @@ public:
 	//UTextBlock* StackWeightValue;
 protected:
 	virtual void NativeConstruct() override;
+private:
+	void SetTextBlockValue(UTextBlock* TextBlock, int32 Value,FText Text = FText::FromString(""));
+	
 };

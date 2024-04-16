@@ -13,9 +13,9 @@
 void UInventoryTooltip::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
+
 	const UItemBase* ItemBeingHovered = InventorySlotBeingHovered->GetItemReference();
-	
+
 	switch (ItemBeingHovered->ItemType) {
 	case EItemType::Junk:
 		ItemType->SetText(FText::FromString("Junk"));
@@ -28,7 +28,7 @@ void UInventoryTooltip::NativeConstruct()
 		break;
 	case EItemType::Weapon:
 		ItemType->SetText(FText::FromString("Weapon"));
-		DamageValue->SetVisibility(ESlateVisibility::Visible);
+		Damage->SetVisibility(ESlateVisibility::Visible);
 		break;
 	case EItemType::Shield:
 		ItemType->SetText(FText::FromString("Shield"));
@@ -41,8 +41,8 @@ void UInventoryTooltip::NativeConstruct()
 		break;
 	case EItemType::Consumable:
 		ItemType->SetText(FText::FromString("Consumable"));
-		DamageValue->SetVisibility(ESlateVisibility::Collapsed);
-		ArmorValue->SetVisibility(ESlateVisibility::Collapsed);
+		Damage->SetVisibility(ESlateVisibility::Collapsed);
+		Armor->SetVisibility(ESlateVisibility::Collapsed);
 		SellValue->SetVisibility(ESlateVisibility::Collapsed);
 		break;
 	case EItemType::Quest:
@@ -50,51 +50,27 @@ void UInventoryTooltip::NativeConstruct()
 		break;
 	case EItemType::Mundane:
 		ItemType->SetText(FText::FromString("Mundane"));
-		DamageValue->SetVisibility(ESlateVisibility::Collapsed);
-		ArmorValue->SetVisibility(ESlateVisibility::Collapsed);
-		UsageText->SetVisibility(ESlateVisibility::Collapsed);
-		SellValue->SetVisibility(ESlateVisibility::Collapsed);
 		break;
 	default:;
 	}
-	
-	// ÀÌ¸§
-	ItemName->SetText(ItemBeingHovered->ItemTextData.Name);
 
-	// µ¥¹ÌÁö°¡ ÀÖ´ÂÁö ÆÇº°½Ä ÀÖ´Ù¸é °ªÀ» ³Ö¾îÁÖ°í ¾øÀ¸¸é Ãâ·Â ²ô±â
-	if (ItemBeingHovered->ItemStatistics.DamageValue > 0)
-	{
-		DamageValue->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.DamageValue));
-	}
-	else
-	{
-		DamageValue->SetVisibility(ESlateVisibility::Collapsed);
-		//DamageLabel->SetVisibility(ESlateVisibility::Collapsed);
-	}
-	
-	// ¹æ¾î·ÂÀÌ ÀÖ´ÂÁö ÆÇº°½Ä ÀÖ´Ù¸é °ªÀ» ³Ö¾îÁÖ°í ¾øÀ¸¸é Ãâ·Â ²ô±â
-	if (ItemBeingHovered->ItemStatistics.ArmorValue > 0)
-	{
-		ArmorValue->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.ArmorValue));
-	}
-	else
-	{
-		ArmorValue->SetVisibility(ESlateVisibility::Collapsed);
-		//ArmorLabel->SetVisibility(ESlateVisibility::Collapsed);
-	}
+	// ì´ë¦„
+	ItemName->SetText(FText::Format(FText::FromString("{0} : {1}"), FText::FromString("Name"), ItemBeingHovered->ItemTextData.Name));
 
-	// ÆÇ¸Å °¡°Ý
+	SetTextBlockValue(AdditionalHp, ItemBeingHovered->ItemStatistics.AdditionalHp, FText::FromString("Type"));
+	SetTextBlockValue(Damage, ItemBeingHovered->ItemStatistics.Damage, FText::FromString("Damage"));
+	SetTextBlockValue(Armor, ItemBeingHovered->ItemStatistics.Armor, FText::FromString("Armor"));
+	SetTextBlockValue(AttackRange, ItemBeingHovered->ItemStatistics.AttackRange, FText::FromString("AttackRange"));
+	SetTextBlockValue(AttackSpeed, ItemBeingHovered->ItemStatistics.AttackSpeed, FText::FromString("AttackSpeed"));
+	SetTextBlockValue(MovementSpeed, ItemBeingHovered->ItemStatistics.MovementSpeed, FText::FromString("MovementSpeed"));
+
 	SellValue->SetText(FText::AsNumber(ItemBeingHovered->ItemStatistics.SellValue));
-	
-	// ¼³¸í
+
 	UsageText->SetText(ItemBeingHovered->ItemTextData.UsageText);
 
-	// ¾ÆÀÌÅÛ ¼³¸í
 	ItemDescription->SetText(ItemBeingHovered->ItemTextData.Description);
-	
-	// ÇöÀç °¹¼ö
+
 	StackWeightValue->SetText(FText::AsNumber(ItemBeingHovered->GetItemStackWeight()));
-	//StackWeightValue->SetText(FText::FromString(WeightInfo));
 
 	if (ItemBeingHovered->ItemNumericData.bIsStackable)
 	{
@@ -103,5 +79,20 @@ void UInventoryTooltip::NativeConstruct()
 	else
 	{
 		MaxStackSizeText->SetVisibility(ESlateVisibility::Collapsed);
-	}	
+	}
+}
+
+void UInventoryTooltip::SetTextBlockValue(UTextBlock* TextBlock, int32 Value, FText Text)
+{
+	if (Value > 0)
+	{
+		if (Text.IsEmpty()) {
+
+		}
+		TextBlock->SetText(FText::Format(FText::FromString("{0} : {1}"), Text, FText::AsNumber(Value)));
+	}
+	else
+	{
+		TextBlock->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }
