@@ -5,7 +5,9 @@
 #include "InventoryTooltip.generated.h"
 
 class UInventoryItemSlot;
+class UBorder;
 class UTextBlock;
+class UVerticalBox;
 
 UCLASS()
 class TEAMNYC_API UInventoryTooltip : public UUserWidget
@@ -15,6 +17,10 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UInventoryItemSlot* InventorySlotBeingHovered;
 
+	// 툴팁 테두리
+	UPROPERTY(meta = (BindWidget))
+	UBorder* ItemBorder;
+
 	// 아이템 이름
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemName;
@@ -22,6 +28,10 @@ public:
 	// 아이템 타입-> 장비, 포션 등등
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemType;
+
+	// 추가스텟 툴팁 박스
+	UPROPERTY(meta = (BindWidget))
+	UVerticalBox* VerticalBox;
 
 	// 추가 체력
 	UPROPERTY(meta = (BindWidget))
@@ -42,7 +52,7 @@ public:
 	// 공격 사거리
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* AttackSpeed;
-	
+
 	// 이동속도
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* MovementSpeed;
@@ -55,25 +65,19 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemDescription;
 
-	// 최대 스택 사이즈 텍스트
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* MaxStackSizeText;
-
 	// 판매 가격
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* SellValue;
 
-	// 최대값
-	UPROPERTY(meta = (BindWidget))
-	UTextBlock* MaxStackSizeValue;
-
-	// 현재값
+	// 무게
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* StackWeightValue;
 
 protected:
 	virtual void NativeConstruct() override;
 private:
-	void SetTextBlockValue(UTextBlock* TextBlock, int32 Value,FText Text = FText::FromString(""));
-	
+	// 가변 인수 템플릿
+	template<typename... Args>
+	void SetTextBlockTextToText(UTextBlock* TextBlock, Args...args);
 };
+

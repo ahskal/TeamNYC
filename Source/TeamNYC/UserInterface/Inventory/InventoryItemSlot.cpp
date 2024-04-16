@@ -10,16 +10,11 @@
 #include "Components/TextBlock.h"
 #include "Util/ColorConstants.h"
 
-
 #define BLUE FLinearColor(0.f, 0.2f, 1.f)
 #define ORANGE FLinearColor(1.f, 0.15f, 0.f)
 #define GOLD FLinearColor(0.97f, 0.8f, 0.f)
 #define CYAN FLinearColor(0.f, 1.f, 1.f)
-
-//#define PURPLE FLinearColor(169.f/255, 7.f/255, 228.f/255)
 #define PURPLE FLinearColor(0.3f, 0.f, 1.f)
-
-class UItemBase;
 
 void UInventoryItemSlot::NativeOnInitialized()
 {
