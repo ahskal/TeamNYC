@@ -71,20 +71,6 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* StackWeightValue;
 
-	//UPROPERTY(meta = (BindWidget))
-	//UTextBlock* QuestText;
-	//UPROPERTY(meta = (BindWidget))
-	//UTextBlock* QualityText;
-	//UPROPERTY()
-	//UTextBlock* DamageLabel;
-	//UPROPERTY()
-	//UTextBlock* ArmorLabel;
-	//UPROPERTY()
-	//UTextBlock* StackSizeLabel;
-	//UPROPERTY(meta = (BindWidget))
-	//UTextBlock* StackSizeText;
-	//UPROPERTY(meta = (BindWidget))
-	//UTextBlock* StackWeightValue;
 protected:
 	virtual void NativeConstruct() override;
 private:

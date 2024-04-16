@@ -106,7 +106,7 @@ struct FItemNumericData
 	int32 MaxStackSize{};
 
 	UPROPERTY(EditAnywhere)
-	bool bIsStackable = true;
+	bool bIsStackable{};
 
 	UPROPERTY(EditAnywhere, Category = "Item Data")
 	bool bIsQuestItem;

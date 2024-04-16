@@ -75,6 +75,7 @@ void UInventoryTooltip::NativeConstruct()
 	if (ItemBeingHovered->ItemNumericData.bIsStackable)
 	{
 		MaxStackSizeText->SetText(FText::AsNumber(ItemBeingHovered->ItemNumericData.MaxStackSize));
+
 	}
 	else
 	{
@@ -87,9 +88,11 @@ void UInventoryTooltip::SetTextBlockValue(UTextBlock* TextBlock, int32 Value, FT
 	if (Value > 0)
 	{
 		if (Text.IsEmpty()) {
-
+			UsageText->SetText(FText::AsNumber(Value));
 		}
-		TextBlock->SetText(FText::Format(FText::FromString("{0} : {1}"), Text, FText::AsNumber(Value)));
+		else {
+			TextBlock->SetText(FText::Format(FText::FromString("{0} : {1}"), Text, FText::AsNumber(Value)));
+		}
 	}
 	else
 	{
