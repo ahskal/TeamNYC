@@ -149,7 +149,7 @@ APlayerCharacter::APlayerCharacter()
 	// 따라서 컴포넌트는 자동으로 부모 클래스의 주소를 알게 되며, 따로 바인딩을 할 필요가 없습니다.
 	InteractionComponent = CreateDefaultSubobject<UPlayerInteractionComponent>(TEXT("InteractionComponent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
-	InventoryComponent->SetSlotsCapacity(20);
+	InventoryComponent->SetSlotsCapacity(50.f);
 	InventoryComponent->SetWeightCapacity(50.f);
 
 

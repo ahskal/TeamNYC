@@ -35,11 +35,11 @@ protected:
 	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Database")
 	FName DesiredItemID;
 
-	UPROPERTY(VisibleAnywhere, Category = "Pickup | Item Reference")
-	UItemBase* ItemReference;
-
 	UPROPERTY(EditInstanceOnly, Category = "Pickup | Item Database")
 	int32 ItemQuantity;
+
+	UPROPERTY(VisibleAnywhere, Category = "Pickup | Item Reference")
+	UItemBase* ItemReference;
 
 	UPROPERTY(EditInstanceOnly, Category = "Pickup | Interaction")
 	FInteractableData InstanceInteractableData;

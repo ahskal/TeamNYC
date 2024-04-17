@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/Player/PlayerCharacter.h"
 #include "UserInterface/Inventory/InventoryPanel.h"
 #include "UserInterface/Inventory/InventoryItemSlot.h"
 #include "UserInterface/Inventory/ItemDragDropOperation.h"
+#include "Character/Player/PlayerCharacter.h"
 
 #include "Components/InventoryComponent.h"
 

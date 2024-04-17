@@ -8,6 +8,7 @@
 #include "ItemBase.generated.h"
 
 class APlayerCharacter;
+struct FCharacterStat;
 
 UCLASS()
 class TEAMNYC_API UItemBase : public UObject
