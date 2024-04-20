@@ -19,11 +19,10 @@ public class TeamNYC : ModuleRules
             "GameplayTasks",
             "Niagara",
             "NavigationSystem",
+            "Slate",
+            "SlateCore",
             "UMG",
         });
-
-        PrivateDependencyModuleNames.AddRange(new string[] {  });
-
         PublicIncludePaths.Add(ModuleDirectory);
 
         // Uncomment if you are using Slate UI

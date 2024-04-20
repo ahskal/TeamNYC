@@ -10,6 +10,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UPlayerInteractionComponent;
 class UInventoryComponent;
+class UItemBase;
 
 UENUM(BlueprintType)
 enum class EPlayerState : uint8
@@ -137,4 +138,6 @@ public:
 	void EndInteract() const;
 
 	void ToggleMenu() const;
+
+	void DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop);
 };

@@ -59,5 +59,13 @@ void UInventoryPanel::RefreshInventory()
 
 bool UInventoryPanel::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEnvet, UDragDropOperation* InOperation)
 {
-	return NativeOnDrop(InGeometry, InDragDropEnvet, InOperation);
+	const UItemDragDropOperation* ItemDragDrop = Cast<UItemDragDropOperation>(InOperation);
+
+	if (ItemDragDrop->SourceItem && InventoryReference)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Detected item drop on inventory panel"));
+
+		return true;
+	}
+	return false;
 }

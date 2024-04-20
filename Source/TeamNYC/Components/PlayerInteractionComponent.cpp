@@ -180,7 +180,8 @@ void UPlayerInteractionComponent::UpdateInteractionWidget() const
 
 void UPlayerInteractionComponent::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
 {
-	if (PlayerInventory->FindMatchingItem(ItemToDrop))
+	UItemBase* FoundItem = PlayerInventory->FindMatchingItem(ItemToDrop);
+	if (FoundItem)
 	{
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.Owner = GetOwner();
@@ -189,6 +190,7 @@ void UPlayerInteractionComponent::DropItem(UItemBase* ItemToDrop, const int32 Qu
 			ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
 		const FVector SpawnLocation{ GetOwner()->GetActorLocation() + FVector(0.f,45.f,0.f) + (GetOwner()->GetActorForwardVector() * 235.f) };
+		//const FVector SpawnLocation{ GetOwner()->GetActorLocation() + (GetOwner()->GetActorForwardVector() * 50.f) };
 		const FTransform SpawnTransform(GetOwner()->GetActorRotation(), SpawnLocation);
 
 		const int32 RemovedQuantity = PlayerInventory->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
