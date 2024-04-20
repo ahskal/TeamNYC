@@ -20,19 +20,18 @@ ADefaultGameModeBase::ADefaultGameModeBase()
 	ConstructorHelpers::FClassFinder<APlayerController> MouseControllerClassFinder(*MouseControllerPath);
 	if (MouseControllerClassFinder.Succeeded())
 	{
-		UE_LOG(LogTemp, Display, TEXT("Succeeded to Get Class: %s"), *MouseControllerPath);
 		PlayerControllerClass = MouseControllerClassFinder.Class;
 	}
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Class: %s"), *MouseControllerPath);
 
 	// Keyboard
-	FString KeyboardControllerPath = TEXT("/Script/CoreUObject.Class'/Script/TeamNYC.KeyboardPlayerController'");
-	ConstructorHelpers::FClassFinder<APlayerController> KeyboardControllerClassFinder(*KeyboardControllerPath);
-	if (KeyboardControllerClassFinder.Succeeded()) UE_LOG(LogTemp, Display, TEXT("Succeeded to Get Class: %s"), *KeyboardControllerPath)
-	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Class: %s"), *KeyboardControllerPath); UE_LOG(LogTemp, Display, TEXT(""));
+	//FString KeyboardControllerPath = TEXT("/Script/CoreUObject.Class'/Script/TeamNYC.KeyboardPlayerController'");
+	//ConstructorHelpers::FClassFinder<APlayerController> KeyboardControllerClassFinder(*KeyboardControllerPath);
+	//if (KeyboardControllerClassFinder.Succeeded()) UE_LOG(LogTemp, Display, TEXT("Succeeded to Get Class: %s"), *KeyboardControllerPath)
+	//else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Class: %s"), *KeyboardControllerPath); UE_LOG(LogTemp, Display, TEXT(""));
 
 
-	// ºí·çÇÁ¸°Æ® °´Ã¼¸¦ ºÒ·¯¿À´Â ¹æ¹ıÁß ÇÏ³ª
+	// ë¸”ë£¨í”„ë¦°íŠ¸ ê°ì²´ë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ” ë°©ë²•ì¤‘ í•˜ë‚˜
 	//FString HUDPath = TEXT("/Script/Engine.Blueprint'/Game/UserInterface/BP_PlayerHUD.BP_PlayerHUD_C'");
 	//FStringClassReference HUDClassRef(HUDPath);
 	//if (UClass* HUDclass = HUDClassRef.TryLoadClass<AHUD>())
@@ -44,12 +43,12 @@ ADefaultGameModeBase::ADefaultGameModeBase()
 	//	UE_LOG(LogTemp, Warning, TEXT("Failed to load HUD class: %s"), *HUDClassRef.GetAssetName());
 	//}
 	
-	// C++·Î ÀÛ¼ºµÈ °´Ã¼¸¦ ºÒ·¯¿Ã¶§
+	// C++ë¡œ ì‘ì„±ëœ ê°ì²´ë¥¼ ë¶ˆëŸ¬ì˜¬ë•Œ
 	//HUDClass = APlayerHUD::StaticClass();
 
 	// Set default HUD class
-	// AGameModeBase³»ºÎ¿¡ HUDClass ¸â¹ö¿¡ BP°´Ã¼ °ª ÇÒ´ç
-	// Create Pawn ¹æ½Ä°ú µ¿ÀÏÇÔ
+	// AGameModeBaseë‚´ë¶€ì— HUDClass ë©¤ë²„ì— BPê°ì²´ ê°’ í• ë‹¹
+	// Create Pawn ë°©ì‹ê³¼ ë™ì¼í•¨
 	FString HUDPath = TEXT("/Script/Engine.Blueprint'/Game/UserInterface/BP_PlayerHUD.BP_PlayerHUD_C'");
 	ConstructorHelpers::FClassFinder<AHUD> HUDClassFinder(*HUDPath);
 	if (HUDClassFinder.Succeeded()) HUDClass = HUDClassFinder.Class;

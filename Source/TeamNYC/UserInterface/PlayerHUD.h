@@ -19,12 +19,18 @@ class TEAMNYC_API APlayerHUD : public AHUD
 	
 protected:
 	UPROPERTY()
-	UMainMenu* MainMenuWidget;
+	TObjectPtr<UUserWidget> MainWidget;
 
 	UPROPERTY()
-	UInteractionWidget* InteractionWidget;
+	TObjectPtr<UMainMenu> MainMenuWidget;
+
+	UPROPERTY()
+	TObjectPtr<UInteractionWidget> InteractionWidget;
 
 public:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UInteractionWidget> MainWidgetClass;
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UMainMenu> MainMenuClass;
 

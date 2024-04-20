@@ -27,6 +27,9 @@ APlayerCharacter::APlayerCharacter()
 {
 	UE_LOG(LogTemp, Display, TEXT("==================== PlayerCharacter ===================="));
 
+	//====================================================================================
+	//  SkeletalMesh Section
+	//====================================================================================
 	// Body SkeletalMesh
 	FString MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/MetaHumans/Character/Male/Medium/NormalWeight/Body/m_med_nrw_body.m_med_nrw_body'");
 	ConstructorHelpers::FObjectFinder<USkeletalMesh> ObjectFinder(*MeshPath);
@@ -39,13 +42,10 @@ APlayerCharacter::APlayerCharacter()
 	if (FaceObjectFinder.Succeeded()) Face = FaceObjectFinder.Object;
 	else UE_LOG(LogTemp, Warning, TEXT("Failed to Get Object: %s"), *MeshPath);
 
-	// Mesh Setup
-	GetMesh()->SetSkeletalMesh(BodyMesh);
-	GetMesh()->SetRelativeLocation(FVector(0, 0, -98));
-	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
-	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
+	//====================================================================================
+	//  SkeletalMesh Component Section
+	//====================================================================================
 	// Face Mesh Setup
 	FaceMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Face"));
 	FaceMesh->SetupAttachment(GetMesh());
@@ -66,6 +66,21 @@ APlayerCharacter::APlayerCharacter()
 	FeetMesh->SetupAttachment(GetMesh());
 	FeetMesh->SetSkeletalMesh(Feet);
 
+
+	//====================================================================================
+	//  Actor, Pawn, Character Section
+	//====================================================================================
+	// Activate tick
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	// Mesh Setup
+	GetMesh()->SetSkeletalMesh(BodyMesh);
+	GetMesh()->SetRelativeLocation(FVector(0, 0, -98));
+	GetMesh()->SetRelativeRotation(FRotator(0, -90, 0));
+	GetMesh()->SetRelativeScale3D(FVector(1, 1, 1));
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+
 	// Don't rotate character to camera direction
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -77,6 +92,10 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->bConstrainToPlane = true;
 	GetCharacterMovement()->bSnapToPlaneAtStart = true;
 
+
+	//====================================================================================
+	//  Camera Section
+	//====================================================================================
 	// SpringArm
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
@@ -90,10 +109,10 @@ APlayerCharacter::APlayerCharacter()
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
 	Camera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	// Activate ticking in order to update the cursor every frame.
-	PrimaryActorTick.bCanEverTick = true;
-	PrimaryActorTick.bStartWithTickEnabled = true;
 
+	//====================================================================================
+	//  Animation Section
+	//====================================================================================
 	// Set Body AnimClass
 	FString AnimBpPath = TEXT("/Script/Engine.AnimBlueprint'/Game/Blueprints/Characters/Player/ABP_Player.ABP_Player_C'");
 	ConstructorHelpers::FClassFinder<UAnimInstance> AnimBpClass(*AnimBpPath);
@@ -118,9 +137,12 @@ APlayerCharacter::APlayerCharacter()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Face AnimBPClass"));
 	}
 
+	//====================================================================================
+	//  Unarmed Attack Section
+	//====================================================================================
 	// Set Player_Jab Montage
 	FString MontagePath = TEXT("/Script/Engine.AnimMontage'/Game/Assets/Character/Player/Animations/AM_Player_Jab.AM_Player_Jab'");
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> UnarmedAttack(*MontagePath);
+	ConstructorHelpers::FObjectFinder<UAnimMontage> UnarmedAttack(*MontagePath);
 	if (UnarmedAttack.Succeeded())
 	{
 		UnarmedAttackMontage = UnarmedAttack.Object;
@@ -133,7 +155,7 @@ APlayerCharacter::APlayerCharacter()
 
 	// Set Player_Jab DataAsset
 	FString DataAssetPath = TEXT("/Script/Engine.Blueprint'/Game/Assets/Character/Player/PlayerAction/JabDataAsset.JabDataAsset_C'");
-	static ConstructorHelpers::FClassFinder<UPlayerJabDataAsset> DataAsset(*DataAssetPath);
+	ConstructorHelpers::FClassFinder<UPlayerJabDataAsset> DataAsset(*DataAssetPath);
 	if (DataAsset.Succeeded())
 	{
 		UnarmedJabDataAsset = DataAsset.Class->GetDefaultObject<UPlayerJabDataAsset>();
@@ -143,6 +165,9 @@ APlayerCharacter::APlayerCharacter()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Player_Jab DataAsset: %s"), *DataAssetPath);
 	}
 	
+	//====================================================================================
+	//  Interaction, Inventory Component Section
+	//====================================================================================
 	// CreateDefaultSubobject를 통해 컴포넌트를 생성하면, 컴포넌트 내부에는
 	// 부모 클래스인 UActorComponent에서 상속받은 OwnerPrivate라는 멤버 변수가 있습니다.
 	// 이 OwnerPrivate 변수에는 해당 컴포넌트를 소유하는 액터 객체의 포인터가 할당됩니다.
@@ -152,8 +177,43 @@ APlayerCharacter::APlayerCharacter()
 	InventoryComponent->SetSlotsCapacity(50.f);
 	InventoryComponent->SetWeightCapacity(50.f);
 
-
+	//====================================================================================
+	//  Player State Section
+	//====================================================================================
 	PlayerCurrentState = EPlayerState::NORMAL;
+
+	//====================================================================================
+	//  Temp Test Section
+	//====================================================================================
+
+	FStatData HealthData;
+	HealthData.MaxValue = 300.f;
+	HealthData.CurrentValue = 300.f;
+	HealthData.DisplayedValue = 300.f;
+	PlayerStatMap.Add(EStatEnum::Health, HealthData);
+
+	FStatData ManaData;
+	ManaData.MaxValue = 200.f;
+	ManaData.CurrentValue = 200.f;
+	ManaData.DisplayedValue = 200.f;
+	ManaData.MinLerpTime = 0.5f;
+	ManaData.MaxLerpTime = 2.5f;
+	PlayerStatMap.Add(EStatEnum::Mana, ManaData);
+
+	FStatData ExperienceData;
+	ExperienceData.MaxValue = 1000.f;
+	ManaData.MinLerpTime = 0.4f;
+	ManaData.MaxLerpTime = 2.0f;
+}
+
+void APlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void APlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
 }
 
 void APlayerCharacter::SetMaxWalkSpeed(float InMaxWalkSpeed)
@@ -365,13 +425,21 @@ void APlayerCharacter::CheckComboInput()
 
 }
 
-void APlayerCharacter::BeginPlay()
+
+
+FStatData& APlayerCharacter::GetPlayerStat(EStatEnum InStatEnum)
 {
-	Super::BeginPlay();
+	return *PlayerStatMap.Find(InStatEnum);
 }
 
-void APlayerCharacter::Tick(float DeltaSeconds)
+void APlayerCharacter::SetPlayerStat(EStatEnum InStatEnum, FStatData InStatData)
 {
-	Super::Tick(DeltaSeconds);
+	PlayerStatMap.Add(InStatEnum, InStatData);
+}
+
+void APlayerCharacter::SetUpStatBar()
+{
+	// Set Member in PlayerStatMap
+	//GetPlayerStat(EStatEnum::Health).BarWidget = CharacterWidget->GetHpBarWidget();
 }
 
