@@ -6,12 +6,15 @@
 #include "Character/Player/PlayerCharacter.h"
 #include "UserInterface/Interaction/InteractionWidget.h"
 #include "UserInterface/MainMenu.h"
+#include "UserInterface/ExtendedUserWidget.h"
+
+#include "Components/ExtendedWidgetComponent.h"
 
 
 APlayerHUD::APlayerHUD()
 {
 	FString MainWidgetPath = TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/UserInterface/ProgressBar/W_Main.W_Main_C'");
-	ConstructorHelpers::FClassFinder<UUserWidget> MainWidgetClassRef(*MainWidgetPath);
+	ConstructorHelpers::FClassFinder<UExtendedUserWidget> MainWidgetClassRef(*MainWidgetPath);
 	if (MainWidgetClassRef.Succeeded())
 	{
 		MainWidgetClass = MainWidgetClassRef.Class;
@@ -39,7 +42,7 @@ void APlayerHUD::BeginPlay()
 
 	//if (MainWidgetClass)
 	//{
-		MainWidget = CreateWidget<UUserWidget>(GetWorld(), MainWidgetClass);
+		MainWidget = CreateWidget<UExtendedUserWidget>(GetWorld(), MainWidgetClass);
 		MainWidget->AddToViewport(1);
 		MainWidget->SetVisibility(ESlateVisibility::Visible);
 	//}

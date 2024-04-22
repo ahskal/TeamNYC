@@ -15,7 +15,8 @@ class TEAMNYC_API UExtendedUserWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	FORCEINLINE void SetOwingActor(AActor* NewOwner) { OwningActor = NewOwner; }
+	FORCEINLINE void SetOwningActor(AActor* NewOwner) { OwningActor = NewOwner; }
+	FORCEINLINE AActor* GetOwningActor() const { return OwningActor; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Actor")

@@ -18,6 +18,9 @@
 
 #include "Engine/LocalPlayer.h"
 
+// 나중에 생각해볼 요소.
+#include "Character/Component/CharacterStatComponent.h"
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 AMousePlayerController::AMousePlayerController()
@@ -124,6 +127,7 @@ void AMousePlayerController::BeginPlay()
 		OwnerCharacter = Cast<APlayerCharacter>(OwnerPawn);
 		if (OwnerCharacter)
 		{
+			OwnerCharacter->CharacterStatComp->OnHealthPointIsZero.AddUObject(this, &AMousePlayerController::SetDisableInput);
 			//UE_LOG(LogTemp, Display, TEXT("OwnerCharacter: %s"), *OwnerCharacter->GetName());
 		}
 		else
@@ -135,6 +139,9 @@ void AMousePlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("OwnerPawn is NULL"));
 	}
+
+
+	
 }
 
 void AMousePlayerController::SetupInputComponent()
@@ -284,6 +291,12 @@ void AMousePlayerController::ToggleMenu()
 	}
 }
 
+void AMousePlayerController::SetDisableInput()
+{
+	FInputModeUIOnly InputMode;
+	SetInputMode(InputMode);
+	DisableInput(this);
+}
 
 void AMousePlayerController::Attack()
 {

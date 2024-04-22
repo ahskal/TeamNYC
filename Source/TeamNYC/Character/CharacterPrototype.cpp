@@ -1,14 +1,19 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+// default includes
 #include "Character/CharacterPrototype.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Character/UI/ExtendedWidgetComponent.h"
-#include "Character/UI/HpBarUserWidget.h"
-#include "Component/CharacterStatComponent.h"
-#include "Engine/DamageEvents.h"
 #include <Components/ProgressBar.h>
+
+// component
+#include "Components/ExtendedWidgetComponent.h"
+#include "Component/CharacterStatComponent.h"
+
+// widget
+#include "Character/UI/CharacterHealthPointBarWidget.h"
+
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 ACharacterPrototype::ACharacterPrototype()
@@ -26,7 +31,7 @@ ACharacterPrototype::ACharacterPrototype()
 	HpBarWidgetComp->SetupAttachment(GetMesh());
 	HpBarWidgetComp->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
 
-	FString HpbarWidgetBlueBlueprintPath= TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Characters/UI/WBP_HpBar.WBP_HpBar_C'");
+	FString HpbarWidgetBlueBlueprintPath= TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/Blueprints/Characters/UI/WBP_CharacterHpBar.WBP_CharacterHpBar_C'");
 	static ConstructorHelpers::FClassFinder<UUserWidget> HpBarWidgetCompWidgetClass(*HpbarWidgetBlueBlueprintPath);
 	if (HpBarWidgetCompWidgetClass.Succeeded())
 	{
@@ -62,7 +67,7 @@ void ACharacterPrototype::BeginPlay()
 	Super::BeginPlay();
 
 	// Delegate Bindings for Death Event
-	CharacterStatComp->OnHpIsZero.AddUObject(this, &ACharacterPrototype::SetDead);
+	CharacterStatComp->OnHealthPointIsZero.AddUObject(this, &ACharacterPrototype::SetDead);
 }
 
 void ACharacterPrototype::AttackHitCheck()
@@ -120,14 +125,14 @@ float ACharacterPrototype::TakeDamage(float DamageAmount, FDamageEvent const& Da
 
 void ACharacterPrototype::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
 {
-	UHpBarUserWidget* HpBarWidget = Cast<UHpBarUserWidget>(InUserWidget);
+	UCharacterHealthPointBarWidget* HpBarWidget = Cast<UCharacterHealthPointBarWidget>(InUserWidget);
 	if (HpBarWidget)
 	{
-		HpBarWidget->SetMaxHp(CharacterStatComp->GetMaxHp());
-		HpBarWidget->UpdateHpBar(CharacterStatComp->GetCurrentHp());
+		HpBarWidget->SetMaxHp(CharacterStatComp->GetMaxHealthPoint());
+		HpBarWidget->UpdateHpBar(CharacterStatComp->GetCurrentHealthPoint());
 		HpBarWidget->SetHpBarColor(FLinearColor::Red);
 
-		CharacterStatComp->OnHpChanged.AddUObject(HpBarWidget, &UHpBarUserWidget::UpdateHpBar);
+		CharacterStatComp->OnHealthPointChanged.AddUObject(HpBarWidget, &UCharacterHealthPointBarWidget::UpdateHpBar);
 	}
 }
 

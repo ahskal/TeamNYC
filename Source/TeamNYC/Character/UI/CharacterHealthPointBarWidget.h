@@ -3,19 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/UI/ExtendedUserWidget.h"
-#include "HpBarUserWidget.generated.h"
+#include "UserInterface/ExtendedUserWidget.h"
+#include "CharacterHealthPointBarWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TEAMNYC_API UHpBarUserWidget : public UExtendedUserWidget
+class TEAMNYC_API UCharacterHealthPointBarWidget : public UExtendedUserWidget
 {
 	GENERATED_BODY()
 	
 public:
-	UHpBarUserWidget(const FObjectInitializer& ObjectInitializer);
+	UCharacterHealthPointBarWidget(const FObjectInitializer& ObjectInitializer);
 
 protected:
 	virtual void NativeConstruct() override;

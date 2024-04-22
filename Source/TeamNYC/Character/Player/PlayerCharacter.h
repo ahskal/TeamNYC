@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Character/CharacterPrototype.h"
-#include "Data/PlayerStat.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -13,10 +12,11 @@ class UPlayerInteractionComponent;
 class UInventoryComponent;
 
 UENUM(BlueprintType)
-enum class EPlayerState : uint8
+enum class EPlayerCurrentState : uint8
 {
 	NORMAL,
-	ATTACKING
+	ATTACKING,
+	DEAD
 };
 
 
@@ -129,11 +129,11 @@ public:
 	//  Player State Section
 	//====================================================================================
 protected:
-	EPlayerState	PlayerCurrentState;
+	EPlayerCurrentState	PlayerCurrentState;
 
 public:
-	FORCEINLINE void SetPlayerState(EPlayerState InPlayerState) { PlayerCurrentState = InPlayerState; }
-	FORCEINLINE EPlayerState GetPlayerState() const { return PlayerCurrentState; }
+	FORCEINLINE void SetPlayerState(EPlayerCurrentState InPlayerState) { PlayerCurrentState = InPlayerState; }
+	FORCEINLINE EPlayerCurrentState GetPlayerState() const { return PlayerCurrentState; }
 
 
 	//====================================================================================
@@ -176,10 +176,5 @@ protected:
 	//====================================================================================
 	//  Test Section
 	//====================================================================================
-public:
-	TMap<EStatEnum, FStatData> PlayerStatMap;
-
-	FStatData& GetPlayerStat(EStatEnum InStatEnum);
-	void SetPlayerStat(EStatEnum InStatEnum, FStatData InStatData);
-	void SetUpStatBar();
+	virtual void SetDead() override;
 };

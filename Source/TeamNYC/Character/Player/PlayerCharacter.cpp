@@ -17,11 +17,14 @@
 
 // Component
 #include "Character/Component/CharacterStatComponent.h"
+#include "Components/ExtendedWidgetComponent.h"
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 
 // HpBar Widget
-#include "Character/UI/HpBarUserWidget.h"
+#include "Character/UI/CharacterHealthPointBarWidget.h"
+#include "UserInterface/ProgressBar/StatBar.h"
+
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -180,40 +183,50 @@ APlayerCharacter::APlayerCharacter()
 	//====================================================================================
 	//  Player State Section
 	//====================================================================================
-	PlayerCurrentState = EPlayerState::NORMAL;
+	PlayerCurrentState = EPlayerCurrentState::NORMAL;
 
 	//====================================================================================
 	//  Temp Test Section
 	//====================================================================================
 
-	FStatData HealthData;
-	HealthData.MaxValue = 300.f;
-	HealthData.CurrentValue = 300.f;
-	HealthData.DisplayedValue = 300.f;
-	PlayerStatMap.Add(EStatEnum::Health, HealthData);
 
-	FStatData ManaData;
-	ManaData.MaxValue = 200.f;
-	ManaData.CurrentValue = 200.f;
-	ManaData.DisplayedValue = 200.f;
-	ManaData.MinLerpTime = 0.5f;
-	ManaData.MaxLerpTime = 2.5f;
-	PlayerStatMap.Add(EStatEnum::Mana, ManaData);
+	//FStatData HealthData;
+	//HealthData.MaxValue = 300.f;
+	//HealthData.CurrentValue = 300.f;
+	//HealthData.DisplayedValue = 300.f;
+	//PlayerStatMap.Add(EStatEnum::Health, HealthData);
 
-	FStatData ExperienceData;
-	ExperienceData.MaxValue = 1000.f;
-	ManaData.MinLerpTime = 0.4f;
-	ManaData.MaxLerpTime = 2.0f;
+	//FStatData ManaData;
+	//ManaData.MaxValue = 200.f;
+	//ManaData.CurrentValue = 200.f;
+	//ManaData.DisplayedValue = 200.f;
+	//ManaData.MinLerpTime = 0.5f;
+	//ManaData.MaxLerpTime = 2.5f;
+	//PlayerStatMap.Add(EStatEnum::Mana, ManaData);
+
+	//FStatData ExperienceData;
+	//ExperienceData.MaxValue = 1000.f;
+	//ManaData.MinLerpTime = 0.4f;
+	//ManaData.MaxLerpTime = 2.0f;
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 void APlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+}
+
+void APlayerCharacter::SetDead()
+{
+	if (PlayerCurrentState == EPlayerCurrentState::DEAD) return;
+
+	SetPlayerState(EPlayerCurrentState::DEAD);
+	Super::SetDead();
 }
 
 void APlayerCharacter::SetMaxWalkSpeed(float InMaxWalkSpeed)
@@ -247,9 +260,6 @@ void APlayerCharacter::SetCameraPitch(float InPitchValue)
 
 void APlayerCharacter::SetCameraYaw(float InYawValue)
 {
-	//float YawScale = 1.f;
-	//InYawValue *= YawScale;
-
 	SpringArm->AddRelativeRotation(FRotator(0.0f, InYawValue, 0.0f));
 }
 
@@ -292,19 +302,23 @@ void APlayerCharacter::ToggleMenu() const
 
 void APlayerCharacter::ProcessUnarmedAttack()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("ProcessUnarmedAttack"));
-	//UE_LOG(LogTemp, Log, TEXT("CurrentCombo: %d"), CurrentCombo);
+	if (PlayerCurrentState == EPlayerCurrentState::DEAD)
+	{
+		bHasNextComboCommand = false;
+		return;
+	}
 
 	// 콤보가 0인 경우
 	if (CurrentCombo == 0)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("1"));
 		UnarmedAttackBegin();
 		return;
 	}
 	// 콤보가 1 이상인 경우
 	else
 	{
+	
+
 		// 콤보 타이머가 유효한 경우
 		if (ComboTimerHandle.IsValid())
 		{
@@ -328,7 +342,7 @@ void APlayerCharacter::UnarmedAttackBegin()
 	
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	
-	SetPlayerState(EPlayerState::ATTACKING);
+	SetPlayerState(EPlayerCurrentState::ATTACKING);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 
 	// 애니메이션 실행
@@ -353,7 +367,7 @@ void APlayerCharacter::UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsPro
 	ensure(CurrentCombo != 0);
 
 	CurrentCombo = 0;
-	SetPlayerState(EPlayerState::NORMAL);
+	SetPlayerState(EPlayerCurrentState::NORMAL);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 }
 
@@ -361,10 +375,39 @@ void APlayerCharacter::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
 {
 	Super::SetupCharacterWidget(InUserWidget);
 
-	UHpBarUserWidget* HpBarWidget = Cast<UHpBarUserWidget>(InUserWidget);
+	UCharacterHealthPointBarWidget* HpBarWidget = Cast<UCharacterHealthPointBarWidget>(InUserWidget);
 	if (HpBarWidget)
 	{
 		HpBarWidget->SetHpBarColor(FLinearColor::Green);
+	}
+
+	UStatBar* MainProgressBar = Cast<UStatBar>(InUserWidget);
+	if (MainProgressBar)
+	{
+		switch (MainProgressBar->GetStatType())
+		{
+		case EStatProgressBarType::Health:
+			UE_LOG(LogTemp, Log, TEXT("HealthPoint: %f / %f"), CharacterStatComp->GetCurrentHealthPoint(), CharacterStatComp->GetMaxHealthPoint());
+			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxHealthPoint());
+			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentHealthPoint());
+			CharacterStatComp->OnHealthPointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
+			break;
+		case EStatProgressBarType::Mana:
+			UE_LOG(LogTemp, Log, TEXT("ManaPoint: %f / %f"), CharacterStatComp->GetCurrentManaPoint(), CharacterStatComp->GetMaxManaPoint());
+			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxManaPoint());
+			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentManaPoint());
+			CharacterStatComp->OnManaPointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
+			break;
+		case EStatProgressBarType::Experience:
+			UE_LOG(LogTemp, Log, TEXT("ExperiencePoint: %f / %f"), CharacterStatComp->GetCurrentExperiencePoint(), CharacterStatComp->GetMaxExperiencePoint());
+			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxExperiencePoint());
+			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentExperiencePoint());
+			CharacterStatComp->OnExperiencePointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
+			break;
+		default:
+			break;
+		}
+
 	}
 }
 
@@ -424,22 +467,3 @@ void APlayerCharacter::CheckComboInput()
 	//else UnarmedAttackEnd(nullptr, true);
 
 }
-
-
-
-FStatData& APlayerCharacter::GetPlayerStat(EStatEnum InStatEnum)
-{
-	return *PlayerStatMap.Find(InStatEnum);
-}
-
-void APlayerCharacter::SetPlayerStat(EStatEnum InStatEnum, FStatData InStatData)
-{
-	PlayerStatMap.Add(InStatEnum, InStatData);
-}
-
-void APlayerCharacter::SetUpStatBar()
-{
-	// Set Member in PlayerStatMap
-	//GetPlayerStat(EStatEnum::Health).BarWidget = CharacterWidget->GetHpBarWidget();
-}
-

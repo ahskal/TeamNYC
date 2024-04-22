@@ -1,20 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/UI/HpBarUserWidget.h"
+#include "Character/UI/CharacterHealthPointBarWidget.h"
 #include "Components/ProgressBar.h"
 #include "Character/Interfaces/CharacterWidgetInterface.h"
 
-UHpBarUserWidget::UHpBarUserWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+UCharacterHealthPointBarWidget::UCharacterHealthPointBarWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	MaxHp = -1.0f;
 }
 
-void UHpBarUserWidget::NativeConstruct()
+// 이득우꺼
+// 스탯컴포넌트 초기화 이후에 불림
+void UCharacterHealthPointBarWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	HpProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_HpBar")));
+	HpProgressBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("PB_HealthBar")));
 	ensure(HpProgressBar);
 
 	ICharacterWidgetInterface* CharacterWidget = Cast<ICharacterWidgetInterface>(OwningActor);
@@ -24,7 +26,7 @@ void UHpBarUserWidget::NativeConstruct()
 	}
 }
 
-void UHpBarUserWidget::UpdateHpBar(float NewCurrnetHp)
+void UCharacterHealthPointBarWidget::UpdateHpBar(float NewCurrnetHp)
 {
 	ensure(MaxHp > 0.0f);
 
@@ -34,7 +36,7 @@ void UHpBarUserWidget::UpdateHpBar(float NewCurrnetHp)
 	}
 }
 
-void UHpBarUserWidget::SetHpBarColor(FLinearColor NewColor)
+void UCharacterHealthPointBarWidget::SetHpBarColor(FLinearColor NewColor)
 {
 	if (HpProgressBar)
 	{

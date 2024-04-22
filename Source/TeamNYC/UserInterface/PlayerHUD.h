@@ -10,6 +10,7 @@
 class UMainMenu;
 class UInventoryPanel;
 class UInteractionWidget;
+class UExtendedUserWidget;
 struct FInteractableData;
 
 UCLASS()
@@ -19,7 +20,7 @@ class TEAMNYC_API APlayerHUD : public AHUD
 	
 protected:
 	UPROPERTY()
-	TObjectPtr<UUserWidget> MainWidget;
+	TObjectPtr<UExtendedUserWidget> MainWidget;
 
 	UPROPERTY()
 	TObjectPtr<UMainMenu> MainMenuWidget;

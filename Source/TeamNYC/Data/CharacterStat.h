@@ -11,10 +11,13 @@ struct FCharacterStat : public FTableRowBase
 	GENERATED_BODY()
 
 	public:
-	FCharacterStat() : MaxHp(0.0f), Damage(0.0f), AttackRange(0.0f), AttackSpeed(0.0f) {}
+	FCharacterStat() : MaxHealthPoint(0.0f), MaxManaPoint(0.0f), Damage(0.0f), AttackRange(0.0f), AttackSpeed(0.0f) {}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
-	float MaxHp;
+	float MaxHealthPoint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	float MaxManaPoint;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
 	float Damage;
@@ -90,3 +93,4 @@ struct FCharacterStat : public FTableRowBase
 		return *this;
 	}
 };
+

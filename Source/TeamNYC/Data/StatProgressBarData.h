@@ -2,10 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
-#include "PlayerStat.generated.h"
+#include "StatProgressBarData.generated.h"
 
 UENUM()
-enum class EStatEnum : uint8
+enum class EStatProgressBarType : uint8
 {
 	Null, Health, Mana, Experience
 };
@@ -32,13 +32,13 @@ struct FStatData
 		RegFuntionName(TEXT("")) {}
 	
 	UPROPERTY(EditAnywhere, Category = Stat)
-	int32 MinValue;
+	float MinValue;
 
 	UPROPERTY(EditAnywhere, Category = Stat)
-	int32 MaxValue;
+	float MaxValue;
 
 	UPROPERTY(EditAnywhere, Category = Stat)
-	int32 CurrentValue;
+	float CurrentValue;
 
 	UPROPERTY(EditAnywhere, Category = Stat)
 	float DisplayedValue;

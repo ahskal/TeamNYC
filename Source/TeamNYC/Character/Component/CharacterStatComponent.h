@@ -7,8 +7,10 @@
 #include "Data/CharacterStat.h"
 #include "CharacterStatComponent.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHPIsZeroDelegate);
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnHPChangedDelegate, float /*CurrentHp*/);
+DECLARE_MULTICAST_DELEGATE(FOnHealthPointIsZeroDelegate);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthPointChangedDelegate,	float /*Current HP*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnManaPointChangedDelegate,	float /*Current MP*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnExperiencePointChangedDelegate,	float /*Current EXP*/);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TEAMNYC_API UCharacterStatComponent : public UActorComponent
@@ -20,24 +22,64 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void InitializeComponent() override;
+
 
 	//====================================================================================
-	//  HP Section
+	//  HealthPoint Section
 	//====================================================================================
 protected:
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
-	float CurrentHp;
+	float CurrentHealthPoint;
 
 public:
-	FOnHPIsZeroDelegate OnHpIsZero;
-	FOnHPChangedDelegate OnHpChanged;
+	FOnHealthPointIsZeroDelegate	OnHealthPointIsZero;
+	FOnHealthPointChangedDelegate	OnHealthPointChanged; 
+	
 
-	FORCEINLINE float GetMaxHp() const { return TotalStat.MaxHp; }
-	FORCEINLINE float GetCurrentHp() const { return CurrentHp; }
-	FORCEINLINE float GetHpRatio() const { return CurrentHp / GetMaxHp(); }
-	void SetHp(float NewHp);
+	FORCEINLINE float GetMaxHealthPoint() const		{ return TotalStat.MaxHealthPoint; }
+	FORCEINLINE float GetCurrentHealthPoint() const { return CurrentHealthPoint;}
+	FORCEINLINE float GetHealthPointRatio() const	{ return CurrentHealthPoint / GetMaxHealthPoint(); }
+	void SetCurrentHealthPoint(float NewHealthPoint);
 	
 	float ApplyDamage(float InDamage);
+
+
+	//====================================================================================
+	//  ManaPoint Section
+	//====================================================================================
+protected:
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
+	float CurrentManaPoint;
+
+public:
+	FOnManaPointChangedDelegate		OnManaPointChanged;
+
+	FORCEINLINE float GetMaxManaPoint() const		{ return TotalStat.MaxManaPoint; }
+	FORCEINLINE float GetCurrentManaPoint() const	{ return CurrentManaPoint; }
+	FORCEINLINE float GetManaPointRatio() const		{ return CurrentManaPoint / GetMaxManaPoint(); }
+	void SetCurrentManaPoint(float NewManaPoint);
+
+	float ApplyManaCost(float InManaCost);
+
+	//====================================================================================
+	//  Experience Section
+	//====================================================================================
+protected:
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
+	float MaxExperiencePoint;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = "Stat")
+	float CurrentExperiencePoint;
+
+public:
+	FOnExperiencePointChangedDelegate	OnExperiencePointChanged;
+
+	FORCEINLINE float GetMaxExperiencePoint() const		{ return MaxExperiencePoint; }
+	FORCEINLINE float GetCurrentExperiencePoint() const	{ return CurrentExperiencePoint; }
+	FORCEINLINE float GetExperiencePointRatio() const	{ return CurrentExperiencePoint / MaxExperiencePoint; }
+	void SetCurrentExperiencePoint(float NewExperiencePoint);
+
 
 	//====================================================================================
 	//  Stat Section

@@ -103,7 +103,11 @@ protected:
 	// Inventory IA
 	void ToggleMenu();
 
+public:
+	void SetDisableInput();
+
 private:
 	FVector CachedDestination;
 	float FollowTime; // For how long it has been pressed
+
 };
