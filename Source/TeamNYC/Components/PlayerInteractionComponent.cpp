@@ -1,7 +1,7 @@
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 #include "Character/Player/PlayerCharacter.h"
-#include "Interfaces/InteractionInterface.h"
+#include "Interfaces/InteractionInterface/InteractionInterface.h"
 #include "UserInterface/PlayerHUD.h"
 #include "Item/Pickup.h"
 
@@ -180,7 +180,8 @@ void UPlayerInteractionComponent::UpdateInteractionWidget() const
 
 void UPlayerInteractionComponent::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
 {
-	UItemBase* FoundItem = PlayerInventory->FindMatchingItem(ItemToDrop);
+	APlayerCharacter* CharacterTemp = Cast<APlayerCharacter>(GetOwner());
+	UItemBase* FoundItem = CharacterTemp->GetInventory()->FindMatchingItem(ItemToDrop);
 	if (FoundItem)
 	{
 		FActorSpawnParameters SpawnParams;
@@ -193,12 +194,10 @@ void UPlayerInteractionComponent::DropItem(UItemBase* ItemToDrop, const int32 Qu
 		//const FVector SpawnLocation{ GetOwner()->GetActorLocation() + (GetOwner()->GetActorForwardVector() * 50.f) };
 		const FTransform SpawnTransform(GetOwner()->GetActorRotation(), SpawnLocation);
 
-		const int32 RemovedQuantity = PlayerInventory->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
+		const int32 RemovedQuantity = CharacterTemp->GetInventory()->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
 
 		APickup* Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), SpawnTransform, SpawnParams);
-
 		Pickup->InitializeDrop(ItemToDrop, RemovedQuantity);
-
 	}
 	else
 	{

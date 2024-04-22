@@ -114,19 +114,19 @@ public:
 	FORCEINLINE void SetWeightCapacity(const float NewWeightCapacity) { InventoryWeightCapacity = NewWeightCapacity; };
 
 protected:
-	// ÀÎº¥Åä¸® ÀüÃ¼ Å©±â
+	// ì¸ë²¤í† ë¦¬ ì „ì²´ í¬ê¸°
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	float InventoryTotalWeight;
 
-	// ÀÎº¥Åä¸® ½½·Ô ¿ë·®
+	// ì¸ë²¤í† ë¦¬ ìŠ¬ë¡¯ ìš©ëŸ‰
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	int32 InventorySlotsCapacity;
 
-	// ÀÎº¥Åä¸® Áß·® ¿ë·®
+	// ì¸ë²¤í† ë¦¬ ì¤‘ëŸ‰ ìš©ëŸ‰
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	float InventoryWeightCapacity;
 
-	// ¾ÆÀÌÅÛ ÁÖ¼ÒÀÇ ¹è¿­
+	// ì•„ì´í…œ ì£¼ì†Œì˜ ë°°ì—´
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	TArray<TObjectPtr<UItemBase>> InventoryContents;
 

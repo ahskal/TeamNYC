@@ -7,6 +7,7 @@
 #include "Item/ItemBase/ItemBase.h"
 #include "Character/Player/PlayerCharacter.h"
 
+
 void UMainMenu::NativeOnInitialized()
 {
     Super::NativeOnInitialized();

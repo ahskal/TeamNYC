@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Interfaces/InteractionInterface.h"
+#include "Interfaces/InteractionInterface/InteractionInterface.h"
 #include "Pickup.generated.h"
 
 class APlayerCharacter;

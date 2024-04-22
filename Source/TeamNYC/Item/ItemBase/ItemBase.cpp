@@ -19,14 +19,15 @@ UItemBase* UItemBase::CreateItemCopy() const
 {
 	UItemBase* ItemCopy = NewObject<UItemBase>(StaticClass());
 
-	ItemCopy->ItemID =			this->ItemID;
-	ItemCopy->ItemQuality =		this->ItemQuality;
-	ItemCopy->ItemType =		this->ItemType;
-	ItemCopy->ItemTextData =	this->ItemTextData;
-	ItemCopy->ItemNumericData =	this->ItemNumericData;
-	ItemCopy->ItemStatistics =	this->ItemStatistics;
-	ItemCopy->ItemAssetData =	this->ItemAssetData;
-	ItemCopy->bIsCopy =			true;
+	ItemCopy->ItemID =				this->ItemID;
+	ItemCopy->ItemQuality =			this->ItemQuality;
+	ItemCopy->ItemType =			this->ItemType;
+	ItemCopy->ItemTextData =		this->ItemTextData;
+	ItemCopy->ItemNumericData =		this->ItemNumericData;
+	ItemCopy->ItemStatistics =		this->ItemStatistics;
+	ItemCopy->CharacterStatistics =	this->CharacterStatistics;
+	ItemCopy->ItemAssetData =		this->ItemAssetData;
+	ItemCopy->bIsCopy =				true;
 
 	return ItemCopy;
 }

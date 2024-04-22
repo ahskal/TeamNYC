@@ -31,13 +31,14 @@ void APickup::InitializePickup(TSubclassOf<UItemBase> BaseClass, const int32 InQ
 
 		ItemReference = NewObject<UItemBase>(this, BaseClass);
 
-		ItemReference->ItemID =			ItemDataRow->ItemID;
-		ItemReference->ItemType =		ItemDataRow->ItemType;
-		ItemReference->ItemQuality =	ItemDataRow->ItemQuality;
-		ItemReference->ItemNumericData =ItemDataRow->ItemNumericData;
-		ItemReference->ItemTextData =	ItemDataRow->ItemTextData;
-		ItemReference->ItemAssetData =	ItemDataRow->ItemAssetData;
-		ItemReference->ItemStatistics =	ItemDataRow->ItemStatistics;
+		ItemReference->ItemID =					ItemDataRow->ItemID;
+		ItemReference->ItemType =				ItemDataRow->ItemType;
+		ItemReference->ItemQuality =			ItemDataRow->ItemQuality;
+		ItemReference->ItemNumericData =		ItemDataRow->ItemNumericData;
+		ItemReference->ItemTextData =			ItemDataRow->ItemTextData;
+		ItemReference->ItemAssetData =			ItemDataRow->ItemAssetData;
+		ItemReference->ItemStatistics =			ItemDataRow->ItemStatistics;
+		ItemReference->CharacterStatistics =	ItemDataRow->CharacterStatistics;
 
 		InQuantity <= 0 ? ItemReference->SetQuantity(1) : ItemReference->SetQuantity(InQuantity);
 

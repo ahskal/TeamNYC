@@ -1,22 +1,22 @@
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Data/CharacterStat.h"
 #include "ItemDataStructs.generated.h"
 
 UENUM()
 enum class EItemQuality : uint8
 {
 	// Item Quality
-	Useless		UMETA(DisplayName = "Useless"),		// È¸»ö
-	Shoddy		UMETA(DisplayName = "Shoddy"),		// Èò»ö
-	Common		UMETA(DisplayName = "Common"),		// ÃÊ·Ï
-	Rare		UMETA(DisplayName = "Rare"),		// ÆÄ¶û
-	Epic		UMETA(DisplayName = "Epic"),		// º¸¶ó
-	Unique		UMETA(DisplayName = "Unique"),		// Ã»·Ï
-	Masterpiece	UMETA(DisplayName = "Masterpiece"),	// ·¹µå
-	Mythic		UMETA(DisplayName = "Mythic"),		// ³ë¶û
-	Legendary	UMETA(DisplayName = "Legendary"),	// ÁÖÈ²
+	Useless		UMETA(DisplayName = "Useless"),		// íšŒìƒ‰
+	Shoddy		UMETA(DisplayName = "Shoddy"),		// í°ìƒ‰
+	Common		UMETA(DisplayName = "Common"),		// ì´ˆë¡
+	Rare		UMETA(DisplayName = "Rare"),		// íŒŒëž‘
+	Epic		UMETA(DisplayName = "Epic"),		// ë³´ë¼
+	Unique		UMETA(DisplayName = "Unique"),		// ì²­ë¡
+	Masterpiece	UMETA(DisplayName = "Masterpiece"),	// ë ˆë“œ
+	Mythic		UMETA(DisplayName = "Mythic"),		// ë…¸ëž‘
+	Legendary	UMETA(DisplayName = "Legendary"),	// ì£¼í™©
 };
 
 UENUM()
@@ -40,35 +40,11 @@ struct FItemStatistics
 {
 	GENERATED_USTRUCT_BODY()
 
-	// ÃÖ´ë Ã¼·Â
-	UPROPERTY(EditAnywhere)
-	float AdditionalHp{};
-
-	// °ø°Ý·Â
-	UPROPERTY(EditAnywhere)
-	float Damage{};
-
-	// ¹æ¾î·Â
-	UPROPERTY(EditAnywhere)
-	float Armor{};
-
-	// °ø°Ý»ç°Å¸®
-	UPROPERTY(EditAnywhere)
-	float AttackRange{};
-
-	// °ø°Ý¼Óµµ
-	UPROPERTY(EditAnywhere)
-	float AttackSpeed{};
-
-	// ÀÌµ¿¼Óµµ
-	UPROPERTY(EditAnywhere)
-	float MovementSpeed{};
-
-	// º¹±¸±Ý¾× -> ´Ù½Ã»ç±â
+	// ë³µêµ¬ê¸ˆì•¡ -> ë‹¤ì‹œì‚¬ê¸°
 	UPROPERTY(EditAnywhere)
 	float RestorationAmount{};
 
-	// ÆÈ±â±Ý¾×
+	// íŒ”ê¸°ê¸ˆì•¡
 	UPROPERTY(EditAnywhere)
 	float SellValue{};
 };
@@ -140,6 +116,9 @@ struct FItemData : public FTableRowBase
 
 	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemStatistics ItemStatistics{};
+
+	UPROPERTY(EditAnywhere, Category = "Item Data")
+	FCharacterStat CharacterStatistics{};
 
 	UPROPERTY(EditAnywhere, Category = "Item Data")
 	FItemTextData ItemTextData{};

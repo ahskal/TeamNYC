@@ -1,10 +1,8 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Components/InventoryComponent.h"
-#include "Item/ItemBase/ItemDataStructs.h"
+#include "Data/ItemDataStruct/ItemDataStructs.h"
+#include "Data/CharacterStat.h"
 #include "ItemBase.generated.h"
 
 class APlayerCharacter;
@@ -48,6 +46,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FItemStatistics ItemStatistics;
+
+	UPROPERTY(VisibleAnywhere, Category = "Item")
+	FCharacterStat CharacterStatistics;	
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	FItemTextData ItemTextData;

@@ -35,7 +35,7 @@ public:
 
 	// 추가 체력
 	UPROPERTY(meta = (BindWidget))
-	UTextBlock* AdditionalHp;
+	UTextBlock* MaxHp;
 
 	// 공격력
 	UPROPERTY(meta = (BindWidget))

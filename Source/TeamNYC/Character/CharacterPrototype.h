@@ -5,7 +5,7 @@
 #include "Character/Interfaces/AnimationAttackInterfece.h"
 #include "Character/Interfaces/CharacterWidgetInterface.h"
 
-#include "Interfaces/InteractionInterface.h"
+#include "Interfaces/InteractionInterface/InteractionInterface.h"
 
 #include "CharacterPrototype.generated.h"
 
