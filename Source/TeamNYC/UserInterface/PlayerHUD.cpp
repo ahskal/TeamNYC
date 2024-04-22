@@ -26,6 +26,7 @@ void APlayerHUD::BeginPlay()
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("HUD BeginPlay executing"));
 
+	
 	if (MainMenuClass)
 	{
 		MainMenuWidget = CreateWidget<UMainMenu>(GetWorld(), MainMenuClass);

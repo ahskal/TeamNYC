@@ -5,7 +5,7 @@
 
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
-#include "Interfaces/InteractionInterface.h"
+#include "Interfaces/InteractionInterface/InteractionInterface.h"
 
 float UInteractionWidget::UpdateInteractionProgress()
 {

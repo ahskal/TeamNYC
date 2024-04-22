@@ -60,7 +60,9 @@ UItemBase* UInventoryComponent::FindMatchingItem(UItemBase* ItemIn) const
 {
 	if (ItemIn)
 	{
-		if (InventoryContents.Contains(ItemIn))
+		UE_LOG(LogTemp, Log, TEXT("FindMatchingItem IN"));
+		auto Found = InventoryContents.Contains(ItemIn);
+		if (Found)
 		{
 			return ItemIn;
 		}
@@ -83,18 +85,15 @@ UItemBase* UInventoryComponent::FindNextItemByID(UItemBase* ItemIn) const
 
 UItemBase* UInventoryComponent::FindNextPartialStack(UItemBase* ItemIn) const
 {
-	const TArray<TObjectPtr<UItemBase>>::ElementType* Result =
+	if (const TArray<TObjectPtr<UItemBase>>::ElementType* Result =
 		InventoryContents.FindByPredicate([&ItemIn](const UItemBase* InventoryItem)
 	{
 		return InventoryItem->ItemID == ItemIn->ItemID && !InventoryItem->IsFullItemStack();
 	}
-	);
-
-	if (Result)
+		))
 	{
 		return *Result;
 	}
-
 	return nullptr;
 }
 
@@ -120,7 +119,6 @@ int32 UInventoryComponent::RemoveAmountOfItem(UItemBase* ItemIn, int32 DesiredAm
 
 void UInventoryComponent::SplitExistingStack(UItemBase* ItemIn, const int32 AmountToSplit)
 {
-	
 	if (!(InventoryContents.Num() + 1 > InventorySlotsCapacity))
 	{
 		RemoveAmountOfItem(ItemIn, AmountToSplit);
@@ -279,7 +277,7 @@ int32 UInventoryComponent::CalculateNumberForFullStack(UItemBase* StackableItem,
 
 void UInventoryComponent::AddNewItem(UItemBase* Item, const int32 AmountToAdd)
 {
-	UItemBase* NewItem;
+	TObjectPtr<UItemBase> NewItem = NewObject<UItemBase>();
 
 	if (Item->bIsCopy || Item->bIsPickup)
 	{

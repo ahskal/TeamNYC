@@ -283,6 +283,11 @@ void APlayerCharacter::ToggleMenu() const
 	InteractionComponent->ToggleMenu();
 }
 
+void APlayerCharacter::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop)
+{
+	InteractionComponent->DropItem(ItemToDrop, QuantityToDrop);
+}
+
 //void APlayerCharacter::UnarmedAttack()
 //{
 //	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();

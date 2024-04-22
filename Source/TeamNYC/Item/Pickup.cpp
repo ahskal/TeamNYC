@@ -31,13 +31,14 @@ void APickup::InitializePickup(TSubclassOf<UItemBase> BaseClass, const int32 InQ
 
 		ItemReference = NewObject<UItemBase>(this, BaseClass);
 
-		ItemReference->ItemID =			ItemDataRow->ItemID;
-		ItemReference->ItemType =		ItemDataRow->ItemType;
-		ItemReference->ItemQuality =	ItemDataRow->ItemQuality;
-		ItemReference->ItemNumericData =ItemDataRow->ItemNumericData;
-		ItemReference->ItemTextData =	ItemDataRow->ItemTextData;
-		ItemReference->ItemAssetData =	ItemDataRow->ItemAssetData;
-		ItemReference->ItemStatistics =	ItemDataRow->ItemStatistics;
+		ItemReference->ItemID =					ItemDataRow->ItemID;
+		ItemReference->ItemType =				ItemDataRow->ItemType;
+		ItemReference->ItemQuality =			ItemDataRow->ItemQuality;
+		ItemReference->ItemNumericData =		ItemDataRow->ItemNumericData;
+		ItemReference->ItemTextData =			ItemDataRow->ItemTextData;
+		ItemReference->ItemAssetData =			ItemDataRow->ItemAssetData;
+		ItemReference->ItemStatistics =			ItemDataRow->ItemStatistics;
+		ItemReference->CharacterStatistics =	ItemDataRow->CharacterStatistics;
 
 		InQuantity <= 0 ? ItemReference->SetQuantity(1) : ItemReference->SetQuantity(InQuantity);
 
@@ -52,7 +53,7 @@ void APickup::InitializeDrop(UItemBase* ItemToDrop, const int32 InQuantity)
 	ItemReference = ItemToDrop;
 	InQuantity <= 0 ? ItemReference->SetQuantity(1) : ItemReference->SetQuantity(InQuantity);
 	ItemReference->ItemNumericData.Weight = ItemToDrop->GetItemSingleWeight();
-	//ItemReference->OwningInventory = nullptr;
+	ItemReference->OwningInventory = nullptr;
 	PickupMesh->SetStaticMesh(ItemToDrop->ItemAssetData.Mesh);
 
 	UpdateInteractableData();

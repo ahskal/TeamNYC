@@ -10,6 +10,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UPlayerInteractionComponent;
 class UInventoryComponent;
+class UItemBase;
 
 UENUM(BlueprintType)
 enum class EPlayerCurrentState : uint8

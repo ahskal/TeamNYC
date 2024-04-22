@@ -2,6 +2,7 @@
 #include "UserInterface/Inventory/InventoryItemSlot.h"
 
 #include "Item/ItemBase/ItemBase.h"
+#include "Data/CharacterStat.h"
 
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
@@ -132,45 +133,45 @@ void UInventoryTooltip::NativeConstruct()
 	
 	// 추가체력, 공격력, 방어력, 사거리, 공속, 이속,	등등
 	// 값이 비어있을경우 해당 부분을 켜지 않는다
-	bool IsEmpty = ItemBeingHovered->ItemStatistics.AdditionalHp == 0 ||
-		ItemBeingHovered->ItemStatistics.Damage == 0 ||
-		ItemBeingHovered->ItemStatistics.Armor == 0 ||
-		ItemBeingHovered->ItemStatistics.AttackRange == 0 ||
-		ItemBeingHovered->ItemStatistics.AttackSpeed == 0 ||
-		ItemBeingHovered->ItemStatistics.MovementSpeed == 0;
+	bool IsEmpty = ItemBeingHovered->CharacterStatistics.MaxHp == 0 ||
+		ItemBeingHovered->CharacterStatistics.Damage == 0 ||
+		//ItemBeingHovered->ItemStatistics.Armor == 0 ||
+		ItemBeingHovered->CharacterStatistics.AttackRange == 0 ||
+		ItemBeingHovered->CharacterStatistics.AttackSpeed == 0 ||
+		ItemBeingHovered->CharacterStatistics.MovementSpeed == 0;
 	if (IsEmpty) {
 		VerticalBox->SetVisibility(ESlateVisibility::Collapsed);
 	}
 	else {
-		SetTextBlockTextToText(AdditionalHp,
+		SetTextBlockTextToText(MaxHp,
 			FText::FromString(TEXT("추가 HP ")),
 			FText::FromString("+"),
-			FText::AsNumber(ItemBeingHovered->ItemStatistics.AdditionalHp));
+			FText::AsNumber(ItemBeingHovered->CharacterStatistics.MaxHp));
 
 		SetTextBlockTextToText(Damage,
 			FText::FromString(TEXT("공격력 ")),
 			FText::FromString("+"),
-			FText::AsNumber(ItemBeingHovered->ItemStatistics.Damage));
+			FText::AsNumber(ItemBeingHovered->CharacterStatistics.Damage));
 
-		SetTextBlockTextToText(Armor,
-			FText::FromString(TEXT("방어력 ")),
-			FText::FromString("+"),
-			FText::AsNumber(ItemBeingHovered->ItemStatistics.Armor));
+		//SetTextBlockTextToText(Armor,
+		//	FText::FromString(TEXT("방어력 ")),
+		//	FText::FromString("+"),
+		//	FText::AsNumber(ItemBeingHovered->ItemStatistics.Armor));
 
 		SetTextBlockTextToText(AttackRange,
 			FText::FromString(TEXT("사거리 ")),
 			FText::FromString("+"),
-			FText::AsNumber(ItemBeingHovered->ItemStatistics.AttackRange));
+			FText::AsNumber(ItemBeingHovered->CharacterStatistics.AttackRange));
 
 		SetTextBlockTextToText(AttackSpeed,
 			FText::FromString(TEXT("공격속도 ")),
 			FText::FromString("+"),
-			FText::AsNumber(ItemBeingHovered->ItemStatistics.AttackSpeed));
+			FText::AsNumber(ItemBeingHovered->CharacterStatistics.AttackSpeed));
 
 		SetTextBlockTextToText(MovementSpeed,
 			FText::FromString(TEXT("이동속도 ")),
 			FText::FromString("+"),
-			FText::AsNumber(ItemBeingHovered->ItemStatistics.MovementSpeed));
+			FText::AsNumber(ItemBeingHovered->CharacterStatistics.MovementSpeed));
 	}
 
 	// 이름
