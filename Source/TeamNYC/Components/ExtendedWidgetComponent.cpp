@@ -7,8 +7,6 @@
 
 void UExtendedWidgetComponent::InitWidget()
 {
-	UE_LOG(LogTemp, Error, TEXT("UExtendedWidgetComponent::InitWidget()"));
-
 	Super::InitWidget();
 
 	//UExtendedUserWidget* ExtendedUserWidget = Cast<UExtendedUserWidget>(GetUserWidgetObject());

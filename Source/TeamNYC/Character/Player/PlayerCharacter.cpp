@@ -387,19 +387,16 @@ void APlayerCharacter::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
 		switch (MainProgressBar->GetStatType())
 		{
 		case EStatProgressBarType::Health:
-			UE_LOG(LogTemp, Log, TEXT("HealthPoint: %f / %f"), CharacterStatComp->GetCurrentHealthPoint(), CharacterStatComp->GetMaxHealthPoint());
 			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxHealthPoint());
 			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentHealthPoint());
 			CharacterStatComp->OnHealthPointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
 			break;
 		case EStatProgressBarType::Mana:
-			UE_LOG(LogTemp, Log, TEXT("ManaPoint: %f / %f"), CharacterStatComp->GetCurrentManaPoint(), CharacterStatComp->GetMaxManaPoint());
 			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxManaPoint());
 			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentManaPoint());
 			CharacterStatComp->OnManaPointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
 			break;
 		case EStatProgressBarType::Experience:
-			UE_LOG(LogTemp, Log, TEXT("ExperiencePoint: %f / %f"), CharacterStatComp->GetCurrentExperiencePoint(), CharacterStatComp->GetMaxExperiencePoint());
 			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxExperiencePoint());
 			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentExperiencePoint());
 			CharacterStatComp->OnExperiencePointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
