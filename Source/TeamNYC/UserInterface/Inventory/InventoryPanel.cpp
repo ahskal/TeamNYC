@@ -29,7 +29,6 @@ void UInventoryPanel::NativeOnInitialized()
 
 void UInventoryPanel::SetInfoText() const
 {
-
 	WeightInfo->SetText(FText::Format(FText::FromString("{0}/{1}"),
 		InventoryReference->GetInventoryTotalWeight(),
 		InventoryReference->GetWeightCapacity()));
@@ -48,9 +47,9 @@ void UInventoryPanel::RefreshInventory()
 		{
 			UInventoryItemSlot* ItemSlot = CreateWidget<UInventoryItemSlot>(this, InventorySlotClass);
 
-			// ¾ÆÀÌÅÛÀÇ º¹»çº»À» °¡Á®¿À´Â ºÎºÐ
+			// ì•„ì´í…œì˜ ë³µì‚¬ë³¸ì„ ê°€ì ¸ì˜¤ëŠ” ë¶€ë¶„
 			ItemSlot->SetItemReference(InventoryItem);
-			// º¹Á¦ÇÑ ¾ÆÀÌÅÛÀ» ÀÎº¥Åä¸®ÀÇ ÀÚ½ÄÀ¸·Î ³Ö´Â ºÎºÐ
+			// ë³µì œí•œ ì•„ì´í…œì„ ì¸ë²¤í† ë¦¬ì˜ ìžì‹ìœ¼ë¡œ ë„£ëŠ” ë¶€ë¶„
 			InventoryUWrapBox->AddChildToWrapBox(ItemSlot);
 		}
 		SetInfoText();

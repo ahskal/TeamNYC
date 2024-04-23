@@ -33,8 +33,10 @@ void UInventoryItemSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	// 아이템이 있는지 판단 여부
 	if (ItemReference)
 	{
+		// 아이템 등급
 		switch (ItemReference->ItemQuality)
 		{
 		case EItemQuality::Useless:
@@ -42,11 +44,9 @@ void UInventoryItemSlot::NativeConstruct()
 			break;
 		case EItemQuality::Shoddy:
 			ItemBorder->SetBrushColor(FLinearColor::Gray);
-			//ItemBorder->SetBrushColor(FLinearColor::White);
 			break;
 		case EItemQuality::Common:
 			ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkCyan3b());
-			//ItemBorder->SetBrushColor(FLinearColor::Green);
 			break;
 		case EItemQuality::Rare:
 			ItemBorder->SetBrushColor(FLinearColor(0.0f, 0.1f, 1.0f));
@@ -64,21 +64,23 @@ void UInventoryItemSlot::NativeConstruct()
 			ItemBorder->SetBrushColor(GOLD);
 			break;
 		case EItemQuality::Legendary:
-			//ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkOrange3b());
 			ItemBorder->SetBrushColor(ORANGE);
 			break;
 		default:
 			ItemBorder->SetBrushColor(FLinearColor::Black);
 		}
-
+		// 이미지 아이콘 지정 코드
 		ItemIcon->SetBrushFromTexture(ItemReference->ItemAssetData.Icon);
 
+		// 아이템 스택으로 쌓기 여부 코드
 		if (ItemReference->ItemNumericData.bIsStackable)
 		{
+			// 쌓는다면 아이콘 위에 숫자로 개수 표시를 하고
 			ItemQuantity->SetText(FText::AsNumber(ItemReference->ItemQuantity));
 		}
 		else
 		{
+			// 안쌓는다면 개수 표시부분을 끈다
 			ItemQuantity->SetVisibility(ESlateVisibility::Collapsed);
 		}
 	}
@@ -109,11 +111,17 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 
 	if (DragItemVisualClass)
 	{
+		// 드래그 했을때 임시객체 추가
+		// 투명하게 보이는 아이템 박스를 생성
 		const TObjectPtr<UDragItemVisual> DragVisual = CreateWidget<UDragItemVisual>(this, DragItemVisualClass);
+
+		// 아이템의 위젯설정값 받아오는
 		DragVisual->ItemIcon->SetBrushFromTexture(ItemReference->ItemAssetData.Icon);
 		DragVisual->ItemBorder->SetBrushColor(ItemBorder->GetBrushColor());
 		DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->ItemQuantity));
 
+		// 아이템의 스택으로 쌓기 가능여부
+		// 참 이라면 출력, 거짓이라면 숨기기
 		ItemReference->ItemNumericData.bIsStackable ?
 			DragVisual->ItemQuantity->SetText(FText::AsNumber(ItemReference->ItemQuantity))
 			: DragVisual->ItemQuantity->SetVisibility(ESlateVisibility::Collapsed);
@@ -126,7 +134,6 @@ void UInventoryItemSlot::NativeOnDragDetected(const FGeometry& InGeometry, const
 		DragItemOperation->Pivot = EDragPivot::TopLeft;
 		
 		OutOperation = DragItemOperation;
-
 	}
 }
 

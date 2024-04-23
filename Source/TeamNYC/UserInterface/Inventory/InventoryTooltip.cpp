@@ -21,103 +21,83 @@ void UInventoryTooltip::NativeConstruct()
 
 	const UItemBase* ItemBeingHovered = InventorySlotBeingHovered->GetItemReference();
 
+	// 아이템 타입에 따른 글씨 출력
 	switch (ItemBeingHovered->ItemType) {
 	case EItemType::Junk:
 		ItemType->SetText(FText::FromString(TEXT("쓰레기")));
-
-
 		break;
 	case EItemType::Tool:
 		ItemType->SetText(FText::FromString(TEXT("도구")));
-
-
 		break;
 	case EItemType::Armor:
 		ItemType->SetText(FText::FromString(TEXT("방어구")));
-
-
 		break;
 	case EItemType::Weapon:
 		ItemType->SetText(FText::FromString(TEXT("무기")));
-
-
 		break;
 	case EItemType::Shield:
 		ItemType->SetText(FText::FromString(TEXT("방패")));
-
-
 		break;
 	case EItemType::Spell:
 		ItemType->SetText(FText::FromString(TEXT("주문")));
-
-
 		break;
 	case EItemType::Ammo:
 		ItemType->SetText(FText::FromString(TEXT("탄약")));
-
-
 		break;
 	case EItemType::Consumable:
 		ItemType->SetText(FText::FromString(TEXT("소모품")));
-
-
 		break;
 	case EItemType::Quest:
 		ItemType->SetText(FText::FromString(TEXT("퀘스트")));
-
-
 		break;
 	case EItemType::Mundane:
 		ItemType->SetText(FText::FromString(TEXT("평범한")));
-
-
 		break;
 	default:;
 	}
 
-	if (ItemBeingHovered) {
-		switch (ItemBeingHovered->ItemQuality)
-		{
-		case EItemQuality::Useless:
-			ItemName->SetColorAndOpacity(FLinearColor(0.1f, 0.1f, 0.1f, 1.f));
-			ItemBorder->SetBrushColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.f));
-			break;
-		case EItemQuality::Shoddy:
-			ItemName->SetColorAndOpacity(FLinearColor::Gray);
-			ItemBorder->SetBrushColor(FLinearColor::Gray);
-			break;
-		case EItemQuality::Common:
-			ItemName->SetColorAndOpacity(UE::Geometry::LinearColors::DarkCyan3b());
-			ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkCyan3b());
-			break;
-		case EItemQuality::Rare:
-			ItemName->SetColorAndOpacity(FLinearColor(0.0f, 0.1f, 1.0f));
-			ItemBorder->SetBrushColor(FLinearColor(0.0f, 0.1f, 1.0f));
-			break;
-		case EItemQuality::Epic:
-			ItemName->SetColorAndOpacity(PURPLE);
-			ItemBorder->SetBrushColor(PURPLE);
-			break;
-		case EItemQuality::Unique:
-			ItemName->SetColorAndOpacity(CYAN);
-			ItemBorder->SetBrushColor(CYAN);
-			break;
-		case EItemQuality::Masterpiece:
-			ItemName->SetColorAndOpacity(UE::Geometry::LinearColors::Red3b());
-			ItemBorder->SetBrushColor(UE::Geometry::LinearColors::Red3b());
-			break;
-		case EItemQuality::Mythic:
-			ItemName->SetColorAndOpacity(GOLD);
-			ItemBorder->SetBrushColor(GOLD);
-			break;
-		case EItemQuality::Legendary:
-			ItemName->SetColorAndOpacity(ORANGE);
-			ItemBorder->SetBrushColor(ORANGE);
-			break;
-		default:
-			ItemName->SetColorAndOpacity(FLinearColor::Black);
-			ItemBorder->SetBrushColor(FLinearColor::Black);
-		}
+	// 아이템 등급에 따른 글씨 색 변경
+	switch (ItemBeingHovered->ItemQuality)
+	{
+	case EItemQuality::Useless:
+		ItemName->SetColorAndOpacity(FLinearColor(0.1f, 0.1f, 0.1f, 1.f));
+		ItemBorder->SetBrushColor(FLinearColor(0.1f, 0.1f, 0.1f, 1.f));
+		break;
+	case EItemQuality::Shoddy:
+		ItemName->SetColorAndOpacity(FLinearColor::Gray);
+		ItemBorder->SetBrushColor(FLinearColor::Gray);
+		break;
+	case EItemQuality::Common:
+		ItemName->SetColorAndOpacity(UE::Geometry::LinearColors::DarkCyan3b());
+		ItemBorder->SetBrushColor(UE::Geometry::LinearColors::DarkCyan3b());
+		break;
+	case EItemQuality::Rare:
+		ItemName->SetColorAndOpacity(FLinearColor(0.0f, 0.1f, 1.0f));
+		ItemBorder->SetBrushColor(FLinearColor(0.0f, 0.1f, 1.0f));
+		break;
+	case EItemQuality::Epic:
+		ItemName->SetColorAndOpacity(PURPLE);
+		ItemBorder->SetBrushColor(PURPLE);
+		break;
+	case EItemQuality::Unique:
+		ItemName->SetColorAndOpacity(CYAN);
+		ItemBorder->SetBrushColor(CYAN);
+		break;
+	case EItemQuality::Masterpiece:
+		ItemName->SetColorAndOpacity(UE::Geometry::LinearColors::Red3b());
+		ItemBorder->SetBrushColor(UE::Geometry::LinearColors::Red3b());
+		break;
+	case EItemQuality::Mythic:
+		ItemName->SetColorAndOpacity(GOLD);
+		ItemBorder->SetBrushColor(GOLD);
+		break;
+	case EItemQuality::Legendary:
+		ItemName->SetColorAndOpacity(ORANGE);
+		ItemBorder->SetBrushColor(ORANGE);
+		break;
+	default:
+		ItemName->SetColorAndOpacity(FLinearColor::Black);
+		ItemBorder->SetBrushColor(FLinearColor::Black);
 	}
 
 	// 퀘스트 툴팁
@@ -130,9 +110,10 @@ void UInventoryTooltip::NativeConstruct()
 	//{
 	//	QuestText->SetVisibility(ESlateVisibility::Collapsed);
 	//}
-	
+
 	// 추가체력, 공격력, 방어력, 사거리, 공속, 이속,	등등
 	// 값이 비어있을경우 해당 부분을 켜지 않는다
+	//TODO: 해당값을 배열에 담아서 반복문으로 처리 예정
 	bool IsEmpty = ItemBeingHovered->CharacterStatistics.MaxHealthPoint == 0 ||
 		ItemBeingHovered->CharacterStatistics.Damage == 0 ||
 		//ItemBeingHovered->ItemStatistics.Armor == 0 ||
@@ -178,7 +159,7 @@ void UInventoryTooltip::NativeConstruct()
 	SetTextBlockTextToText(ItemName,
 		FText::FromString(TEXT("이름 : ")),
 		ItemBeingHovered->ItemTextData.Name);
-				
+
 	SetTextBlockTextToText(UsageText,
 		FText::FromString(TEXT("-용도 : ")),
 		ItemBeingHovered->ItemTextData.UsageText);
@@ -191,7 +172,7 @@ void UInventoryTooltip::NativeConstruct()
 		FText::FromString(TEXT("무게 : ")),
 		FText::AsNumber(ItemBeingHovered->GetItemStackWeight()));
 
-	SetTextBlockTextToText(SellValue, 
+	SetTextBlockTextToText(SellValue,
 		FText::FromString(TEXT("판매가격 : ")),
 		FText::AsNumber(ItemBeingHovered->ItemStatistics.SellValue),
 		FText::FromString(TEXT("원")));

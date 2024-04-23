@@ -11,7 +11,7 @@ class APlayerCharacter;
 UENUM()
 enum class EInteractableType : uint8
 {
-	// Linetrace Collision TargetType
+	// 충돌 이벤트 했을때 타입들
 	Pickup				UMETA(DisplayName = "Pickup"),
 	Monster				UMETA(DisplayName = "Monster"),
 	NonPlayerCharacter	UMETA(DisplayName = "NonPlayerCharacter"),
@@ -31,9 +31,7 @@ struct FInteractableData
 		Action(FText::GetEmpty()),
 		Quantity(0),
 		InteractionDuration(0.0f)
-	{
-
-	};
+	{};
 
 	UPROPERTY(EditInstanceOnly)
 	EInteractableType InteractableType;
@@ -46,7 +44,6 @@ struct FInteractableData
 	// used only for pickup
 	UPROPERTY(EditInstanceOnly)
 	int32 Quantity;
-
 
 	// used for things like valves, doors, etc. that require an interaction timer
 	UPROPERTY(EditInstanceOnly)

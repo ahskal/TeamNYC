@@ -17,66 +17,66 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UInventoryItemSlot* InventorySlotBeingHovered;
 
-	// ÅøÆÁ Å×µÎ¸®
+	// íˆ´íŒ í…Œë‘ë¦¬
 	UPROPERTY(meta = (BindWidget))
 	UBorder* ItemBorder;
 
-	// ¾ÆÀÌÅÛ ÀÌ¸§
+	// ì•„ì´í…œ ì´ë¦„
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemName;
 
-	// ¾ÆÀÌÅÛ Å¸ÀÔ-> Àåºñ, Æ÷¼Ç µîµî
+	// ì•„ì´í…œ íƒ€ì…-> ì¥ë¹„, í¬ì…˜ ë“±ë“±
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemType;
 
-	// Ãß°¡½ºÅİ ÅøÆÁ ¹Ú½º
+	// ì¶”ê°€ìŠ¤í…Ÿ íˆ´íŒ ë°•ìŠ¤
 	UPROPERTY(meta = (BindWidget))
 	UVerticalBox* VerticalBox;
 
-	// Ãß°¡ Ã¼·Â
+	// ì¶”ê°€ ì²´ë ¥
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* MaxHp;
 
-	// °ø°İ·Â
+	// ê³µê²©ë ¥
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Damage;
 
-	// ¹æ¾î·Â
+	// ë°©ì–´ë ¥
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* Armor;
 
-	// °ø°İ »ç°Å¸®
+	// ê³µê²© ì‚¬ê±°ë¦¬
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* AttackRange;
 
-	// °ø°İ »ç°Å¸®
+	// ê³µê²© ì‚¬ê±°ë¦¬
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* AttackSpeed;
 
-	// ÀÌµ¿¼Óµµ
+	// ì´ë™ì†ë„
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* MovementSpeed;
 
-	// »ç¿ë¹ı ¼³¸í ÅØ½ºÆ®
+	// ì‚¬ìš©ë²• ì„¤ëª… í…ìŠ¤íŠ¸
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* UsageText;
 
-	// ¾ÆÀÌÅÛ ¼³¸í
+	// ì•„ì´í…œ ì„¤ëª…
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* ItemDescription;
 
-	// ÆÇ¸Å °¡°İ
+	// íŒë§¤ ê°€ê²©
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* SellValue;
 
-	// ¹«°Ô
+	// ë¬´ê²Œ
 	UPROPERTY(meta = (BindWidget))
 	UTextBlock* StackWeightValue;
 
 protected:
 	virtual void NativeConstruct() override;
 private:
-	// °¡º¯ ÀÎ¼ö ÅÛÇÃ¸´
+	// ê°€ë³€ ì¸ìˆ˜ í…œí”Œë¦¿
 	template<typename... Args>
 	void SetTextBlockTextToText(UTextBlock* TextBlock, Args...args);
 };

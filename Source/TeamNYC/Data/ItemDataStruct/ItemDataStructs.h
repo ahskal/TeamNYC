@@ -38,6 +38,7 @@ enum class EItemType : uint8
 USTRUCT()
 struct FItemStatistics
 {
+	// 각종 아이템 관련 스텟 추가 하는곳
 	GENERATED_USTRUCT_BODY()
 
 	// 복구금액 -> 다시사기
@@ -93,9 +94,11 @@ struct FItemAssetData
 {
 	GENERATED_USTRUCT_BODY()
 
+	// 이미지 아이콘
 	UPROPERTY(EditAnywhere)
 	UTexture2D* Icon{};
 
+	// 이미지 매쉬
 	UPROPERTY(EditAnywhere)
 	UStaticMesh* Mesh{};
 };

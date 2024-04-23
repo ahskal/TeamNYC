@@ -12,18 +12,6 @@ UCLASS()
 class TEAMNYC_API UItemBase : public UObject
 {
 	GENERATED_BODY()
-protected:
-	//====================================================================================
-	// PROPERTIES & VARIABLES
-	//====================================================================================
-	bool operator ==(const FName& OtherID) const
-	{
-		return this->ItemID == OtherID;
-	}
-protected:
-	//====================================================================================
-	// FUNCTIONS
-	//====================================================================================
 
 public:
 	//====================================================================================
@@ -72,18 +60,37 @@ public:
 	UFUNCTION(Category = "Item")
 	UItemBase* CreateItemCopy() const;
 
+	// 아이템 스택의 총 무게
 	UFUNCTION(Category = "Item")
 	FORCEINLINE float GetItemStackWeight() const { return ItemQuantity * ItemNumericData.Weight; };
 
+	// 아이템 단일의 무게
 	UFUNCTION(Category = "Item")
 	FORCEINLINE float GetItemSingleWeight() const { return ItemNumericData.Weight; };
 
+	// 최고 스택인지 비교하는 함수
 	UFUNCTION(Category = "Item")
 	FORCEINLINE bool IsFullItemStack() const { return ItemQuantity == ItemNumericData.MaxStackSize; };
+
+	// TODO:
+	// 매개변수들을 protected로 변경예정
 
 	UFUNCTION(Category = "Item")
 	void SetQuantity(const int32 NewQuantity);
 
 	UFUNCTION(Category = "Item")
 	virtual void Use(APlayerCharacter* Character);
+protected:
+	//====================================================================================
+	// PROPERTIES & VARIABLES
+	//====================================================================================
+	bool operator ==(const FName& OtherID) const
+	{
+		return this->ItemID == OtherID;
+	}
+protected:
+	//====================================================================================
+	// FUNCTIONS
+	//====================================================================================
+
 };

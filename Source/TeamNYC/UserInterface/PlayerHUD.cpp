@@ -1,6 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "UserInterface/PlayerHUD.h"
 
 #include "Character/Player/PlayerCharacter.h"
@@ -26,7 +23,7 @@ void APlayerHUD::BeginPlay()
 	Super::BeginPlay();
 	UE_LOG(LogTemp, Warning, TEXT("HUD BeginPlay executing"));
 
-	
+
 	if (MainMenuClass)
 	{
 		MainMenuWidget = CreateWidget<UMainMenu>(GetWorld(), MainMenuClass);
@@ -41,12 +38,12 @@ void APlayerHUD::BeginPlay()
 		InteractionWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
-	//if (MainWidgetClass)
-	//{
+	if (MainWidgetClass)
+	{
 		MainWidget = CreateWidget<UExtendedUserWidget>(GetWorld(), MainWidgetClass);
 		MainWidget->AddToViewport(1);
 		MainWidget->SetVisibility(ESlateVisibility::Visible);
-	//}
+	}
 }
 
 
@@ -74,6 +71,8 @@ void APlayerHUD::ToggleMenu()
 	{
 		HideMenu();
 
+		// 만약 해당이벤트가 작동하면 컨트롤러 제어관련
+		// 
 		//const FInputModeGameOnly InputMode;
 		//GetOwningPlayerController()->SetInputMode(InputMode);
 		//GetOwningPlayerController()->SetShowMouseCursor(false);
@@ -113,6 +112,12 @@ void APlayerHUD::UpdateInteractionWidget(const FInteractableData* InteractableDa
 			InteractionWidget->SetVisibility(ESlateVisibility::Visible);
 		}
 
-		InteractionWidget->UpdateWidget(InteractableData);
+		// 해당 타입이 몬스터일때 줍기 이벤트 버튼 삭제
+		if (InteractableData->InteractableType == EInteractableType::Monster) {
+			InteractionWidget->SetVisibility(ESlateVisibility::Visible);
+		}
+		else {
+			InteractionWidget->UpdateWidget(InteractableData);
+		}
 	}
 }

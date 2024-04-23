@@ -43,10 +43,19 @@ protected:
 
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
+
+	// FPointerEvent는 마우스의 이벤트를 감지하는 타입
+	// 마우스가 누르거나 올라가있거나 하는 이벤트를 받아오는 값
+
+	// 마우스로 눌렀을때
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
+	// 마우스가 범위에서 떠났을때
 	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
-	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent,
-		UDragDropOperation*& OutOperation) override;
-	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent,
-		UDragDropOperation* InOperation) override;
+
+	// 마우스로 드래그를 할때
+	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
+
+	// 마우스가 해당 객체를 놨을때
+	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 };

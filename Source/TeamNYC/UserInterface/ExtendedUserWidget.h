@@ -6,9 +6,6 @@
 #include "Blueprint/UserWidget.h"
 #include "ExtendedUserWidget.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class TEAMNYC_API UExtendedUserWidget : public UUserWidget
 {
