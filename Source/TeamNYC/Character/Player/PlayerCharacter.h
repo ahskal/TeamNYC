@@ -124,6 +124,7 @@ private:
 
 public:
 	FORCEINLINE UInventoryComponent* GetInventory() const { return InventoryComponent; }
+	void DropItem(UItemBase* ItemToDrop, const int32 QuantityToDrop);
 
 
 	//====================================================================================

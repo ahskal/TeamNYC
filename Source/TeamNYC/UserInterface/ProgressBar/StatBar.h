@@ -14,6 +14,7 @@ class UProgressBar;
 class UTextBlock;
 class UImage;
 class APlayerCharacter;
+struct FStatData;
 
 /**
  *

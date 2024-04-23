@@ -133,7 +133,7 @@ void UInventoryTooltip::NativeConstruct()
 	
 	// 추가체력, 공격력, 방어력, 사거리, 공속, 이속,	등등
 	// 값이 비어있을경우 해당 부분을 켜지 않는다
-	bool IsEmpty = ItemBeingHovered->CharacterStatistics.MaxHp == 0 ||
+	bool IsEmpty = ItemBeingHovered->CharacterStatistics.MaxHealthPoint == 0 ||
 		ItemBeingHovered->CharacterStatistics.Damage == 0 ||
 		//ItemBeingHovered->ItemStatistics.Armor == 0 ||
 		ItemBeingHovered->CharacterStatistics.AttackRange == 0 ||
@@ -146,7 +146,7 @@ void UInventoryTooltip::NativeConstruct()
 		SetTextBlockTextToText(MaxHp,
 			FText::FromString(TEXT("추가 HP ")),
 			FText::FromString("+"),
-			FText::AsNumber(ItemBeingHovered->CharacterStatistics.MaxHp));
+			FText::AsNumber(ItemBeingHovered->CharacterStatistics.MaxHealthPoint));
 
 		SetTextBlockTextToText(Damage,
 			FText::FromString(TEXT("공격력 ")),
