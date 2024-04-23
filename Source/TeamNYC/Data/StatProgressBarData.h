@@ -50,7 +50,7 @@ struct FStatData
 	float MaxLerpTime;
 
 	UPROPERTY(EditAnywhere, Category = Stat)
-	TObjectPtr<class UStatBar> BarWidget;
+	TObjectPtr<class UHeadUpDisplayStatBarWidget> BarWidget;
 
 	UPROPERTY(EditAnywhere, Category = Stat)
 	bool bIsCurrentlyAnimated;

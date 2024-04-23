@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "UserInterface/ExtendedUserWidget.h"
 #include "Data/StatProgressBarData.h"
-#include "StatBar.generated.h"
+#include "HeadUpDisplayStatBarWidget.generated.h"
 
 
 class USizeBox;
@@ -20,12 +20,12 @@ struct FStatData;
  *
  */
 UCLASS()
-class TEAMNYC_API UStatBar : public UExtendedUserWidget
+class TEAMNYC_API UHeadUpDisplayStatBarWidget : public UExtendedUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	UStatBar(const FObjectInitializer& ObjectInitializer);
+	UHeadUpDisplayStatBarWidget(const FObjectInitializer& ObjectInitializer);
 	
 protected:
 	virtual void NativeConstruct() override;

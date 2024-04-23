@@ -2,19 +2,20 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "Character/Interfaces/AnimationAttackInterfece.h"
-#include "Character/Interfaces/CharacterWidgetInterface.h"
 
+// Interfaces
+#include "Interfaces/CharacterInterface/PlayerInterface/AnimationAttackInterfece.h"
+#include "Interfaces/CharacterInterface/CharacterWidgetInterface.h"
 #include "Interfaces/InteractionInterface/InteractionInterface.h"
 
-#include "CharacterPrototype.generated.h"
+#include "CharacterBase.generated.h"
 
 /********************************************************
 *	모든 캐릭터(Player, Monster, NPC)의 베이스 클래스
 *	공통적인 요소만을 선언
 ********************************************************/
 UCLASS()
-class TEAMNYC_API ACharacterPrototype : public ACharacter, public IAnimationAttackInterfece, public ICharacterWidgetInterface, public IInteractionInterface
+class TEAMNYC_API ACharacterBase : public ACharacter, public IAnimationAttackInterfece, public ICharacterWidgetInterface, public IInteractionInterface
 {
 	GENERATED_BODY()
 
@@ -24,7 +25,7 @@ protected:
 	TObjectPtr<USkeletalMesh> BodyMesh;
 
 public:
-	ACharacterPrototype();
+	ACharacterBase();
 
 protected:
 	virtual void BeginPlay() override;

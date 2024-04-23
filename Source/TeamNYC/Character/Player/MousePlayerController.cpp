@@ -19,7 +19,7 @@
 #include "Engine/LocalPlayer.h"
 
 // 나중에 생각해볼 요소.
-#include "Character/Component/CharacterStatComponent.h"
+#include "Components/CharacterStatComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 

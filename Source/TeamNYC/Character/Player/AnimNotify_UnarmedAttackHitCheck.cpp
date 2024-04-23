@@ -2,7 +2,7 @@
 
 
 #include "Character/Player/AnimNotify_UnarmedAttackHitCheck.h"
-#include "Character/Interfaces/AnimationAttackInterfece.h"
+#include "Interfaces/CharacterInterface/PlayerInterface/AnimationAttackInterfece.h"
 
 void UAnimNotify_UnarmedAttackHitCheck::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {

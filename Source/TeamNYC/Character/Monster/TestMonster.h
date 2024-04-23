@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/CharacterPrototype.h"
+#include "Character/CharacterBase.h"
 #include "TestMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TEAMNYC_API ATestMonster : public ACharacterPrototype
+class TEAMNYC_API ATestMonster : public ACharacterBase
 {
 	GENERATED_BODY()
 	

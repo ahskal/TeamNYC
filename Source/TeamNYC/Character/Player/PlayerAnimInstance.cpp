@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Character/Player/PlayerAnimInstance.h"
-#include "Character/CharacterPrototype.h"
+#include "Character/CharacterBase.h"
 #include "Character/Player/PlayerCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -16,7 +16,7 @@ void UPlayerAnimInstance::NativeBeginPlay()
 	APawn* Pawn = TryGetPawnOwner();
 	if (Pawn)
 	{
-		OwnerCharacter = Cast<ACharacterPrototype>(Pawn);
+		OwnerCharacter = Cast<ACharacterBase>(Pawn);
 		//PlayerController = Cast<APlayerController>(PlayerCharacter->GetController());
 		Movement = OwnerCharacter->GetCharacterMovement();
 	}

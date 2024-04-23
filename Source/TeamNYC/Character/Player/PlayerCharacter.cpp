@@ -16,14 +16,14 @@
 #include "Character/Player/PlayerJabDataAsset.h"
 
 // Component
-#include "Character/Component/CharacterStatComponent.h"
+#include "Components/CharacterStatComponent.h"
 #include "Components/ExtendedWidgetComponent.h"
 #include "Components/PlayerInteractionComponent.h"
 #include "Components/InventoryComponent.h"
 
 // HpBar Widget
-#include "Character/UI/CharacterHealthPointBarWidget.h"
-#include "UserInterface/ProgressBar/StatBar.h"
+#include "UserInterface/ProgressBar/CharacterHealthPointBarWidget.h"
+#include "UserInterface/ProgressBar/HeadUpDisplayStatBarWidget.h"
 
 
 APlayerCharacter::APlayerCharacter()
@@ -386,7 +386,7 @@ void APlayerCharacter::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
 		HpBarWidget->SetHpBarColor(FLinearColor::Green);
 	}
 
-	UStatBar* MainProgressBar = Cast<UStatBar>(InUserWidget);
+	UHeadUpDisplayStatBarWidget* MainProgressBar = Cast<UHeadUpDisplayStatBarWidget>(InUserWidget);
 	if (MainProgressBar)
 	{
 		switch (MainProgressBar->GetStatType())
@@ -394,17 +394,17 @@ void APlayerCharacter::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
 		case EStatProgressBarType::Health:
 			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxHealthPoint());
 			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentHealthPoint());
-			CharacterStatComp->OnHealthPointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
+			CharacterStatComp->OnHealthPointChanged.AddUObject(MainProgressBar, &UHeadUpDisplayStatBarWidget::SetCurrentValue);
 			break;
 		case EStatProgressBarType::Mana:
 			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxManaPoint());
 			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentManaPoint());
-			CharacterStatComp->OnManaPointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
+			CharacterStatComp->OnManaPointChanged.AddUObject(MainProgressBar, &UHeadUpDisplayStatBarWidget::SetCurrentValue);
 			break;
 		case EStatProgressBarType::Experience:
 			MainProgressBar->SetMaxValue(CharacterStatComp->GetMaxExperiencePoint());
 			MainProgressBar->SetCurrentValue(CharacterStatComp->GetCurrentExperiencePoint());
-			CharacterStatComp->OnExperiencePointChanged.AddUObject(MainProgressBar, &UStatBar::SetCurrentValue);
+			CharacterStatComp->OnExperiencePointChanged.AddUObject(MainProgressBar, &UHeadUpDisplayStatBarWidget::SetCurrentValue);
 			break;
 		default:
 			break;

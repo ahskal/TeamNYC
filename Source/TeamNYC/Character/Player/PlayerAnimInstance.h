@@ -16,7 +16,7 @@ class TEAMNYC_API UPlayerAnimInstance : public UAnimInstance
 
 private:
 		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
-		TObjectPtr<class ACharacterPrototype> OwnerCharacter;
+		TObjectPtr<class ACharacterBase> OwnerCharacter;
 
 		//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character", meta = (AllowPrivateAccess = "true"))
 		//TObjectPtr<class APlayerController> PlayerController;

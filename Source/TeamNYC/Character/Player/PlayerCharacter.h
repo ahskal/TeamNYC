@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/CharacterPrototype.h"
+#include "Character/CharacterBase.h"
 #include "PlayerCharacter.generated.h"
 
 class USpringArmComponent;
@@ -22,7 +22,7 @@ enum class EPlayerCurrentState : uint8
 
 
 UCLASS()
-class TEAMNYC_API APlayerCharacter : public ACharacterPrototype
+class TEAMNYC_API APlayerCharacter : public ACharacterBase
 {
 	GENERATED_BODY()
 	

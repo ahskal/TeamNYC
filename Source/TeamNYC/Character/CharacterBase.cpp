@@ -1,24 +1,24 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 // default includes
-#include "Character/CharacterPrototype.h"
+#include "Character/CharacterBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
 #include <Components/ProgressBar.h>
 
 // component
 #include "Components/ExtendedWidgetComponent.h"
-#include "Component/CharacterStatComponent.h"
+#include "Components/CharacterStatComponent.h"
 
 // widget
-#include "Character/UI/CharacterHealthPointBarWidget.h"
+#include "UserInterface/ProgressBar/CharacterHealthPointBarWidget.h"
 
 #include "Engine/DamageEvents.h"
 
 // Sets default values
-ACharacterPrototype::ACharacterPrototype()
+ACharacterBase::ACharacterBase()
 {
-	UE_LOG(LogTemp, Display, TEXT("==================== CharacterPrototype ===================="));
+	UE_LOG(LogTemp, Display, TEXT("==================== CharacterBase ===================="));
 
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("CharacterCapsule"));
@@ -62,15 +62,15 @@ ACharacterPrototype::ACharacterPrototype()
 }
 
 // Called when the game starts or when spawned
-void ACharacterPrototype::BeginPlay()
+void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
 	// Delegate Bindings for Death Event
-	CharacterStatComp->OnHealthPointIsZero.AddUObject(this, &ACharacterPrototype::SetDead);
+	CharacterStatComp->OnHealthPointIsZero.AddUObject(this, &ACharacterBase::SetDead);
 }
 
-void ACharacterPrototype::AttackHitCheck()
+void ACharacterBase::AttackHitCheck()
 {
 	const float AttackRange = CharacterStatComp->GetTotalStat().AttackRange;
 	const float AttackRadius = 50.0f; // 임시값, 스탯에 공격범위 추가시 변경할 예정
@@ -114,7 +114,7 @@ void ACharacterPrototype::AttackHitCheck()
 #endif
 }
 
-float ACharacterPrototype::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+float ACharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
@@ -123,7 +123,7 @@ float ACharacterPrototype::TakeDamage(float DamageAmount, FDamageEvent const& Da
 	return DamageAmount;
 }
 
-void ACharacterPrototype::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
+void ACharacterBase::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
 {
 	UCharacterHealthPointBarWidget* HpBarWidget = Cast<UCharacterHealthPointBarWidget>(InUserWidget);
 	if (HpBarWidget)
@@ -136,7 +136,7 @@ void ACharacterPrototype::SetupCharacterWidget(UExtendedUserWidget* InUserWidget
 	}
 }
 
-void ACharacterPrototype::SetDead()
+void ACharacterBase::SetDead()
 {
 	GetCharacterMovement()->DisableMovement();
 	PlayDeadAnimation();
@@ -144,7 +144,7 @@ void ACharacterPrototype::SetDead()
 	HpBarWidgetComp->SetHiddenInGame(true);
 }
 
-void ACharacterPrototype::PlayDeadAnimation()
+void ACharacterBase::PlayDeadAnimation()
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 

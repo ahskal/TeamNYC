@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/UI/CharacterHealthPointBarWidget.h"
+#include "UserInterface/ProgressBar/CharacterHealthPointBarWidget.h"
 #include "Components/ProgressBar.h"
-#include "Character/Interfaces/CharacterWidgetInterface.h"
+#include "Interfaces/CharacterInterface/CharacterWidgetInterface.h"
 
 UCharacterHealthPointBarWidget::UCharacterHealthPointBarWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Character/Component/CharacterStatComponent.h"
+#include "Components/CharacterStatComponent.h"
 
 UCharacterStatComponent::UCharacterStatComponent()
 {

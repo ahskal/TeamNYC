@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UserInterface/ProgressBar/StatBar.h"
+#include "UserInterface/ProgressBar/HeadUpDisplayStatBarWidget.h"
 #include "Components/SizeBox.h"
 #include "Components/Overlay.h"
 #include "Components/ProgressBar.h"
@@ -9,15 +9,16 @@
 #include "Components/Image.h"
 #include "Character/Player/PlayerCharacter.h"
 
-#include "Character/Interfaces/CharacterWidgetInterface.h"
+#include "Interfaces/CharacterInterface/CharacterWidgetInterface.h"
 
-UStatBar::UStatBar(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+
+UHeadUpDisplayStatBarWidget::UHeadUpDisplayStatBarWidget(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 }
 
 // 내꺼
 // 스탯컴포넌트 초기화 이전에 불림
-void UStatBar::NativeConstruct()
+void UHeadUpDisplayStatBarWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
@@ -40,21 +41,21 @@ void UStatBar::NativeConstruct()
 	}
 }
 
-void UStatBar::SetCurrentValue(float NewCurrentValue)
+void UHeadUpDisplayStatBarWidget::SetCurrentValue(float NewCurrentValue)
 {
 	StatData.CurrentValue = FMath::Clamp<float>(NewCurrentValue, StatData.MinValue, StatData.MaxValue);
 
 	UpdateProgressBar();
 }
 
-void UStatBar::SetMaxValue(float NewMaxHp)
+void UHeadUpDisplayStatBarWidget::SetMaxValue(float NewMaxHp)
 {
 	StatData.MaxValue = NewMaxHp;
 
 	UpdateProgressBar();
 }
 
-void UStatBar::UpdateProgressBar()
+void UHeadUpDisplayStatBarWidget::UpdateProgressBar()
 {
 	if (StatData.MaxValue <= 0.0f)
 	{
@@ -69,7 +70,7 @@ void UStatBar::UpdateProgressBar()
 	}
 }
 
-void UStatBar::UpdateTextBlock()
+void UHeadUpDisplayStatBarWidget::UpdateTextBlock()
 {
 	if (StatText)
 	{
