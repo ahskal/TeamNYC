@@ -34,8 +34,11 @@ friend class UPlayerAnimInstance;
 	//====================================================================================
 public:
 	APlayerCharacter();
-	void SetMaxWalkSpeed(float InMaxWalkSpeed);
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
+	void SetMaxWalkSpeed(float InMaxWalkSpeed);
+	virtual void SetDead() override;
 
 	//====================================================================================
 	//  SkeletalMesh Section
@@ -170,13 +173,8 @@ private:
 	void SetComoboCheckTimer();		// 타이머 발동 함수
 	void CheckComboInput();			// 타이머 발동시 콤보 입력 체크 함수
 
-protected:
-	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
-
-
 	//====================================================================================
 	//  Test Section
 	//====================================================================================
-	virtual void SetDead() override;
+
 };
