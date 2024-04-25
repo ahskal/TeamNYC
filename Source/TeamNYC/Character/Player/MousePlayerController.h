@@ -62,6 +62,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> InventoryAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> PlusSignAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UInputAction> MinusSignAction;
+
+
 	//====================================================================================
 	//  Owner Section
 	//====================================================================================
@@ -70,6 +77,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Owner")
 	TObjectPtr<APlayerCharacter> OwnerCharacter;
+
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
@@ -80,6 +88,11 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+
+	//====================================================================================
+	//  Binding Funtion Section
+	//====================================================================================
+protected:
 	// Camera Zoom Up/Down
 	void OnWheelAction(const FInputActionValue& Value);
 
@@ -103,6 +116,8 @@ protected:
 	// Inventory IA
 	void ToggleMenu();
 
+	// Modify Stat
+	void ModifyStat(const FInputActionValue& Value);
 public:
 	void SetDisableInput();
 

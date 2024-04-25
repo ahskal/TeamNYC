@@ -20,16 +20,7 @@ struct FStatData
 		MinValue(0), 
 		MaxValue(0), 
 		CurrentValue(0), 
-		DisplayedValue(0.0f), 
-		MinLerpTime(0.2f), 
-		MaxLerpTime(1.5f), 
-		BarWidget(nullptr), 
-		bIsCurrentlyAnimated(false), 
-		bHasRegeneration(false), 
-		TimeToRegMaxValue(45.0f),
-		RegInterval(0.4f),
-		//RegenerationTimer(nullptr),
-		RegFuntionName(TEXT("")) {}
+		DisplayedValue(0.0f) {}
 	
 	UPROPERTY(EditAnywhere, Category = Stat)
 	float MinValue;
@@ -42,33 +33,6 @@ struct FStatData
 
 	UPROPERTY(EditAnywhere, Category = Stat)
 	float DisplayedValue;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	float MinLerpTime;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	float MaxLerpTime;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	TObjectPtr<class UHeadUpDisplayStatBarWidget> BarWidget;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	bool bIsCurrentlyAnimated;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	bool bHasRegeneration;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	float TimeToRegMaxValue;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	float RegInterval;
-
-	//UPROPERTY(EditAnywhere, Category = Stat)
-	//TObjectPtr<class FTimerHandle> RegenerationTimer;
-
-	UPROPERTY(EditAnywhere, Category = Stat)
-	FString RegFuntionName;
 };
 
 USTRUCT()

@@ -189,25 +189,6 @@ APlayerCharacter::APlayerCharacter()
 	//  Temp Test Section
 	//====================================================================================
 
-
-	//FStatData HealthData;
-	//HealthData.MaxValue = 300.f;
-	//HealthData.CurrentValue = 300.f;
-	//HealthData.DisplayedValue = 300.f;
-	//PlayerStatMap.Add(EStatEnum::Health, HealthData);
-
-	//FStatData ManaData;
-	//ManaData.MaxValue = 200.f;
-	//ManaData.CurrentValue = 200.f;
-	//ManaData.DisplayedValue = 200.f;
-	//ManaData.MinLerpTime = 0.5f;
-	//ManaData.MaxLerpTime = 2.5f;
-	//PlayerStatMap.Add(EStatEnum::Mana, ManaData);
-
-	//FStatData ExperienceData;
-	//ExperienceData.MaxValue = 1000.f;
-	//ManaData.MinLerpTime = 0.4f;
-	//ManaData.MaxLerpTime = 2.0f;
 }
 
 void APlayerCharacter::BeginPlay()
@@ -468,4 +449,21 @@ void APlayerCharacter::CheckComboInput()
 	}
 	//else UnarmedAttackEnd(nullptr, true);
 
+}
+
+void APlayerCharacter::ModifyStat(float value)
+{
+
+	if (value > 0)
+	{
+		value *= 10;
+		CharacterStatComp->Heal(value);
+		CharacterStatComp->RestoreMana(value);
+	}
+	else
+	{
+		value *= -10;
+		CharacterStatComp->ApplyDamage(value);
+		CharacterStatComp->ApplyManaCost(value);
+	}
 }

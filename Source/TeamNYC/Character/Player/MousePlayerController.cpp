@@ -34,18 +34,6 @@ AMousePlayerController::AMousePlayerController()
 	FollowTime = 0.f;
 	ShortPressThreshold = 0.3f;
 
-	/*
-		객체 로드 방식 변경 (나중에 삭제할 주석)
-		기존: UInputMappingContext* DmcObj = Cast<UInputMappingContext>(StaticLoadObject(UInputMappingContext::StaticClass(), nullptr, *ImcPath));
-		변경: ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(*ImcPath);
-
-					ConstructorHelpers::FObjectFinder				StaticLoadObject
-		설명			생성자에서 객체를 로드하는 방식					게임 실행 중에 동적으로 객체를 로드하는 방식
-		장점			간단하고 안전함(생성자에서 한 번에 처리 가능)		실행 중에 동적으로 객체 로드 가능(유연성이 높음)
-		단점			실행 중에 동적으로 객체를 로드할 수 없음			코드가 약간 복잡함, 메모리 관리 필요
-		사용시기		게임 시작 시 필요한 객체를 로드할 때				게임 실행 중에 동적으로 객체가 필요할 때
-		예시			플레이어 입력 매핑 컨텍스트 설정					실행 중에 다른 입력 매핑 컨텍스트 로드
-	*/
 	// Set DMC
 	FString ImcPath = TEXT("/Script/EnhancedInput.InputMappingContext'/Game/Assets/Input/IMC_Mouse.IMC_Mouse'");
 	ConstructorHelpers::FObjectFinder<UInputMappingContext> InputMappingContextRef(*ImcPath);
@@ -94,6 +82,18 @@ AMousePlayerController::AMousePlayerController()
 	ConstructorHelpers::FObjectFinder<UInputAction> IaInventoryRef(*IaPath);
 	if (IaInventoryRef.Succeeded()) InventoryAction = IaInventoryRef.Object;
 	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_Inventory: %s"), *IaPath);
+
+	// Plus Sign Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_PlusSign.IA_PlusSign'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaPlusSignRef(*IaPath);
+	if (IaPlusSignRef.Succeeded()) PlusSignAction = IaPlusSignRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_PlusSign: %s"), *IaPath);
+
+	// Minus Sign Action
+	IaPath = TEXT("/Script/EnhancedInput.InputAction'/Game/Assets/Input/IA_MinusSign.IA_MinusSign'");
+	ConstructorHelpers::FObjectFinder<UInputAction> IaMinusSignRef(*IaPath);
+	if (IaMinusSignRef.Succeeded()) MinusSignAction = IaMinusSignRef.Object;
+	else UE_LOG(LogTemp, Error, TEXT("Failed to load IA_MinusSign: %s"), *IaPath);
 
 	// Set FxCursor
 	FString FxCursorPath = TEXT("/Script/Niagara.NiagaraSystem'/Game/Assets/Cursor/FX_Cursor.FX_Cursor'");
@@ -182,6 +182,10 @@ void AMousePlayerController::SetupInputComponent()
 
 		// Inventory
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Started, this, &AMousePlayerController::ToggleMenu);
+
+		// Plus/Minus Sign
+		EnhancedInputComponent->BindAction(PlusSignAction, ETriggerEvent::Started, this, &AMousePlayerController::ModifyStat);
+		EnhancedInputComponent->BindAction(MinusSignAction, ETriggerEvent::Started, this, &AMousePlayerController::ModifyStat);
 	}
 	else
 	{
@@ -291,6 +295,14 @@ void AMousePlayerController::ToggleMenu()
 	}
 }
 
+void AMousePlayerController::ModifyStat(const FInputActionValue& Value)
+{
+	if (OwnerCharacter)
+	{
+		OwnerCharacter->ModifyStat(Value.Get<float>());
+	}
+}
+
 void AMousePlayerController::SetDisableInput()
 {
 	FInputModeUIOnly InputMode;
@@ -317,7 +329,7 @@ void AMousePlayerController::Attack()
 			FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(OwnerCharacter->GetActorLocation(), Hit.Location);
 			LookAtRotation.Pitch = OwnerCharacter->GetActorRotation().Pitch;
 			LookAtRotation.Roll = OwnerCharacter->GetActorRotation().Roll;
-
+			
 			// 회전 속도
 			float RotationSpeed = 12.f;
 

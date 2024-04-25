@@ -11,24 +11,41 @@ struct FCharacterStat : public FTableRowBase
 	GENERATED_BODY()
 
 	public:
-	FCharacterStat() : MaxHealthPoint(0.0f), MaxManaPoint(0.0f), Damage(0.0f), AttackRange(0.0f), AttackSpeed(0.0f) {}
+	FCharacterStat() : 
+		MaxHealthPoint(0.0f), 
+		HealthPointRegenerationAmount(0.0f),
+		MaxManaPoint(0.0f), 
+		ManaPointRegenerationAmount(0.0f),
+		Damage(0.0f), 
+		Armor(0.0f),
+		AttackRange(0.0f), 
+		AttackSpeed(0.0f) {}
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float MaxHealthPoint;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+	float HealthPointRegenerationAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float MaxManaPoint;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+	float ManaPointRegenerationAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float Damage;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+	float Armor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float AttackRange;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float AttackSpeed;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stat)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
 	float MovementSpeed;
 
 	FCharacterStat operator+(const FCharacterStat& Other) const

@@ -10,8 +10,10 @@ UCharacterStatComponent::UCharacterStatComponent()
 
 	MaxExperiencePoint = 100.0f;
 
-	BaseStat.MaxHealthPoint = 10.0f;
-	BaseStat.MaxManaPoint = 10.0f;
+	BaseStat.MaxHealthPoint = 100.0f;
+	BaseStat.HealthPointRegenerationAmount = 5.0f;
+	BaseStat.MaxManaPoint = 100.0f;
+	BaseStat.ManaPointRegenerationAmount = 4.0f;
 	BaseStat.Damage = 1.0f;
 	BaseStat.AttackSpeed = 1.0f;
 	BaseStat.AttackRange = 40.0f;
@@ -21,9 +23,7 @@ void UCharacterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//SetTotalStat();
-	//SetCurrentHealthPoint(TotalStat.MaxHealthPoint);
-	//SetCurrentManaPoint(TotalStat.MaxManaPoint);
+	StartRegeneration();
 }
 
 void UCharacterStatComponent::InitializeComponent()
@@ -44,6 +44,32 @@ float UCharacterStatComponent::ApplyDamage(float InDamage)
 	SetCurrentHealthPoint(PrevHealthPoint - ActualDamage);
 
 	return ActualDamage;
+}
+
+float UCharacterStatComponent::Heal(float InHealAmount)
+{
+	const float PrevHealthPoint = CurrentHealthPoint;
+	const float ActualHealAmount = FMath::Clamp<float>(InHealAmount, 0.0f, GetMaxHealthPoint() - CurrentHealthPoint);
+
+	SetCurrentHealthPoint(PrevHealthPoint + ActualHealAmount);
+
+	return ActualHealAmount;
+}
+
+void UCharacterStatComponent::StartRegeneration()
+{
+	if (RegenerationTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(RegenerationTimerHandle);
+	}
+
+	GetWorld()->GetTimerManager().SetTimer(RegenerationTimerHandle, this, &UCharacterStatComponent::HealthAndManaRegeneration, RegenerationInterval, true, 1.0f);
+}
+
+void UCharacterStatComponent::HealthAndManaRegeneration()
+{
+	Heal(TotalStat.HealthPointRegenerationAmount);	
+	RestoreMana(TotalStat.ManaPointRegenerationAmount);
 }
 
 
@@ -79,6 +105,16 @@ float UCharacterStatComponent::ApplyManaCost(float InManaCost)
 	SetCurrentManaPoint(PrevManaPoint - ActualManaCost);
 
 	return ActualManaCost;
+}
+
+float UCharacterStatComponent::RestoreMana(float InManaAmount)
+{
+	const float PrevManaPoint = CurrentManaPoint;
+	const float ActualManaAmount = FMath::Clamp<float>(InManaAmount, 0.0f, GetMaxManaPoint() - CurrentManaPoint);
+
+	SetCurrentManaPoint(PrevManaPoint + ActualManaAmount);
+
+	return ActualManaAmount;
 }
 
 void UCharacterStatComponent::SetCurrentExperiencePoint(float NewExperiencePoint)

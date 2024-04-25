@@ -43,6 +43,8 @@ public:
 	void SetCurrentHealthPoint(float NewHealthPoint);
 	
 	float ApplyDamage(float InDamage);
+	float Heal(float InHealAmount);
+
 
 
 	//====================================================================================
@@ -61,6 +63,21 @@ public:
 	void SetCurrentManaPoint(float NewManaPoint);
 
 	float ApplyManaCost(float InManaCost);
+	float RestoreMana(float InManaAmount);
+
+
+	//====================================================================================
+	//  Regeneration Section
+	//====================================================================================
+protected:
+	FTimerHandle	RegenerationTimerHandle;
+	float			RegenerationInterval{ 5.0f };
+
+public:
+	void StartRegeneration();
+	//void StopRegeneration();
+	void HealthAndManaRegeneration();
+
 
 	//====================================================================================
 	//  Experience Section
