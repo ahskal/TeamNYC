@@ -1,9 +1,10 @@
 #include "Components/PlayerInteractionComponent.h"
-#include "Components/InventoryComponent.h"
+#include "Components/InventoryComponents/InventoryComponent.h"
 #include "Character/Player/PlayerCharacter.h"
 #include "Interfaces/InteractionInterface/InteractionInterface.h"
 #include "UserInterface/PlayerHUD.h"
 #include "Item/Pickup.h"
+#include "Item/LootItem.h"
 
 #include "GameFramework/Character.h"
 
@@ -196,8 +197,9 @@ void UPlayerInteractionComponent::DropItem(UItemBase* ItemToDrop, const int32 Qu
 
 		const int32 RemovedQuantity = CharacterTemp->GetInventory()->RemoveAmountOfItem(ItemToDrop, QuantityToDrop);
 
-		APickup* Pickup = GetWorld()->SpawnActor<APickup>(APickup::StaticClass(), SpawnTransform, SpawnParams);
-		Pickup->InitializeDrop(ItemToDrop, RemovedQuantity);
+		ALootItem* LootItem = GetWorld()->SpawnActor<ALootItem>(ALootItem::StaticClass(), SpawnTransform, SpawnParams);
+		LootItem->InitializeDrop(ItemToDrop, RemovedQuantity);
+
 	}
 	else
 	{

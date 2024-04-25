@@ -6,7 +6,7 @@
 #include "UserInterface/Inventory/ItemDragDropOperation.h"
 #include "Character/Player/PlayerCharacter.h"
 
-#include "Components/InventoryComponent.h"
+#include "Components/InventoryComponents/InventoryComponent.h"
 
 // engine
 #include "Components/TextBlock.h"

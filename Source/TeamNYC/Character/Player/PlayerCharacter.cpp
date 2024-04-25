@@ -19,7 +19,7 @@
 #include "Components/CharacterStatComponent.h"
 #include "Components/ExtendedWidgetComponent.h"
 #include "Components/PlayerInteractionComponent.h"
-#include "Components/InventoryComponent.h"
+#include "Components/InventoryComponents/InventoryComponent.h"
 
 // HpBar Widget
 #include "UserInterface/ProgressBar/CharacterHealthPointBarWidget.h"

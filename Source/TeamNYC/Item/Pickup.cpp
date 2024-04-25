@@ -3,6 +3,10 @@
 #include "Item/ItemBase/ItemBase.h"
 #include "Character/Player/PlayerCharacter.h"
 
+#include "Engine/CollisionProfile.h"
+#include "CollisionQueryParams.h"
+#include "Components/CapsuleComponent.h"
+
 APickup::APickup()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -10,7 +14,13 @@ APickup::APickup()
 	PickupMesh = CreateDefaultSubobject<UStaticMeshComponent>("PickupMesh");
 	PickupMesh->SetSimulatePhysics(true);
 	PickupMesh->SetCanEverAffectNavigation(false);
+	
+	//PickupMesh->SetCollisionProfileName("CustomCollisionProfile");
+	PickupMesh->SetCollisionProfileName("BlockAll");
+	PickupMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	SetRootComponent(PickupMesh);
+
 }
 
 void APickup::BeginPlay()
@@ -86,7 +96,7 @@ void APickup::Interact(APlayerCharacter* PlayerCharacter)
 
 void APickup::UpdateInteractableData()
 {
-	InstanceInteractableData.InteractableType = EInteractableType::Pickup;
+	InstanceInteractableData.InteractableType = EInteractableType::Loot;
 	InstanceInteractableData.Action = ItemReference->ItemTextData.InteractionText;
 	InstanceInteractableData.Name = ItemReference->ItemTextData.Name;
 	InstanceInteractableData.Quantity = ItemReference->ItemQuantity;

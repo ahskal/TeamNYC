@@ -12,7 +12,7 @@ UENUM()
 enum class EInteractableType : uint8
 {
 	// 충돌 이벤트 했을때 타입들
-	Pickup				UMETA(DisplayName = "Pickup"),
+	Loot				UMETA(DisplayName = "Loot"),
 	Monster				UMETA(DisplayName = "Monster"),
 	NonPlayerCharacter	UMETA(DisplayName = "NonPlayerCharacter"),
 	Device				UMETA(DisplayName = "Device"),
@@ -26,7 +26,7 @@ struct FInteractableData
 	GENERATED_USTRUCT_BODY()
 
 	FInteractableData() :
-		InteractableType(EInteractableType::Pickup),
+		InteractableType(EInteractableType::Loot),
 		Name(FText::GetEmpty()),
 		Action(FText::GetEmpty()),
 		Quantity(0),

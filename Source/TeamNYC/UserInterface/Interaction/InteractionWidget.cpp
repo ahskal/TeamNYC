@@ -31,7 +31,7 @@ void UInteractionWidget::UpdateWidget(const FInteractableData* InteractableData)
 {
 	switch (InteractableData->InteractableType)
 	{
-	case EInteractableType::Pickup:
+	case EInteractableType::Loot:
 		//	ActionText->SetText(FText::FromString("examine"));
 
 		KeyPressText->SetText(FText::FromString("Press"));
