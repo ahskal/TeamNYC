@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Character/CharacterBase.h"
+#include "Interfaces/CharacterInterface/MonsterInterface/MonsterAIInterface.h"
 #include "TestMonster.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TEAMNYC_API ATestMonster : public ACharacterBase
+class TEAMNYC_API ATestMonster : public ACharacterBase, public IMonsterAIInterface
 {
 	GENERATED_BODY()
 	
@@ -55,4 +56,13 @@ protected:
 
 	virtual void BeginFocus() override;
 	virtual void EndFocus() override;
+
+	//====================================================================================
+	//  Interface
+	//====================================================================================
+public:
+	virtual float GetAIPatrolRadius() override;
+	virtual float GetAIDetectRange() override;
+	virtual float GetAIAttackRange() override;
+	virtual float GetAITurnSpeed() override;
 };

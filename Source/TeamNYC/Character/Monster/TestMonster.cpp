@@ -3,12 +3,17 @@
 
 #include "Character/Monster/TestMonster.h"
 #include "Components/CapsuleComponent.h"
+#include "AI/DefaultAIController.h"
 
 ATestMonster::ATestMonster()
 {
 	UE_LOG(LogTemp, Display, TEXT("==================== TestMonster ===================="));
 
 	PrimaryActorTick.bCanEverTick = true;
+
+	// Set AI
+	AIControllerClass = ADefaultAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	// Body SkeletalMesh
 	FString MeshPath = TEXT("/Script/Engine.SkeletalMesh'/Game/Assets/Character/MetaHumans/Character/Male/Medium/NormalWeight/Body/m_med_nrw_body.m_med_nrw_body'");
@@ -101,4 +106,24 @@ void ATestMonster::EndFocus()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	FaceMesh->SetRenderCustomDepth(false);
+}
+
+float ATestMonster::GetAIPatrolRadius()
+{
+	return 800.0f;
+}
+
+float ATestMonster::GetAIDetectRange()
+{
+	return 400.0f;
+}
+
+float ATestMonster::GetAIAttackRange()
+{
+	return 50.0f;
+}
+
+float ATestMonster::GetAITurnSpeed()
+{
+	return 2.0f;
 }
