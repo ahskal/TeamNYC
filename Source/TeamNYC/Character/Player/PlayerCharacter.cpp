@@ -319,7 +319,7 @@ void APlayerCharacter::ProcessAttack()
 
 void APlayerCharacter::UnarmedAttackBegin()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackBegin"));
+	//UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackBegin"));
 	// 시작 콤보 스테이지 설정
 	CurrentCombo = 1;
 	
@@ -331,7 +331,7 @@ void APlayerCharacter::UnarmedAttackBegin()
 
 	// 애니메이션 실행
 	const float AttackSpeed = CharacterStatComp->GetTotalStat().AttackSpeed;
-	UE_LOG(LogTemp, Warning, TEXT("AttackSpeed: %f"), AttackSpeed);
+	//UE_LOG(LogTemp, Warning, TEXT("AttackSpeed: %f"), AttackSpeed);
 	AnimInstance->Montage_Play(UnarmedAttackMontage, AttackSpeed);
 
 	// 애니메이션 종료 델리게이트 설정
@@ -348,7 +348,7 @@ void APlayerCharacter::UnarmedAttackBegin()
 
 void APlayerCharacter::UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackEnd"));
+	//UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackEnd"));
 	ensure(CurrentCombo != 0);
 
 	CurrentCombo = 0;
