@@ -70,6 +70,8 @@ void ACharacterBase::BeginPlay()
 	CharacterStatComp->OnHealthPointIsZero.AddUObject(this, &ACharacterBase::SetDead);
 }
 
+
+
 void ACharacterBase::AttackHitCheck()
 {
 	const float AttackRange = CharacterStatComp->GetTotalStat().AttackRange;
@@ -134,6 +136,23 @@ void ACharacterBase::SetupCharacterWidget(UExtendedUserWidget* InUserWidget)
 
 		CharacterStatComp->OnHealthPointChanged.AddUObject(HpBarWidget, &UCharacterHealthPointBarWidget::UpdateHpBar);
 	}
+}
+
+void ACharacterBase::ProcessAttack()
+{
+}
+
+void ACharacterBase::AttackBegin()
+{
+}
+
+void ACharacterBase::AttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded)
+{
+	NotifyAttackEnd();
+}
+
+void ACharacterBase::NotifyAttackEnd()
+{
 }
 
 void ACharacterBase::SetDead()

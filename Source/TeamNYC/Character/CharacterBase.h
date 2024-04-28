@@ -51,6 +51,15 @@ protected:
 
 
 	//====================================================================================
+	//  Attack Section
+	//====================================================================================
+protected:
+	virtual void ProcessAttack();
+	virtual void AttackBegin();
+	virtual void AttackEnd(UAnimMontage* TargetMontage = nullptr, bool bIsProperlyEnded = true);
+	virtual void NotifyAttackEnd();
+
+	//====================================================================================
 	//  Take a Hit Section
 	//====================================================================================
 protected:

@@ -139,9 +139,6 @@ void AMousePlayerController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("OwnerPawn is NULL"));
 	}
-
-
-	
 }
 
 void AMousePlayerController::SetupInputComponent()
@@ -338,7 +335,7 @@ void AMousePlayerController::Attack()
 		}
 
 		// 나중에 이부분은 맵핑된 함수를 호출하게 수정할 예정
-		OwnerCharacter->ProcessUnarmedAttack();
+		OwnerCharacter->ProcessAttack();
 	}
 }
 

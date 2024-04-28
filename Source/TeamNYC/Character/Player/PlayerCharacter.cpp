@@ -188,7 +188,7 @@ APlayerCharacter::APlayerCharacter()
 	//====================================================================================
 	//  Temp Test Section
 	//====================================================================================
-
+	CharacterStatComp->ModifyDamage(15.f);
 }
 
 void APlayerCharacter::BeginPlay()
@@ -286,24 +286,21 @@ void APlayerCharacter::DropItem(UItemBase* ItemToDrop, const int32 QuantityToDro
 //	}
 //}
 
-void APlayerCharacter::ProcessUnarmedAttack()
+void APlayerCharacter::ProcessAttack()
 {
-	if (PlayerCurrentState == EPlayerCurrentState::DEAD)
-	{
-		bHasNextComboCommand = false;
-		return;
-	}
+	if (PlayerCurrentState == EPlayerCurrentState::DEAD) return;
 
 	// 콤보가 0인 경우
 	if (CurrentCombo == 0)
 	{
+		// 나중에 무기 공격으로 변경
 		UnarmedAttackBegin();
 		return;
 	}
 	// 콤보가 1 이상인 경우
 	else
 	{
-	
+
 
 		// 콤보 타이머가 유효한 경우
 		if (ComboTimerHandle.IsValid())
@@ -322,7 +319,7 @@ void APlayerCharacter::ProcessUnarmedAttack()
 
 void APlayerCharacter::UnarmedAttackBegin()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackBegin"));
+	UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackBegin"));
 	// 시작 콤보 스테이지 설정
 	CurrentCombo = 1;
 	
@@ -330,6 +327,7 @@ void APlayerCharacter::UnarmedAttackBegin()
 	
 	SetPlayerState(EPlayerCurrentState::ATTACKING);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
 
 	// 애니메이션 실행
 	const float AttackSpeed = CharacterStatComp->GetTotalStat().AttackSpeed;
@@ -341,6 +339,7 @@ void APlayerCharacter::UnarmedAttackBegin()
 	EndDelegate.BindUObject(this, &APlayerCharacter::UnarmedAttackEnd);
 	AnimInstance->Montage_SetEndDelegate(EndDelegate, UnarmedAttackMontage);
 
+
 	// 콤보 타이머 핸들 무효화
 	ComboTimerHandle.Invalidate();
 	// 콤보 타이머 발동
@@ -349,7 +348,7 @@ void APlayerCharacter::UnarmedAttackBegin()
 
 void APlayerCharacter::UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackEnd"));
+	UE_LOG(LogTemp, Warning, TEXT("UnarmedAttackEnd"));
 	ensure(CurrentCombo != 0);
 
 	CurrentCombo = 0;
@@ -447,8 +446,6 @@ void APlayerCharacter::CheckComboInput()
 		// 입력값 초기화
 		bHasNextComboCommand = false;
 	}
-	//else UnarmedAttackEnd(nullptr, true);
-
 }
 
 void APlayerCharacter::ModifyStat(float value)
@@ -456,13 +453,13 @@ void APlayerCharacter::ModifyStat(float value)
 
 	if (value > 0)
 	{
-		value *= 10;
+		value *= 20;
 		CharacterStatComp->Heal(value);
 		CharacterStatComp->RestoreMana(value);
 	}
 	else
 	{
-		value *= -10;
+		value *= -20;
 		CharacterStatComp->ApplyDamage(value);
 		CharacterStatComp->ApplyManaCost(value);
 	}

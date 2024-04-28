@@ -3,7 +3,12 @@
 
 #include "Character/Monster/TestMonster.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "AI/DefaultAIController.h"
+
+// Components
+#include "Components/CharacterStatComponent.h"
+
 
 ATestMonster::ATestMonster()
 {
@@ -78,22 +83,47 @@ ATestMonster::ATestMonster()
 		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Face AnimBPClass"));
 	}
 
+	//====================================================================================
+	//  Attack Section
+	//====================================================================================
+	// 임시
+	FString MontagePath = TEXT("/Script/Engine.AnimMontage'/Game/Assets/Character/Player/Animations/AM_Player_Jab.AM_Player_Jab'");
+	ConstructorHelpers::FObjectFinder<UAnimMontage> AttackRef(*MontagePath);
+	if (AttackRef.Succeeded())
+	{
+		AttackMontage = AttackRef.Object;
+		AttackMontage->RateScale = 1.0f;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Failed to Get Player_Jab Montage: %s"), *MontagePath);
+	}
+
 	InteractableData.InteractableType = EInteractableType::Monster;
 }
 
 void ATestMonster::SetDead()
 {
-	Super::SetDead();
-
 	FTimerHandle DeadTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(DeadTimerHandle,
+	GetWorld()->GetTimerManager().SetTimer(
+		DeadTimerHandle,
 		FTimerDelegate::CreateLambda(
 			[&]()
 			{
 				Destroy();
 			}
 		),
-		DeadEventDelayTime, false);
+		DeadEventDelayTime, false
+	);
+
+	// Stop AI
+	ADefaultAIController* AIController = Cast<ADefaultAIController>(GetController());
+	if (AIController)
+	{
+		AIController->StopAI();
+	}
+
+	Super::SetDead();
 }
 
 void ATestMonster::BeginFocus()
@@ -120,10 +150,57 @@ float ATestMonster::GetAIDetectRange()
 
 float ATestMonster::GetAIAttackRange()
 {
-	return 50.0f;
+	return 100.0f;
 }
 
 float ATestMonster::GetAITurnSpeed()
 {
 	return 2.0f;
+}
+
+void ATestMonster::SetAIAttackDelegate(const FAICharacterAttackFinished& InOnAttackFinished)
+{
+	OnAttackFinished = InOnAttackFinished;
+}
+
+void ATestMonster::AttackByAI()
+{
+
+	ProcessAttack();
+}
+
+void ATestMonster::ProcessAttack()
+{
+	AttackBegin();
+}
+
+void ATestMonster::AttackBegin()
+{
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	// 애니메이션 실행
+	const float AttackSpeed = CharacterStatComp->GetTotalStat().AttackSpeed;
+	UE_LOG(LogTemp, Warning, TEXT("AttackSpeed: %f"), AttackSpeed);
+	AnimInstance->Montage_Play(AttackMontage, AttackSpeed);
+
+	// 애니메이션 종료 델리게이트 설정
+	FOnMontageEnded EndDelegate;
+	EndDelegate.BindUObject(this, &ATestMonster::AttackEnd);
+	AnimInstance->Montage_SetEndDelegate(EndDelegate, AttackMontage);
+}
+
+void ATestMonster::AttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded)
+{
+	Super::AttackEnd();
+
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+}
+
+void ATestMonster::NotifyAttackEnd()
+{
+	Super::NotifyAttackEnd();
+
+	OnAttackFinished.ExecuteIfBound();
 }

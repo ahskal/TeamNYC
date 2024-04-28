@@ -115,4 +115,11 @@ public:
 	FORCEINLINE FCharacterStat& GetTotalStat() { return TotalStat; }
 	FORCEINLINE void SetTotalStat() { TotalStat = BaseStat + ModifierStat; }
 	FORCEINLINE void AddModifierStat(const FCharacterStat& InModifierStat) { ModifierStat += InModifierStat; }
+
+
+	//====================================================================================
+	//  Test Section
+	//====================================================================================
+public:
+	void ModifyDamage(float value);
 };

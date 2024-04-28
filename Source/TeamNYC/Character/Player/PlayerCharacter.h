@@ -140,6 +140,27 @@ public:
 	FORCEINLINE void SetPlayerState(EPlayerCurrentState InPlayerState) { PlayerCurrentState = InPlayerState; }
 	FORCEINLINE EPlayerCurrentState GetPlayerState() const { return PlayerCurrentState; }
 
+	//====================================================================================
+	//  Combo Section
+	//====================================================================================
+protected:
+	int32			CurrentCombo{ 0 };
+	FTimerHandle    ComboTimerHandle;
+	bool			bHasNextComboCommand{ false };
+
+
+	//====================================================================================
+	//  Timer Section
+	//====================================================================================
+protected:
+	virtual void SetComoboCheckTimer();		// 타이머 발동 함수
+	virtual void CheckComboInput();			// 타이머 발동시 콤보 입력 체크 함수
+
+	//====================================================================================
+	//  Default Attack Section
+	//====================================================================================
+protected:
+	virtual void ProcessAttack() override;
 
 	//====================================================================================
 	//  Unarmed Attack Section
@@ -152,26 +173,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UPlayerJabDataAsset> UnarmedJabDataAsset;
 
-	void ProcessUnarmedAttack();
 	void UnarmedAttackBegin();
 	void UnarmedAttackEnd(UAnimMontage* TargetMontage, bool bIsProperlyEnded);
-
-
-	//====================================================================================
-	//  Combo Section
-	//====================================================================================
-public:
-	int32			CurrentCombo{ 0 };
-	FTimerHandle    ComboTimerHandle;
-	bool			bHasNextComboCommand{ false };
-
-
-	//====================================================================================
-	//  Timer Section
-	//====================================================================================
-private:
-	void SetComoboCheckTimer();		// 타이머 발동 함수
-	void CheckComboInput();			// 타이머 발동시 콤보 입력 체크 함수
 
 	//====================================================================================
 	//  Test Section

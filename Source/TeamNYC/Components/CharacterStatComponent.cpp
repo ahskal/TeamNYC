@@ -14,7 +14,7 @@ UCharacterStatComponent::UCharacterStatComponent()
 	BaseStat.HealthPointRegenerationAmount = 5.0f;
 	BaseStat.MaxManaPoint = 100.0f;
 	BaseStat.ManaPointRegenerationAmount = 4.0f;
-	BaseStat.Damage = 1.0f;
+	BaseStat.Damage = 5.0f;
 	BaseStat.AttackSpeed = 1.0f;
 	BaseStat.AttackRange = 40.0f;
 }
@@ -124,4 +124,10 @@ void UCharacterStatComponent::SetCurrentExperiencePoint(float NewExperiencePoint
 
 	// Broadcast OnExperiencePointChanged
 	OnExperiencePointChanged.Broadcast(CurrentExperiencePoint);
+}
+
+void UCharacterStatComponent::ModifyDamage(float value)
+{
+	ModifierStat.Damage += value;
+	SetTotalStat();
 }

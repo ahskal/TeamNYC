@@ -52,8 +52,6 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> FeetMesh;
 
 protected:
-	void SetDead() override;
-
 	virtual void BeginFocus() override;
 	virtual void EndFocus() override;
 
@@ -65,4 +63,26 @@ public:
 	virtual float GetAIDetectRange() override;
 	virtual float GetAIAttackRange() override;
 	virtual float GetAITurnSpeed() override;
+
+	FAICharacterAttackFinished OnAttackFinished;
+	virtual void SetAIAttackDelegate(const FAICharacterAttackFinished& InOnAttackFinished) override;
+	virtual void AttackByAI() override;
+
+	//====================================================================================
+	//  Attack Section
+	//====================================================================================
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UAnimMontage> AttackMontage;
+
+	virtual void ProcessAttack() override;
+	virtual void AttackBegin() override;
+	virtual void AttackEnd(UAnimMontage* TargetMontage = nullptr, bool bIsProperlyEnded = true) override;
+	virtual void NotifyAttackEnd() override;
+
+	//====================================================================================
+	//  Dead Section
+	//====================================================================================
+protected:
+	virtual void SetDead() override;
 };
