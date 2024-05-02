@@ -23,7 +23,7 @@ void UCharacterStatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	StartRegeneration();
+	//StartRegeneration();
 }
 
 void UCharacterStatComponent::InitializeComponent()
@@ -56,22 +56,58 @@ float UCharacterStatComponent::Heal(float InHealAmount)
 	return ActualHealAmount;
 }
 
-void UCharacterStatComponent::StartRegeneration()
+void UCharacterStatComponent::StartHealthRegeneration()
 {
-	if (RegenerationTimerHandle.IsValid())
+	UE_LOG(LogTemp, Error, TEXT("Start HealthRegeneration"));
+	UE_LOG(LogTemp, Error, TEXT("Regeneration Interval : %f"), RegenerationInterval);
+
+	if (HealthRegenerationTimerHandle.IsValid())
 	{
-		GetWorld()->GetTimerManager().ClearTimer(RegenerationTimerHandle);
+		GetWorld()->GetTimerManager().ClearTimer(HealthRegenerationTimerHandle);
+	}
+	
+	GetWorld()->GetTimerManager().SetTimer(HealthRegenerationTimerHandle, this, &UCharacterStatComponent::HealthRegeneration, RegenerationInterval, true, 1.0f);
+}
+
+void UCharacterStatComponent::StopHealthRegeneration()
+{
+	UE_LOG(LogTemp, Error, TEXT("Stop HealthRegeneration"));
+	
+	if (HealthRegenerationTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(HealthRegenerationTimerHandle);
+	}
+}
+
+void UCharacterStatComponent::HealthRegeneration()
+{
+	UE_LOG(LogTemp, Error, TEXT("Health Regeneration : %f"), TotalStat.HealthPointRegenerationAmount);
+
+	Heal(TotalStat.HealthPointRegenerationAmount);
+}
+
+void UCharacterStatComponent::StartManaRegeneration()
+{
+	if (ManaRegenerationTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ManaRegenerationTimerHandle);
 	}
 
-	GetWorld()->GetTimerManager().SetTimer(RegenerationTimerHandle, this, &UCharacterStatComponent::HealthAndManaRegeneration, RegenerationInterval, true, 1.0f);
+	GetWorld()->GetTimerManager().SetTimer(ManaRegenerationTimerHandle, this, &UCharacterStatComponent::ManaRegeneration, RegenerationInterval, true, 1.0f);
 }
 
-void UCharacterStatComponent::HealthAndManaRegeneration()
+void UCharacterStatComponent::StopManaRegeneration()
 {
-	Heal(TotalStat.HealthPointRegenerationAmount);	
+	if (ManaRegenerationTimerHandle.IsValid())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ManaRegenerationTimerHandle);
+	}
+}
+
+void UCharacterStatComponent::ManaRegeneration()
+{
 	RestoreMana(TotalStat.ManaPointRegenerationAmount);
 }
-
 
 void UCharacterStatComponent::SetCurrentHealthPoint(float NewHealthPoint)
 {
@@ -81,11 +117,24 @@ void UCharacterStatComponent::SetCurrentHealthPoint(float NewHealthPoint)
 	// Broadcast OnHealthPointChanged
 	OnHealthPointChanged.Broadcast(CurrentHealthPoint);
 
+	// Check if HealthPoint is less than MaxHealthPoint
+	if (CurrentHealthPoint < GetMaxHealthPoint())
+	{
+		StartHealthRegeneration();
+	}
+
+	if (CurrentHealthPoint == GetMaxHealthPoint())
+	{
+		StopHealthRegeneration();
+	}
+
 	// Check if HealthPoint is zero
 	if (CurrentHealthPoint <= KINDA_SMALL_NUMBER)
 	{
+		StopHealthRegeneration();
 		OnHealthPointIsZero.Broadcast();
 	}
+
 }
 
 void UCharacterStatComponent::SetCurrentManaPoint(float NewManaPoint)
@@ -95,6 +144,17 @@ void UCharacterStatComponent::SetCurrentManaPoint(float NewManaPoint)
 
 	// Broadcast OnHealthPointChanged
 	OnManaPointChanged.Broadcast(CurrentManaPoint);
+
+	// Check if ManaPoint is less than MaxManaPoint
+	if (CurrentManaPoint < GetMaxManaPoint())
+	{
+		StartManaRegeneration();
+	}
+
+	if (CurrentManaPoint == GetMaxManaPoint())
+	{
+		StopManaRegeneration();
+	}
 }
 
 float UCharacterStatComponent::ApplyManaCost(float InManaCost)

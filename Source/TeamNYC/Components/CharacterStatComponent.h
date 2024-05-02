@@ -45,8 +45,6 @@ public:
 	float ApplyDamage(float InDamage);
 	float Heal(float InHealAmount);
 
-
-
 	//====================================================================================
 	//  ManaPoint Section
 	//====================================================================================
@@ -70,13 +68,18 @@ public:
 	//  Regeneration Section
 	//====================================================================================
 protected:
-	FTimerHandle	RegenerationTimerHandle;
+	FTimerHandle	HealthRegenerationTimerHandle;
+	FTimerHandle	ManaRegenerationTimerHandle;
 	float			RegenerationInterval{ 5.0f };
 
 public:
-	void StartRegeneration();
-	//void StopRegeneration();
-	void HealthAndManaRegeneration();
+	void StartHealthRegeneration();
+	void StopHealthRegeneration();
+	void HealthRegeneration();
+
+	void StartManaRegeneration();
+	void StopManaRegeneration();
+	void ManaRegeneration();
 
 
 	//====================================================================================
