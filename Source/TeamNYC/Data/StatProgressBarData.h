@@ -22,17 +22,20 @@ struct FStatData
 		CurrentValue(0), 
 		DisplayedValue(0.0f) {}
 	
-	UPROPERTY(EditAnywhere, Category = Stat)
+	UPROPERTY(EditAnywhere, Category = "Stat")
 	float MinValue;
 
-	UPROPERTY(EditAnywhere, Category = Stat)
+	UPROPERTY(EditAnywhere, Category = "Stat")
 	float MaxValue;
 
-	UPROPERTY(EditAnywhere, Category = Stat)
+	UPROPERTY(EditAnywhere, Category = "Stat")
 	float CurrentValue;
 
-	UPROPERTY(EditAnywhere, Category = Stat)
+	UPROPERTY(EditAnywhere, Category = "Stat")
 	float DisplayedValue;
+
+	//UPROPERTY(EditAnywhere, Category = "Skill")
+	//EDamageType Color;
 };
 
 USTRUCT()
