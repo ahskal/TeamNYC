@@ -14,8 +14,8 @@ enum class ETargetType : uint8
 	AreaAroundSelf		UMETA(DisplayName = "Area Around Self"),	// 자신 주변
 	Nontarget			UMETA(DisplayName = "Nontarget"),			// 논타겟
 };
-UENUM()
 
+UENUM()
 enum class EDamageType : uint8
 {
 	Pyhsical			UMETA(DisplayName = "Pyhsical"),			// 물리
