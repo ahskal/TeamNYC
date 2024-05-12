@@ -6,6 +6,10 @@
 #include "Blueprint/UserWidget.h"
 #include "SkillHotKeyWidget.generated.h"
 
+class UImage;
+class UTextBlock;
+class UButton;
+
 /**
  * 
  */
@@ -25,5 +29,27 @@ protected:
 	// MEMBER VARIABLES
 	//====================================================================================
 public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skill Hotkey", meta = (BindWidget))
+	TObjectPtr<UImage> Background;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skill Hotkey", meta = (BindWidget))
+	TObjectPtr<UImage> SkillIcon;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skill Hotkey", meta = (BindWidget))
+	TObjectPtr<UImage> CooldownImage;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skill Hotkey", meta = (BindWidget))
+	TObjectPtr<UTextBlock> CooldownText;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skill Hotkey", meta = (BindWidget))
+	TObjectPtr<UTextBlock> HotkeyText;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Skill Hotkey", meta = (BindWidget))
+	TObjectPtr<UButton> SkillButton;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill Hotkey")
+	FKey HotKey;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Material")
+	TObjectPtr<UMaterialInstanceDynamic> CooldownDynamicMaterial;
 };
