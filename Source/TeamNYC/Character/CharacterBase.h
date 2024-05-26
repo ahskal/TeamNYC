@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/Actor.h"
 
 // Interfaces
 #include "Interfaces/CharacterInterface/PlayerInterface/AnimationAttackInterfece.h"
@@ -58,6 +59,9 @@ protected:
 	virtual void AttackBegin();
 	virtual void AttackEnd(UAnimMontage* TargetMontage = nullptr, bool bIsProperlyEnded = true);
 	virtual void NotifyAttackEnd();
+	
+	// EventAnyDamage
+
 
 	//====================================================================================
 	//  Take a Hit Section

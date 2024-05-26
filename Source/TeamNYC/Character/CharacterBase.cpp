@@ -155,6 +155,7 @@ void ACharacterBase::NotifyAttackEnd()
 {
 }
 
+
 void ACharacterBase::SetDead()
 {
 	GetCharacterMovement()->DisableMovement();
