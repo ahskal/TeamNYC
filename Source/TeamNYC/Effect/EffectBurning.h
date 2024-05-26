@@ -16,4 +16,11 @@ class TEAMNYC_API AEffectBurning : public AEffectBase
 	
 public:
 	AEffectBurning();
+
+protected:
+	virtual void BeginPlay() override;
+
+public:
+	UFUNCTION()
+	void Burning();
 };

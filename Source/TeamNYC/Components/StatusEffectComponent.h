@@ -22,17 +22,19 @@ class TEAMNYC_API UStatusEffectComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UStatusEffectComponent();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	TSubclassOf<AActor> BurningEffectClass;
+
+
 public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
 	void TriggerEffect(EStatusEffectType EffectType);
 };

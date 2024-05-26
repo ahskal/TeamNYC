@@ -20,7 +20,7 @@ void UStatusEffectComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+
 }
 
 
@@ -34,11 +34,20 @@ void UStatusEffectComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 
 void UStatusEffectComponent::TriggerEffect(EStatusEffectType EffectType)
 {
+	FTransform SpawnTransform = GetOwner()->GetActorTransform();
+
+
 	switch (EffectType)
 	{
 	case EStatusEffectType::Burning:
-		// Do something
-		break;
+	{
+		// Actor Spawn
+		AActor* SpawnActor = GetWorld()->SpawnActor<AActor>(BurningEffectClass, SpawnTransform);
+
+		// Attach the effect to the owner
+		SpawnActor->AttachToActor(GetOwner(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	}
+	break;
 	case EStatusEffectType::Stunned:
 		// Do something
 		break;

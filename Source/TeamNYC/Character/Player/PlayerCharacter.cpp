@@ -25,6 +25,10 @@
 #include "UserInterface/ProgressBar/CharacterHealthPointBarWidget.h"
 #include "UserInterface/ProgressBar/HeadUpDisplayStatBarWidget.h"
 
+// Test
+#include "Kismet/GameplayStatics.h"
+#include "Data/DamageType/DamageType_Fire.h"
+
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -460,7 +464,8 @@ void APlayerCharacter::ModifyStat(float value)
 	else
 	{
 		value *= -20;
-		CharacterStatComp->ApplyDamage(value);
+		//CharacterStatComp->ApplyDamage(value);
+		UGameplayStatics::ApplyDamage(this, value, nullptr, this, nullptr);
 		CharacterStatComp->ApplyManaCost(value);
 	}
 }
